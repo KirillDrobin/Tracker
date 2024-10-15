@@ -12,7 +12,6 @@ class TrackersViewController: UIViewController {
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
 
-    
     // MARK: - Private Properties
     private let addTrackerButton: UIButton = {
         let button = UIButton()
@@ -57,7 +56,6 @@ class TrackersViewController: UIViewController {
         return label
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviews()
@@ -77,6 +75,7 @@ class TrackersViewController: UIViewController {
             self?.view.addSubview($0)
         }
     }
+    
     private func makeConstraints() {
         NSLayoutConstraint.activate([
             addTrackerButton.widthAnchor.constraint(equalToConstant: 42),
@@ -104,9 +103,7 @@ class TrackersViewController: UIViewController {
             
             mainTrackersViewImageLabel.topAnchor.constraint(equalTo: mainTrackersViewImage.bottomAnchor, constant: 8),
             mainTrackersViewImageLabel.leadingAnchor.constraint(equalTo: mainTrackersViewImage.leadingAnchor, constant: -131),
-            mainTrackersViewImageLabel.trailingAnchor.constraint(equalTo: mainTrackersViewImage.trailingAnchor, constant: 132),
-
+            mainTrackersViewImageLabel.trailingAnchor.constraint(equalTo: mainTrackersViewImage.trailingAnchor, constant: 132)
         ])
     }
-    
 }
