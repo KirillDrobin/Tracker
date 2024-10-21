@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackersViewController: UIViewController {
+final class TrackersViewController: UIViewController {
        
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
@@ -16,12 +16,12 @@ class TrackersViewController: UIViewController {
     private let addTrackerButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Add tracker"), for: .normal)
+        button.addTarget(self, action: #selector(switchToTrackerChoiceViewController), for: .touchUpInside)
         return button
     }()
     
     private let datePicker: UIDatePicker = {
         let date = UIDatePicker()
-        date.setDate(Date(), animated: true)
         date.datePickerMode = .date
         date.preferredDatePickerStyle = .compact
         date.locale = Locale(identifier: "ru_RU")
@@ -62,6 +62,11 @@ class TrackersViewController: UIViewController {
         makeConstraints()
     }
     
+    @objc private func switchToTrackerChoiceViewController() {
+        let trackerChoiceViewController = TrackerChoiceViewController()
+        present(trackerChoiceViewController, animated: true)
+    }
+    
     private func addSubviews() {
         [
             addTrackerButton,
@@ -84,7 +89,7 @@ class TrackersViewController: UIViewController {
             addTrackerButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
             
             datePicker.centerYAnchor.constraint(equalTo: addTrackerButton.centerYAnchor, constant: 0),
-            datePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 16),
+            datePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             label.widthAnchor.constraint(equalToConstant: 254),
             label.heightAnchor.constraint(equalToConstant: 41),

@@ -22,6 +22,10 @@
 		EDFE37012CBD2F2100C672E1 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE37002CBD2F2100C672E1 /* Tracker.swift */; };
 		EDFE37032CBD2F2B00C672E1 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE37022CBD2F2B00C672E1 /* TrackerCategory.swift */; };
 		EDFE37052CBD2F3600C672E1 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE37042CBD2F3600C672E1 /* TrackerRecord.swift */; };
+		EDFE37072CC031A800C672E1 /* TrackerChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */; };
+		EDFE370B2CC2D71F00C672E1 /* HabitCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE370A2CC2D71F00C672E1 /* HabitCreaterViewController.swift */; };
+		EDFE370D2CC6783400C672E1 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE370C2CC6783400C672E1 /* ScheduleViewController.swift */; };
+		EDFE370F2CC6AF0B00C672E1 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE370E2CC6AF0B00C672E1 /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,11 +60,15 @@
 		ED7890C32CB29F2400721730 /* TrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		ED7890C92CB29F5E00721730 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
-		EDFE367E2CB3E57000C672E1 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
-		EDFE367F2CB3E57000C672E1 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
+		EDFE367E2CB3E57000C672E1 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YS Display-Bold.ttf"; path = "Resources/YS Display-Bold.ttf"; sourceTree = SOURCE_ROOT; };
+		EDFE367F2CB3E57000C672E1 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YS Display-Medium.ttf"; path = "Resources/YS Display-Medium.ttf"; sourceTree = SOURCE_ROOT; };
 		EDFE37002CBD2F2100C672E1 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		EDFE37022CBD2F2B00C672E1 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		EDFE37042CBD2F3600C672E1 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
+		EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerChoiceViewController.swift; sourceTree = "<group>"; };
+		EDFE370A2CC2D71F00C672E1 /* HabitCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCreaterViewController.swift; sourceTree = "<group>"; };
+		EDFE370C2CC6783400C672E1 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		EDFE370E2CC6AF0B00C672E1 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +152,10 @@
 			children = (
 				ED7890BD2CAEF50C00721730 /* TabBarController.swift */,
 				ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */,
+				EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */,
+				EDFE370A2CC2D71F00C672E1 /* HabitCreaterViewController.swift */,
+				EDFE370C2CC6783400C672E1 /* ScheduleViewController.swift */,
+				EDFE370E2CC6AF0B00C672E1 /* CategoryViewController.swift */,
 				ED7890C92CB29F5E00721730 /* StatsViewController.swift */,
 			);
 			path = ViewControllers;
@@ -310,11 +322,15 @@
 			files = (
 				ED7890BA2CAC727600721730 /* AppDelegate.swift in Sources */,
 				EDFE37032CBD2F2B00C672E1 /* TrackerCategory.swift in Sources */,
+				EDFE37072CC031A800C672E1 /* TrackerChoiceViewController.swift in Sources */,
 				ED7890BE2CAEF50C00721730 /* TabBarController.swift in Sources */,
+				EDFE370F2CC6AF0B00C672E1 /* CategoryViewController.swift in Sources */,
 				ED7890CC2CB29F6A00721730 /* TrackersViewController.swift in Sources */,
+				EDFE370B2CC2D71F00C672E1 /* HabitCreaterViewController.swift in Sources */,
 				EDFE37052CBD2F3600C672E1 /* TrackerRecord.swift in Sources */,
 				ED7890BB2CAC727600721730 /* SceneDelegate.swift in Sources */,
 				ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */,
+				EDFE370D2CC6783400C672E1 /* ScheduleViewController.swift in Sources */,
 				EDFE37012CBD2F2100C672E1 /* Tracker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
