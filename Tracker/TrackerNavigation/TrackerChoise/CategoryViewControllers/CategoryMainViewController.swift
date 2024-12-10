@@ -1,0 +1,113 @@
+//
+//  CategoryViewController.swift
+//  Tracker
+//
+//  Created by Кирилл Дробин on 21.10.2024.
+//
+
+import UIKit
+
+final class CategoryMainViewController: UIViewController {
+   
+    var trackerCategoryStorage = TrackerCategoryStorage.shared
+    
+    private lazy var label: UILabel = {
+        let label = UILabel()
+        label.text = "Категория"
+        label.font = UIFont(name: "YS Display-Medium", size: 16)
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private lazy var categoryTableView: UITableView = {
+        let table = UITableView()
+        table.rowHeight = 75
+        table.layer.cornerRadius = 16
+        table.alwaysBounceVertical = false
+        table.layer.masksToBounds = true
+        return table
+    }()
+    
+    private lazy var addButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 16
+        button.backgroundColor = .black
+        button.setTitle("Добавить категорию", for: .normal)
+        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.addTarget(self, action: #selector(switchToCategoryCreaterViewController), for: .touchUpInside)
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = true
+        view.backgroundColor = .white
+        addSubviews()
+        makeConstraints()
+        categoryTableView.dataSource = self
+        categoryTableView.delegate = self
+        categoryTableView.reloadData()
+    }
+    
+    @objc private func switchToCategoryCreaterViewController() {
+        let categoryCreaterViewController = CategoryCreaterViewController()
+        navigationController?.pushViewController(categoryCreaterViewController, animated: true)
+    }
+    
+    private func addSubviews() {
+        [
+            label,
+            categoryTableView,
+            addButton
+        ].forEach { [weak self] in
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            self?.view.addSubview($0)
+        }
+    }
+    
+    private func makeConstraints() {
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 38),
+            label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 114),
+            label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -112),
+            
+            categoryTableView.heightAnchor.constraint(equalToConstant: 75),
+            categoryTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            categoryTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            categoryTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
+            categoryTableView.widthAnchor.constraint(equalToConstant: 343),
+            
+            addButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 662),
+            addButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+}
+
+extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        //cell
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = "Важное"
+        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+            trackerCategoryStorage.trackerCategoryName = ""
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            trackerCategoryStorage.trackerCategoryName = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
+            print("\(trackerCategoryStorage.trackerCategoryName)")
+        }
+    }
+}
