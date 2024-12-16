@@ -16,7 +16,6 @@ final class HabitCreaterViewController: UIViewController {
     var trackerCategoryStorage = TrackerCategoryStorage.shared
     var trackerStorage = TrackerStorage.shared
     
-    
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -25,14 +24,15 @@ final class HabitCreaterViewController: UIViewController {
         return label
     }()
     
-    private lazy var trackerNameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "   Введите название трекера"
+    private lazy var trackerNameTextField: CustomTextField = {
+        let textField = CustomTextField()
+        textField.placeholder = "Введите название трекера"
         textField.clearButtonMode = .whileEditing
         textField.font = UIFont(name: "YS Display-Medium", size: 16)
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
         textField.keyboardType = .default
+        textField.addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingChanged)
         return textField
     }()
     
@@ -64,7 +64,7 @@ final class HabitCreaterViewController: UIViewController {
         button.setTitle("Создать", for: .normal)
         button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
         button.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
-        button.isEnabled = true
+        button.isEnabled = false
         return button
     }()
     
@@ -74,16 +74,22 @@ final class HabitCreaterViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         menu.dataSource = self
         menu.delegate = self
-        trackerNameTextField.delegate = self
-        
-        reloadInputViews()
         addSubviews()
         makeConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        menu.dataSource = self
+        menu.delegate = self
         menu.reloadData()
+        addSubviews()
+        makeConstraints()
+        
+        if trackerStorage.trackerNameText.isEmpty == false, trackerCategoryStorage.trackerCategoryName.isEmpty == false, trackerStorage.date.isEmpty == false {
+            createButton.isEnabled = true
+            createButton.backgroundColor = .black
+        }
     }
     
     private func addSubviews() {
@@ -111,7 +117,6 @@ final class HabitCreaterViewController: UIViewController {
             trackerNameTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackerNameTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             trackerNameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
-            
             trackerNameTextField.textInputView.leadingAnchor.constraint(equalTo: trackerNameTextField.leadingAnchor, constant: 16),
             
             menu.heightAnchor.constraint(equalToConstant: 150),
@@ -131,62 +136,35 @@ final class HabitCreaterViewController: UIViewController {
         ])
     }
     
-//    private func makeDaysOfWeekShort() -> [String] {
-////        let dateFormatter = DateFormatter()
-////        dateFormatter.locale = Locale(identifier: "ru_RU")
-////        dateFormatter.dateFormat = "EEEE"
-//        
-//        let date = Date()
-//        let calendar = Calendar(identifier: .iso8601)
-//
-//        func weekDayMaker(weekday: Int) -> DateComponents {
-//            var datecomponets = DateComponents()
-//            datecomponets.weekday = weekday
-//            datecomponets.weekOfYear = calendar.dateComponents([.weekOfYear], from: date).weekOfYear
-//            datecomponets.year = calendar.dateComponents([.year], from: date).year
-//            return datecomponets
-//        }
-//        
-//        var cellTextArray = [String]()
-//        
-//        //        for date in trackerStorage.date {
-//        //            let formattedTrackerDate = dateFormatter.string(from: date)
-//
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 1)) ?? Date()) == true {
-//            cellTextArray.append("Пн")
-//        }
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 2)) ?? Date()) == true {
-//            cellTextArray.append("Вт")
-//        }
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 3)) ?? Date()) == true {
-//            cellTextArray.append("Ср")
-//        }
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 4)) ?? Date()) == true {
-//            cellTextArray.append("Чт")
-//        }
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 5)) ?? Date()) == true {
-//            cellTextArray.append("Пт")
-//        }
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 6)) ?? Date()) == true {
-//            cellTextArray.append("Сб")
-//        }
-//        if trackerStorage.date.contains(calendar.date(from: weekDayMaker(weekday: 7)) ?? Date()) == true {
-//            cellTextArray.append("Вс")
-//        }
-//        
-//        return cellTextArray
-//    }
-    
     @objc private func createTracker() {
-        if trackerStorage.trackerNameText.isEmpty == false, trackerCategoryStorage.trackerCategoryName.isEmpty == false, trackerStorage.date.isEmpty == false {
-            let randomId = UInt.random(in: 0..<10000)
-            trackerStorage.tracker.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
-            self.dismiss(animated: true)
+        
+        let randomId = UInt.random(in: 0..<10000)
+        
+        trackerStorage.tracker.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
+        
+        for i in trackerCategoryStorage.categories {
+            var trackersForCategory = i.trackers
+            if i.categoryName == trackerCategoryStorage.trackerCategoryName {
+                trackersForCategory.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
+                trackerCategoryStorage.categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
+                print("\(trackerCategoryStorage.categories)")
+            }
         }
+        
+        NotificationCenter.default.post(name: .valueChange, object: nil)
+        print("\(trackerStorage.tracker)")
+        dismissViewController()
     }
     
     @objc private func dismissViewController() {
+        let trackersViewController = TrackersViewController()
+        trackersViewController.viewWillAppear(true)
+        
         self.dismiss(animated: true)
+    }
+    
+    @objc private func textFieldDidEndEditing() {
+        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
     }
 }
 
@@ -234,11 +212,37 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
     }
 }
 
-extension HabitCreaterViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
-        return true
-    }
-}
+//class TextFieldWithPadding: UITextField {
+//    var textPadding = UIEdgeInsets(
+//        top: 10,
+//        left: 20,
+//        bottom: 10,
+//        right: 20
+//    )
+//
+//    override func textRect(forBounds bounds: CGRect) -> CGRect {
+//        let rect = super.textRect(forBounds: bounds)
+//        return rect.inset(by: textPadding)
+//    }
+//
+//    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+//        let rect = super.editingRect(forBounds: bounds)
+//        return rect.inset(by: textPadding)
+//    }
+//}
+
+//class CustomTextField: UITextField {
+//
+//    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+//        return CGRect.init(x: 16, y: 0, width: bounds.width, height: bounds.height)
+//    }
+//}
+
+//extension HabitCreaterViewController: UITextFieldDelegate {
+//
+//    private func textFieldDidEndEditing(_ textField: UITextField) -> Bool {
+//        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
+//        return true
+//    }
+//}
 

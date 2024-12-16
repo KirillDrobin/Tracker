@@ -19,13 +19,15 @@ final class UnregularEventCreaterViewController: UIViewController {
         return label
     }()
     
-    private lazy var trackerNameTextField: UITextField = {
-        let textField = UITextField()
+    private lazy var trackerNameTextField: CustomTextField = {
+        let textField = CustomTextField()
         textField.placeholder = "Введите название трекера"
-        textField.textColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
+        textField.clearButtonMode = .whileEditing
         textField.font = UIFont(name: "YS Display-Medium", size: 16)
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
+        textField.keyboardType = .default
+        textField.addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingChanged)
         return textField
     }()
     
@@ -64,17 +66,24 @@ final class UnregularEventCreaterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        navigationController?.navigationBar.isHidden = true
         menu.dataSource = self
         menu.delegate = self
-        navigationController?.navigationBar.isHidden = true
+        reloadInputViews()
         addSubviews()
         makeConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        menu.reloadData()
     }
     
     private func addSubviews() {
         [
             label,
             trackerNameTextField,
+            trackerNameTextField.textInputView,
             menu,
             canselButton,
             createButton
@@ -94,7 +103,9 @@ final class UnregularEventCreaterViewController: UIViewController {
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
             trackerNameTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackerNameTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            trackerNameTextField .topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
+            trackerNameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
+            trackerNameTextField.textInputView.leadingAnchor.constraint(equalTo: trackerNameTextField.leadingAnchor, constant: 16),
+            
             
             menu.heightAnchor.constraint(equalToConstant: 75),
             menu.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -111,6 +122,10 @@ final class UnregularEventCreaterViewController: UIViewController {
             createButton.centerYAnchor.constraint(equalTo: canselButton.centerYAnchor),
             createButton.leadingAnchor.constraint(equalTo: canselButton.trailingAnchor, constant: 8)
         ])
+    }
+    
+    @objc private func textFieldDidEndEditing() {
+//        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
     }
     
     @objc private func dismissViewController() {

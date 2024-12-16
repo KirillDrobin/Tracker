@@ -9,7 +9,7 @@ import UIKit
 
 final class TabBarController: UITabBarController {
     
-    override func viewDidLoad() {
+    override func viewDidLoad () {
         super.viewDidLoad()
         view.backgroundColor = .white
         tabBar.layer.borderColor = CGColor(gray: 0.5, alpha: 0.5)

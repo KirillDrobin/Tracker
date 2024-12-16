@@ -16,4 +16,5 @@ final class TrackerStorage {
     var currentTrackersIndexes = [Int]()
     
     var tracker = [Tracker]()
+    
 }

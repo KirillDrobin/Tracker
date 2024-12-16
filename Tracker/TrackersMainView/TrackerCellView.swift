@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerCellView: UICollectionViewCell {
     
-    let trackerStorage = TrackerStorage.shared
+    let trackerRecordStorage = TrackerRecordStorage.shared
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -25,7 +25,7 @@ final class TrackerCellView: UICollectionViewCell {
     
     lazy var recordLabel: UILabel = {
         let label = UILabel()
-        label.text = "1 день"
+        label.text = "0 день"
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .natural
         label.sizeToFit()
@@ -120,11 +120,33 @@ final class TrackerCellView: UICollectionViewCell {
         ])
     }
     
-    @objc private func checkButtonAction() {
+    @objc func checkButtonAction(id: UInt) {
         if checkButton.currentImage == UIImage(systemName: "plus") {
+            let date = Date()
+            
+            if trackerRecordStorage.completedTrackers.isEmpty == false {
+                for (key, value) in trackerRecordStorage.completedTrackers {
+                    var dateComplete = value
+                    if key == id {
+                        dateComplete = date
+                        trackerRecordStorage.completedTrackers.updateValue(dateComplete, forKey: key)
+                        print("\(trackerRecordStorage.completedTrackers)")
+                    }
+                }
+            } else {
+                trackerRecordStorage.completedTrackers.updateValue(date, forKey: id)
+                print("\(trackerRecordStorage.completedTrackers)")
+            }
+
+            print("трекер выполнен: \(trackerRecordStorage.completedTrackers)")
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
         } else {
+            let date = Date()
+            trackerRecordStorage.completedTrackers.removeAll { trackers in
+                return trackers.trackerRecord == [id: date]
+            }
+            print("трекер выполнен: \(trackerRecordStorage.completedTrackers)")
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
         }

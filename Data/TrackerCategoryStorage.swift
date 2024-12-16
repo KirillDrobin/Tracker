@@ -10,5 +10,6 @@ import Foundation
 final class TrackerCategoryStorage {
     static let shared = TrackerCategoryStorage()
     var trackerCategoryName = String()
-    var categories: [TrackerCategory] = []
+    
+    var categories = [TrackerCategory]()
 }

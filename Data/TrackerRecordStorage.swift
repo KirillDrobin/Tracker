@@ -9,5 +9,6 @@ import Foundation
 
 final class TrackerRecordStorage {
     static let shared = TrackerRecordStorage()
+    
     var completedTrackers = [TrackerRecord]()
 }

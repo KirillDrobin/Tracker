@@ -68,21 +68,18 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if trackerStorage.currentTrackersIndexes.isEmpty == false {
-            addSubviewsWithCollection()
-            makeConstraintsWithCollection()
-            collectionView.dataSource = self
-            collectionView.delegate = self
-            collectionView.register(TrackerCellView.self, forCellWithReuseIdentifier: "cell")
-            collectionView.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        } else {
-            addSubviewsDefault()
-            makeConstraintsDefault()
-        }
+        
+        reloadMainScreen()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMainScreen), name: .valueChange, object: nil)
+        dateChecker(datePicker)
+        print("will appear")
+    }
+    
+    @objc func reloadMainScreen() {
         if trackerStorage.currentTrackersIndexes.isEmpty == false {
             addSubviewsWithCollection()
             makeConstraintsWithCollection()
@@ -95,7 +92,6 @@ final class TrackersViewController: UIViewController {
             makeConstraintsDefault()
         }
         collectionView.reloadData()
-        //        print("\(trackerStorage.currentTrackersIndexes)")
     }
     
     @objc private func switchToTrackerChoiceViewController() {
@@ -105,30 +101,36 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        trackerStorage.currentTrackersIndexes.removeAll()
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        dateFormatter.dateFormat = "E"
-        let formattedSelectedDate = dateFormatter.string(from: selectedDate)
-        
-        for (index, item) in trackerStorage.tracker.enumerated() {
-            let formattedCurrentDate = dateFormatter.string(from: item.trackerDate[index])
-            print("Текущий день денели: \(formattedCurrentDate)")
-            if formattedCurrentDate == formattedSelectedDate {
-                trackerStorage.currentTrackersIndexes.append(index)
-                print("индексы: \(trackerStorage.currentTrackersIndexes)")
-            } else {
-                print("индексы не записались")
-            }
-        }
-        
-        print("sender: \(sender.date)")
-        print("tracker: \(trackerStorage.tracker)")
-        
-        print("Выбранная дата: \(formattedSelectedDate)")
+        dateChecker(sender)
     }
+    
+    private func dateChecker(_ sender: UIDatePicker) {
+        let senderDate = sender.date
+        trackerStorage.currentTrackersIndexes.removeAll()
+        print("индексы после загрузки метода пикера: \(trackerStorage.currentTrackersIndexes)")
+        let calendar = Calendar.current
+        var senderDatecomponets = DateComponents()
+        senderDatecomponets.weekday = calendar.dateComponents([.weekday], from: senderDate).weekday
+        
+        var cellDatecomponents = DateComponents()
+        for (index, item) in trackerStorage.tracker.enumerated() {
+            for i in item.trackerDate {
+                cellDatecomponents.weekday = calendar.dateComponents([.weekday], from: i).weekday
+                print("trackerDate: \(i)")
+                print("cellDatecomponents: \(cellDatecomponents)")
+                if cellDatecomponents == senderDatecomponets {
+                    trackerStorage.currentTrackersIndexes.append(index)
+                    print("индексы: \(index)")
+                    print("индексы: \(trackerStorage.currentTrackersIndexes)")
+                    
+                } else {
+                    print("индексы не записались")
+                }
+            }
+            NotificationCenter.default.post(name:.valueChange, object: nil)
+        }
+    }
+    
     
     private func addSubviewsDefault() {
         [
@@ -229,14 +231,14 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCellView else { return TrackerCellView()}
         
         var currentTrackerDataArray = [Tracker]()
-
         for i in trackerStorage.currentTrackersIndexes{
             currentTrackerDataArray.append(trackerStorage.tracker[i])
         }
-        
         cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
-        
+        cell.checkButtonAction(id: currentTrackerDataArray[indexPath.row].id)
+
         return cell
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -248,8 +250,10 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
             id = ""
         }
         
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackerHeaderView// 6
-        view.headerLabel.text = "Важное"
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackerHeaderView
+        if trackerStorage.currentTrackersIndexes.isEmpty == false {
+            view.headerLabel.text = "Важное"
+        }
         return view
     }
     
