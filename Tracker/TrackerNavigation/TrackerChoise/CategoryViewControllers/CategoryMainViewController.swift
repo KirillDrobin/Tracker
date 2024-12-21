@@ -8,9 +8,11 @@
 import UIKit
 
 final class CategoryMainViewController: UIViewController {
-   
+    
+    // MARK: - Properties
     var trackerCategoryStorage = TrackerCategoryStorage.shared
     
+    // MARK: - Private Properties
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
@@ -38,6 +40,7 @@ final class CategoryMainViewController: UIViewController {
         return button
     }()
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
@@ -49,11 +52,7 @@ final class CategoryMainViewController: UIViewController {
         categoryTableView.reloadData()
     }
     
-    @objc private func switchToCategoryCreaterViewController() {
-        let categoryCreaterViewController = CategoryCreaterViewController()
-        navigationController?.pushViewController(categoryCreaterViewController, animated: true)
-    }
-    
+    // MARK: - Private Methods
     private func addSubviews() {
         [
             label,
@@ -83,10 +82,16 @@ final class CategoryMainViewController: UIViewController {
             addButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
+    // MARK: - Objc Methods
+    @objc private func switchToCategoryCreaterViewController() {
+        let categoryCreaterViewController = CategoryCreaterViewController()
+        navigationController?.pushViewController(categoryCreaterViewController, animated: true)
+    }
 }
 
+// MARK: - extension CategoryMainViewController
 extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }

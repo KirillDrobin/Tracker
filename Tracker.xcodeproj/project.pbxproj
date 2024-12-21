@@ -22,9 +22,6 @@
 		ED7890BA2CAC727600721730 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890AC2CAC727600721730 /* AppDelegate.swift */; };
 		ED7890BB2CAC727600721730 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890B32CAC727600721730 /* SceneDelegate.swift */; };
 		ED7890BE2CAEF50C00721730 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890BD2CAEF50C00721730 /* TabBarController.swift */; };
-		ED7890C12CB29F2300721730 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890BF2CB29F2300721730 /* TrackerTests.swift */; };
-		ED7890C52CB29F2400721730 /* TrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890C22CB29F2400721730 /* TrackerUITests.swift */; };
-		ED7890C62CB29F2400721730 /* TrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890C32CB29F2400721730 /* TrackerUITestsLaunchTests.swift */; };
 		ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890C92CB29F5E00721730 /* StatsViewController.swift */; };
 		ED7890CC2CB29F6A00721730 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */; };
 		EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */; };
@@ -72,9 +69,6 @@
 		ED7890AF2CAC727600721730 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED7890B32CAC727600721730 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		ED7890BD2CAEF50C00721730 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		ED7890BF2CB29F2300721730 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
-		ED7890C22CB29F2400721730 /* TrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerUITests.swift; sourceTree = "<group>"; };
-		ED7890C32CB29F2400721730 /* TrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		ED7890C92CB29F5E00721730 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreaterViewController.swift; sourceTree = "<group>"; };
@@ -147,8 +141,6 @@
 				ED7890B52CAC727600721730 /* Tracker */,
 				ED121A962D0D91B5001EE8C5 /* Data */,
 				EDFE367D2CB3E54C00C672E1 /* Resources */,
-				ED7890C02CB29F2300721730 /* TrackerTests */,
-				ED7890C42CB29F2400721730 /* TrackerUITests */,
 				ED7890792CAC722B00721730 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -176,23 +168,6 @@
 				EDE6A9582CD16EA60038CBBA /* TrackerNavigation */,
 			);
 			path = Tracker;
-			sourceTree = "<group>";
-		};
-		ED7890C02CB29F2300721730 /* TrackerTests */ = {
-			isa = PBXGroup;
-			children = (
-				ED7890BF2CB29F2300721730 /* TrackerTests.swift */,
-			);
-			path = TrackerTests;
-			sourceTree = "<group>";
-		};
-		ED7890C42CB29F2400721730 /* TrackerUITests */ = {
-			isa = PBXGroup;
-			children = (
-				ED7890C22CB29F2400721730 /* TrackerUITests.swift */,
-				ED7890C32CB29F2400721730 /* TrackerUITestsLaunchTests.swift */,
-			);
-			path = TrackerUITests;
 			sourceTree = "<group>";
 		};
 		EDE6A9432CC6B4D90038CBBA /* Schedule */ = {
@@ -439,7 +414,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED7890C12CB29F2300721730 /* TrackerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,8 +421,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED7890C52CB29F2400721730 /* TrackerUITests.swift in Sources */,
-				ED7890C62CB29F2400721730 /* TrackerUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

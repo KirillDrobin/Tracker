@@ -8,11 +8,13 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    
-    private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    
+    // MARK: - Properties
     var trackerStorage = TrackerStorage.shared
     var habitCreaterViewController = HabitCreaterViewController.shared
+   
+    // MARK: - Private Properties
+    private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -40,6 +42,7 @@ final class ScheduleViewController: UIViewController {
         return button
     }()
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         trackerStorage.date.removeAll()
@@ -52,6 +55,7 @@ final class ScheduleViewController: UIViewController {
         makeConstraints()
     }
     
+    // MARK: - Private Methods
     private func addSubviews() {
         [
             label,
@@ -86,57 +90,43 @@ final class ScheduleViewController: UIViewController {
     
     private func selectedDaysOfWeekToDateConverter(selectedDayOfWeek: Int) -> Date {
         let today = Date()
-        let calendar = Calendar.current
+        print("\(today)")
+        let calendar = Calendar(identifier: .gregorian)
         var datecomponets = DateComponents()
         if selectedDayOfWeek == 7 {
             datecomponets.weekday = 1
-            print("день недели по calendar \(datecomponets.weekday)")
         } else {
             datecomponets.weekday = selectedDayOfWeek + 1
-            print("день недели по calendar \(datecomponets.weekday)")
         }
         datecomponets.weekOfYear = calendar.dateComponents([.weekOfYear], from: today).weekOfYear
         datecomponets.year = calendar.dateComponents([.year], from: today).year
-        
         guard let selectedDate = calendar.date(from: datecomponets) else { return Date() }
         return selectedDate
     }
     
-    private func makeDaysOfWeekShort(tag: Int) {
-        if daysOfWeek[tag - 1] == "Понедельник" {
-            trackerStorage.daysOfWeekCellTextArray.append("Пн")
-        } else {
-            if daysOfWeek[tag - 1] == "Вторник" {
-                trackerStorage.daysOfWeekCellTextArray.append("Вт")
-            } else {
-                if daysOfWeek[tag - 1] == "Среда" {
-                    trackerStorage.daysOfWeekCellTextArray.append("Ср")
-                } else {
-                    if daysOfWeek[tag - 1] == "Четверг" {
-                        trackerStorage.daysOfWeekCellTextArray.append("Чт")
-                    } else {
-                        if daysOfWeek[tag - 1] == "Пятница" {
-                            trackerStorage.daysOfWeekCellTextArray.append("Пт")
-                        } else {
-                            if daysOfWeek[tag - 1] == "Суббота" {
-                                trackerStorage.daysOfWeekCellTextArray.append("Сб")
-                            } else {
-                                if daysOfWeek[tag - 1] == "Воскресенье" {
-                                    trackerStorage.daysOfWeekCellTextArray.append("Вс")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
+    // MARK: - Objc Methods
     @objc private func popViewController() {
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc func changeDayOfWeek(_ sender: UISwitch) {
+        if sender.isOn {
+            trackerStorage.date.append(selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag))
+            print("даты трекеров: \(trackerStorage.date)")
+            trackerStorage.daysOfWeekCellTextArray.append(daysOfWeekShort[sender.tag - 1])
+        } else {
+            trackerStorage.date.removeAll { value in
+                return value == selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag)
+            }
+            print("даты трекеров удалены: \(trackerStorage.date)")
+            trackerStorage.daysOfWeekCellTextArray.removeAll { value in
+                return value == daysOfWeekShort[sender.tag - 1]
+            }
+        }
+    }
 }
 
+// MARK: - extension ScheduleViewController
 extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -157,7 +147,6 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         cell.accessoryView = uiSwitch
         cell.selectionStyle = .none
-        
         return cell
     }
     
@@ -165,19 +154,5 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         return 75
     }
     
-    @objc func changeDayOfWeek(_ sender: UISwitch) {
-        if sender.isOn {
-            trackerStorage.date.append(selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag))
-            print("даты трекеров: \(trackerStorage.date)")
-            makeDaysOfWeekShort(tag: sender.tag)
-        } else {
-            trackerStorage.date.removeAll { value in
-                return value == selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag)
-            }
-            print("даты трекеров удалены: \(trackerStorage.date)")
-            trackerStorage.daysOfWeekCellTextArray.removeAll { value in
-                return value == daysOfWeek[sender.tag]
-            }
-        }
-    }
+
 }

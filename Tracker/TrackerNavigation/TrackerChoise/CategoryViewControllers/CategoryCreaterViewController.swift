@@ -9,6 +9,7 @@ import UIKit
 
 final class CategoryCreaterViewController: UIViewController {
     
+    // MARK: - Private Properties
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
@@ -48,6 +49,7 @@ final class CategoryCreaterViewController: UIViewController {
         return button
     }()
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -57,7 +59,8 @@ final class CategoryCreaterViewController: UIViewController {
         print("didload category creat")
         
     }
-     
+    
+    // MARK: - Private Methods
     private func showWarningTextLimitLabel() {
         warningTextLimitLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(warningTextLimitLabel)
@@ -100,6 +103,7 @@ final class CategoryCreaterViewController: UIViewController {
         ])
     }
     
+    // MARK: - Objc Methods
     @objc private func createCategoryButtonAction() {
         navigationController?.popViewController(animated: true)
     }

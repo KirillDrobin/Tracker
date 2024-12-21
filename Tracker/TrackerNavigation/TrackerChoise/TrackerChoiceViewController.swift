@@ -9,6 +9,7 @@ import UIKit
 
 final class TrackerChoiceViewController: UIViewController {
     
+    // MARK: - Private Properties
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
@@ -39,6 +40,7 @@ final class TrackerChoiceViewController: UIViewController {
         return button
     }()
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -46,17 +48,8 @@ final class TrackerChoiceViewController: UIViewController {
         addSubviews()
         makeConstraints()
     }
-    
-    @objc private func switchToHabitViewController() {
-        let habitCreaterViewController = HabitCreaterViewController()
-        navigationController?.pushViewController(habitCreaterViewController, animated: true)
-    }
-    
-    @objc private func switchToUnregularEventCreaterViewController() {
-        let unregularEventCreaterViewController = UnregularEventCreaterViewController()
-        navigationController?.pushViewController(unregularEventCreaterViewController, animated: true)
-    }
-    
+
+    // MARK: - Private Methods
     private func addSubviews() {
         [
             label,
@@ -85,5 +78,16 @@ final class TrackerChoiceViewController: UIViewController {
             addEventButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             addEventButton.topAnchor.constraint(equalTo: addHabitButton.bottomAnchor, constant: 18),
         ])
+    }
+    
+    // MARK: - Objc Methods
+    @objc private func switchToHabitViewController() {
+        let habitCreaterViewController = HabitCreaterViewController()
+        navigationController?.pushViewController(habitCreaterViewController, animated: true)
+    }
+    
+    @objc private func switchToUnregularEventCreaterViewController() {
+        let unregularEventCreaterViewController = UnregularEventCreaterViewController()
+        navigationController?.pushViewController(unregularEventCreaterViewController, animated: true)
     }
 }

@@ -8,13 +8,13 @@
 import UIKit
 
 final class TrackerHeaderView: UICollectionReusableView {
-    
+    // MARK: - Properties
     lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 19)
         return label
     }()
-    
+    // MARK: - Header init
     override init(frame: CGRect) {
         super.init(frame: frame)
         

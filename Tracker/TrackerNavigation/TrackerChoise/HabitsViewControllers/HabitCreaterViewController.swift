@@ -8,14 +8,15 @@
 import UIKit
 
 final class HabitCreaterViewController: UIViewController {
-    
-    private let cellId = "habitcell"
-    
+    // MARK: - Static Properties
     static var shared = HabitCreaterViewController()
     
+    // MARK: - Properties
     var trackerCategoryStorage = TrackerCategoryStorage.shared
     var trackerStorage = TrackerStorage.shared
-    
+   
+    // MARK: - Private Properties
+    private let cellId = "habitcell"
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -40,7 +41,7 @@ final class HabitCreaterViewController: UIViewController {
         let table = UITableView()
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
-        table.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
+//        table.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         return table
     }()
     
@@ -68,6 +69,7 @@ final class HabitCreaterViewController: UIViewController {
         return button
     }()
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -92,6 +94,7 @@ final class HabitCreaterViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Methods
     private func addSubviews() {
         [
             label,
@@ -136,6 +139,14 @@ final class HabitCreaterViewController: UIViewController {
         ])
     }
     
+    private func clearTrackerParams() {
+        trackerStorage.trackerNameText.removeAll()
+        trackerCategoryStorage.trackerCategoryName.removeAll()
+        trackerStorage.date.removeAll()
+        trackerStorage.daysOfWeekCellTextArray.removeAll()
+    }
+    
+    // MARK: - Objc Methods
     @objc private func createTracker() {
         
         let randomId = UInt.random(in: 0..<10000)
@@ -147,17 +158,15 @@ final class HabitCreaterViewController: UIViewController {
             if i.categoryName == trackerCategoryStorage.trackerCategoryName {
                 trackersForCategory.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
                 trackerCategoryStorage.categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
-                print("\(trackerCategoryStorage.categories)")
             }
         }
-        
         NotificationCenter.default.post(name: .valueChange, object: nil)
-        print("\(trackerStorage.tracker)")
         dismissViewController()
     }
     
     @objc private func dismissViewController() {
         let trackersViewController = TrackersViewController()
+        clearTrackerParams()
         trackersViewController.viewWillAppear(true)
         
         self.dismiss(animated: true)
@@ -168,6 +177,7 @@ final class HabitCreaterViewController: UIViewController {
     }
 }
 
+// MARK: - extension HabitCreaterViewController
 extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -211,38 +221,4 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
         return 75
     }
 }
-
-//class TextFieldWithPadding: UITextField {
-//    var textPadding = UIEdgeInsets(
-//        top: 10,
-//        left: 20,
-//        bottom: 10,
-//        right: 20
-//    )
-//
-//    override func textRect(forBounds bounds: CGRect) -> CGRect {
-//        let rect = super.textRect(forBounds: bounds)
-//        return rect.inset(by: textPadding)
-//    }
-//
-//    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-//        let rect = super.editingRect(forBounds: bounds)
-//        return rect.inset(by: textPadding)
-//    }
-//}
-
-//class CustomTextField: UITextField {
-//
-//    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-//        return CGRect.init(x: 16, y: 0, width: bounds.width, height: bounds.height)
-//    }
-//}
-
-//extension HabitCreaterViewController: UITextFieldDelegate {
-//
-//    private func textFieldDidEndEditing(_ textField: UITextField) -> Bool {
-//        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
-//        return true
-//    }
-//}
 

@@ -8,8 +8,10 @@
 import UIKit
 
 final class TrackerCellView: UICollectionViewCell {
-    
+    // MARK: - Properties
     let trackerRecordStorage = TrackerRecordStorage.shared
+    let trackerStorage = TrackerStorage.shared
+    let trackersViewController = TrackersViewController.shared
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -19,13 +21,12 @@ final class TrackerCellView: UICollectionViewCell {
         label.textAlignment = .natural
         label.layer.masksToBounds = true
         label.sizeToFit()
-        label.text = "Покормить кота"        
         return label
     }()
     
     lazy var recordLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 день"
+        label.text = "0 дней"
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .natural
         label.sizeToFit()
@@ -46,7 +47,6 @@ final class TrackerCellView: UICollectionViewCell {
         view.clipsToBounds = true
         view.layer.masksToBounds = true
         view.backgroundColor = UIColor(white: 1, alpha: 0.3)
-        view.text = "❤️"
         view.font = .systemFont(ofSize: 13)
         view.textAlignment = .center
         return view
@@ -63,19 +63,92 @@ final class TrackerCellView: UICollectionViewCell {
         button.tintColor = .white
         button.setPreferredSymbolConfiguration(.init(scale: .small), forImageIn: .normal)
         button.addTarget(self, action: #selector(checkButtonAction), for: .touchUpInside)
+        button.isEnabled = true
         return button
     }()
     
+    lazy var id: UInt = {
+        return id
+    }()
+    
+    lazy var datePickerDate: Date = {
+        return datePickerDate
+    }()
+    
+    // MARK: - Cell init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         contentView.backgroundColor = .clear
         addSubviews()
         makeConstraints()
+
+        checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Methods
+    func cellViewInit() {
+        print("4")
+        let currentDate = Date()
+        let calendar = Calendar.current
+        var datePicker = DateComponents()
+        var trackersDate = DateComponents()
+        
+        if datePickerDate > currentDate {
+            checkButton.isEnabled = false
+        } else {
+            checkButton.isEnabled = true
+        }
+
+        checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+        
+        for i in trackerRecordStorage.completedTrackers {
+            trackersDate.day = calendar.dateComponents([.day], from: i.date).day
+            trackersDate.month = calendar.dateComponents([.month], from: i.date).month
+            trackersDate.year = calendar.dateComponents([.year], from: i.date).year
+            
+            datePicker.day = calendar.dateComponents([.day], from: datePickerDate).day
+            datePicker.month = calendar.dateComponents([.month], from: datePickerDate).month
+            datePicker.year = calendar.dateComponents([.year], from: datePickerDate).year
+
+            print("дата календаря: \(datePicker)")
+            print("дата трекера: \(trackersDate)")
+           
+            if trackersDate == datePicker && i.id == id {
+                recordLabelTextMaker(count: countForRecordLabel(id: id))
+                checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func countForRecordLabel(id: UInt) -> Int {
+        var count = Int()
+        for i in trackerRecordStorage.completedTrackers {
+            if i.id == id {
+                count += 1
+            }
+        }
+        if trackerRecordStorage.completedTrackers.isEmpty {
+            count = 0
+        }
+        return count
+    }
+    
+    private func recordLabelTextMaker(count: Int) {
+        if count == 0 || count >= 5 {
+            recordLabel.text = "\(count) дней"
+        } else if count == 1 {
+            recordLabel.text = "\(count) день"
+        } else {
+            recordLabel.text = "\(count) дня"
+        }
     }
     
     private func addSubviews() {
@@ -84,7 +157,7 @@ final class TrackerCellView: UICollectionViewCell {
             titleLabel,
             recordLabel,
             emojiView,
-            checkButton
+            checkButton,
         ].forEach { [weak self] in
             $0.translatesAutoresizingMaskIntoConstraints = false
             self?.contentView.addSubview($0)
@@ -120,35 +193,32 @@ final class TrackerCellView: UICollectionViewCell {
         ])
     }
     
-    @objc func checkButtonAction(id: UInt) {
+    // MARK: - Objc Methods
+    @objc func checkButtonAction() {
         if checkButton.currentImage == UIImage(systemName: "plus") {
-            let date = Date()
-            
-            if trackerRecordStorage.completedTrackers.isEmpty == false {
-                for (key, value) in trackerRecordStorage.completedTrackers {
-                    var dateComplete = value
-                    if key == id {
-                        dateComplete = date
-                        trackerRecordStorage.completedTrackers.updateValue(dateComplete, forKey: key)
-                        print("\(trackerRecordStorage.completedTrackers)")
-                    }
-                }
-            } else {
-                trackerRecordStorage.completedTrackers.updateValue(date, forKey: id)
-                print("\(trackerRecordStorage.completedTrackers)")
-            }
-
-            print("трекер выполнен: \(trackerRecordStorage.completedTrackers)")
+            trackerRecordStorage.completedTrackers.append(TrackerRecord(id: id, date: datePickerDate))
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
-        } else {
-            let date = Date()
-            trackerRecordStorage.completedTrackers.removeAll { trackers in
-                return trackers.trackerRecord == [id: date]
-            }
+            recordLabelTextMaker(count: countForRecordLabel(id: id))
             print("трекер выполнен: \(trackerRecordStorage.completedTrackers)")
+        } else {
+            trackerRecordStorage.completedTrackers.removeAll { trackers in
+                let calendar = Calendar.current
+                var currentDateComponents = DateComponents()
+                var trackersDateComponents = DateComponents()
+                currentDateComponents.day = calendar.dateComponents([.day], from: datePickerDate).day
+                currentDateComponents.month = calendar.dateComponents([.month], from: datePickerDate).month
+                currentDateComponents.year = calendar.dateComponents([.year], from: datePickerDate).year
+                
+                trackersDateComponents.day = calendar.dateComponents([.day], from: trackers.date).day
+                trackersDateComponents.month = calendar.dateComponents([.month], from: trackers.date).month
+                trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
+                return trackersDateComponents == currentDateComponents && trackers.id == id
+            }
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+            recordLabelTextMaker(count: countForRecordLabel(id: id))
+            print("трекер удален: \(trackerRecordStorage.completedTrackers)")
         }
     }
 }
