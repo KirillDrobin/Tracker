@@ -18,9 +18,6 @@ final class TrackerCellView: UICollectionViewCell {
         label.font = .systemFont(ofSize: 12)
         label.numberOfLines = 2
         label.textColor = .white
-        label.textAlignment = .natural
-        label.layer.masksToBounds = true
-        label.sizeToFit()
         return label
     }()
     
@@ -104,9 +101,6 @@ final class TrackerCellView: UICollectionViewCell {
             checkButton.isEnabled = true
         }
 
-        checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
-        
         for i in trackerRecordStorage.completedTrackers {
             trackersDate.day = calendar.dateComponents([.day], from: i.date).day
             trackersDate.month = calendar.dateComponents([.month], from: i.date).month
@@ -115,14 +109,16 @@ final class TrackerCellView: UICollectionViewCell {
             datePicker.day = calendar.dateComponents([.day], from: datePickerDate).day
             datePicker.month = calendar.dateComponents([.month], from: datePickerDate).month
             datePicker.year = calendar.dateComponents([.year], from: datePickerDate).year
-
-            print("дата календаря: \(datePicker)")
-            print("дата трекера: \(trackersDate)")
            
             if trackersDate == datePicker && i.id == id {
                 recordLabelTextMaker(count: countForRecordLabel(id: id))
                 checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
                 checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
+                break
+            } else {
+                recordLabelTextMaker(count: countForRecordLabel(id: id))
+                checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
+                checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
             }
         }
     }
@@ -174,7 +170,6 @@ final class TrackerCellView: UICollectionViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
             titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
-            titleLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 44),
             
             recordLabel.heightAnchor.constraint(equalToConstant: 18),
             recordLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 12),
@@ -200,7 +195,6 @@ final class TrackerCellView: UICollectionViewCell {
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
             recordLabelTextMaker(count: countForRecordLabel(id: id))
-            print("трекер выполнен: \(trackerRecordStorage.completedTrackers)")
         } else {
             trackerRecordStorage.completedTrackers.removeAll { trackers in
                 let calendar = Calendar.current
@@ -218,7 +212,6 @@ final class TrackerCellView: UICollectionViewCell {
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
             recordLabelTextMaker(count: countForRecordLabel(id: id))
-            print("трекер удален: \(trackerRecordStorage.completedTrackers)")
         }
     }
 }

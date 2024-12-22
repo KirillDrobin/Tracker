@@ -8,13 +8,11 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    // MARK: - Properties
-    var trackerStorage = TrackerStorage.shared
-    var habitCreaterViewController = HabitCreaterViewController.shared
-   
     // MARK: - Private Properties
     private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     private let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+    private var trackerStorage = TrackerStorage.shared
+    private var habitCreaterViewController = HabitCreaterViewController.shared
     
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -29,6 +27,7 @@ final class ScheduleViewController: UIViewController {
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
         table.layer.masksToBounds = true
+        table.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         return table
     }()
     
@@ -90,7 +89,6 @@ final class ScheduleViewController: UIViewController {
     
     private func selectedDaysOfWeekToDateConverter(selectedDayOfWeek: Int) -> Date {
         let today = Date()
-        print("\(today)")
         let calendar = Calendar(identifier: .gregorian)
         var datecomponets = DateComponents()
         if selectedDayOfWeek == 7 {
@@ -112,13 +110,11 @@ final class ScheduleViewController: UIViewController {
     @objc func changeDayOfWeek(_ sender: UISwitch) {
         if sender.isOn {
             trackerStorage.date.append(selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag))
-            print("даты трекеров: \(trackerStorage.date)")
             trackerStorage.daysOfWeekCellTextArray.append(daysOfWeekShort[sender.tag - 1])
         } else {
             trackerStorage.date.removeAll { value in
                 return value == selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag)
             }
-            print("даты трекеров удалены: \(trackerStorage.date)")
             trackerStorage.daysOfWeekCellTextArray.removeAll { value in
                 return value == daysOfWeekShort[sender.tag - 1]
             }
@@ -142,6 +138,11 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         
         //cell
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        
+        if (indexPath.row == 6) {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        }
+        
         cell.imageView?.image = UIImage(named: "chevron.right")
         cell.textLabel?.text = daysOfWeek[indexPath.row]
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)

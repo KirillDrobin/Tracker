@@ -8,11 +8,9 @@
 import UIKit
 
 final class CategoryMainViewController: UIViewController {
-    
-    // MARK: - Properties
-    var trackerCategoryStorage = TrackerCategoryStorage.shared
-    
     // MARK: - Private Properties
+    private var trackerCategoryStorage = TrackerCategoryStorage.shared
+    
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
@@ -102,6 +100,7 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.text = "Важное"
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
     
@@ -112,7 +111,6 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             trackerCategoryStorage.trackerCategoryName = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
-            print("\(trackerCategoryStorage.trackerCategoryName)")
         }
     }
 }

@@ -41,7 +41,6 @@ final class HabitCreaterViewController: UIViewController {
         let table = UITableView()
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
-//        table.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         return table
     }()
     
@@ -192,12 +191,14 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
         cell.detailTextLabel?.font = .systemFont(ofSize: 17)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
         
+        
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Категория"
             cell.detailTextLabel?.text = trackerCategoryStorage.trackerCategoryName
+            cell.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         } else {
             cell.textLabel?.text = "Расписание"
-            
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             if trackerStorage.daysOfWeekCellTextArray.count == 7 {
                 cell.detailTextLabel?.text = "Каждый день"
             } else {

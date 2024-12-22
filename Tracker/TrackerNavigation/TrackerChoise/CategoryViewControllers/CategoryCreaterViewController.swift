@@ -56,20 +56,9 @@ final class CategoryCreaterViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         addSubviews()
         makeConstraints()
-        print("didload category creat")
-        
     }
     
-    // MARK: - Private Methods
-    private func showWarningTextLimitLabel() {
-        warningTextLimitLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(warningTextLimitLabel)
-        NSLayoutConstraint.activate([
-            warningTextLimitLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            warningTextLimitLabel.topAnchor.constraint(equalTo: categoryNameTextField.bottomAnchor, constant: 8)
-            ])
-    }
-    
+    // MARK: - Private Methods  
     private func addSubviews() {
         [
             label,

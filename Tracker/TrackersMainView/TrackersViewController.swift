@@ -10,14 +10,19 @@ import UIKit
 final class TrackersViewController: UIViewController {
     static var shared = TrackersViewController()
     // MARK: - Properties
-    var categories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
-    let trackerStorage = TrackerStorage.shared
-    var currentTrackerDataArray = [Tracker]()
+    
+   
     
     // MARK: - Private Properties
     private var trackersViewControllerObserver: NSObjectProtocol?
+    
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    private var currentTrackerDataArray = [Tracker]()
+    
     private let trackerRecordStorage = TrackerRecordStorage.shared
+    private let trackerStorage = TrackerStorage.shared
+    private let trackerCathegoryStorage = TrackerCategoryStorage.shared
 
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton()
@@ -31,14 +36,14 @@ final class TrackersViewController: UIViewController {
         date.datePickerMode = .date
         date.preferredDatePickerStyle = .compact
         date.locale = Locale(identifier: "ru_RU")
-        date.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .allEvents)
+        date.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         return date
     }()
     
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
-        label.font = UIFont.boldSystemFont(ofSize: 34)
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
@@ -46,6 +51,7 @@ final class TrackersViewController: UIViewController {
         let search = UISearchTextField()
         search.placeholder = "Поиск"
         search.textColor = .gray
+        search.backgroundColor = UIColor(red: 255/118, green: 255/118, blue: 225/128, alpha: 0.12)
         return search
     }()
     
@@ -86,7 +92,7 @@ final class TrackersViewController: UIViewController {
                 self.reloadMainScreen()
         }
         dateChecker(datePicker)
-        print("3 will appear")
+
     }
     
     // MARK: - Private Methods
@@ -119,7 +125,6 @@ final class TrackersViewController: UIViewController {
                 cellDatecomponents.weekday = calendar.dateComponents([.weekday], from: i).weekday
                 if cellDatecomponents == senderDatecomponets && item.id <= 10000 {
                     trackerStorage.currentTrackersIndexes.append(index)
-                    print("индексы записались для привычки \(trackerStorage.currentTrackersIndexes)")
                 } else {
                     print("индексы не записались")
                 }
@@ -135,18 +140,13 @@ final class TrackersViewController: UIViewController {
                 senderDatecomponets.day = calendar.dateComponents([.day], from: senderDate).day
                 senderDatecomponets.month = calendar.dateComponents([.month], from: senderDate).month
                 senderDatecomponets.year = calendar.dateComponents([.year], from: senderDate).year
-                
-                print("дата из массива \(cellDatecomponents)")
-                print("текущая дата \(senderDatecomponets)")
-                
+                                
                 if cellDatecomponents == senderDatecomponets && item.id > 10000 {
                     trackerStorage.currentTrackersIndexes.append(index)
-                    print("индексы записались для нерегулярки \(trackerStorage.currentTrackersIndexes)")
                 } else {
                     print("индексы не записались")
                 }
             }
-            
             NotificationCenter.default.post(name:.valueChange, object: nil)
         }
     }
@@ -249,7 +249,6 @@ final class TrackersViewController: UIViewController {
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         dateChecker(sender)
-        print("2")
     }
 }
 
@@ -262,7 +261,6 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCellView else { return TrackerCellView()}
-        print("1")
         currentTrackerDataArray.removeAll()
         for i in trackerStorage.currentTrackersIndexes{
             currentTrackerDataArray.append(trackerStorage.tracker[i])
@@ -275,8 +273,7 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         } else {
             cell.checkButton.isEnabled = true
         }
-        
-        print("текущие трекеры: \(currentTrackerDataArray)")
+
         cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
         cell.emojiView.text = currentTrackerDataArray[indexPath.row].trackerEmoji
         cell.cardView.backgroundColor = currentTrackerDataArray[indexPath.row].trackerColor
@@ -286,9 +283,6 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         cell.cellViewInit()
 
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -302,7 +296,7 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackerHeaderView
         if trackerStorage.currentTrackersIndexes.isEmpty == false {
-            view.headerLabel.text = "Важное"
+            view.headerLabel.text = "Ваэное"
         }
         return view
     }
