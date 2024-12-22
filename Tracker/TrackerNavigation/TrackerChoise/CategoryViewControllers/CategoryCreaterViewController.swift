@@ -106,7 +106,6 @@ final class CategoryCreaterViewController: UIViewController {
             createCategoryButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
         }
         if categoryNameTextField.text?.count == 38 {
-            showWarningTextLimitLabel()
         }
     }
 }
