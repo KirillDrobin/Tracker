@@ -13,7 +13,7 @@ final class TrackerChoiceViewController: UIViewController {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
-        label.font = UIFont(name: "YS Display-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
     }()
@@ -21,7 +21,7 @@ final class TrackerChoiceViewController: UIViewController {
     private lazy var addHabitButton: UIButton = {
         let button = UIButton()
         button.setTitle("Привычка", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -32,7 +32,7 @@ final class TrackerChoiceViewController: UIViewController {
     private lazy var addEventButton: UIButton = {
         let button = UIButton()
         button.setTitle("Нерегулярное событие", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true

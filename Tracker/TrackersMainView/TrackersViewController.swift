@@ -26,7 +26,7 @@ final class TrackersViewController: UIViewController {
 
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Add tracker"), for: .normal)
+        button.setImage(UIImage(named: "Figma plus"), for: .normal)
         button.addTarget(self, action: #selector(switchToTrackerChoiceViewController), for: .touchUpInside)
         return button
     }()
@@ -50,6 +50,7 @@ final class TrackersViewController: UIViewController {
     private lazy var searchField: UISearchTextField = {
         let search = UISearchTextField()
         search.placeholder = "Поиск"
+        search.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         search.textColor = .gray
         search.backgroundColor = UIColor(red: 255/118, green: 255/118, blue: 225/128, alpha: 0.12)
         return search
@@ -70,7 +71,7 @@ final class TrackersViewController: UIViewController {
     private lazy var mainTrackersViewImageLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
         return label
     }()
@@ -78,6 +79,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchField.delegate = self
         reloadMainScreen()
     }
     
@@ -94,6 +96,12 @@ final class TrackersViewController: UIViewController {
         dateChecker(datePicker)
 
     }
+    
+    
+
+    
+    
+    
     
     // MARK: - Private Methods
     private func reloadMainScreen() {

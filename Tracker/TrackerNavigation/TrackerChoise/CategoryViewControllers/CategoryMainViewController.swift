@@ -14,7 +14,7 @@ final class CategoryMainViewController: UIViewController {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
-        label.font = UIFont(name: "YS Display-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
     }()
@@ -33,7 +33,7 @@ final class CategoryMainViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.backgroundColor = .black
         button.setTitle("Добавить категорию", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(switchToCategoryCreaterViewController), for: .touchUpInside)
         return button
     }()

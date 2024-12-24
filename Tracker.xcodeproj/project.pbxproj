@@ -24,6 +24,7 @@
 		ED7890BE2CAEF50C00721730 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890BD2CAEF50C00721730 /* TabBarController.swift */; };
 		ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890C92CB29F5E00721730 /* StatsViewController.swift */; };
 		ED7890CC2CB29F6A00721730 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */; };
+		EDA91B212D1AF55100A00F86 /* HideKeyboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */; };
 		EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */; };
 		EDE6A9512CCFD3800038CBBA /* UnregularEventCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9502CCFD3800038CBBA /* UnregularEventCreaterViewController.swift */; };
 		EDFE37072CC031A800C672E1 /* TrackerChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */; };
@@ -71,6 +72,7 @@
 		ED7890BD2CAEF50C00721730 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		ED7890C92CB29F5E00721730 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
+		EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKeyboardExtension.swift; sourceTree = "<group>"; };
 		EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreaterViewController.swift; sourceTree = "<group>"; };
 		EDE6A9502CCFD3800038CBBA /* UnregularEventCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnregularEventCreaterViewController.swift; sourceTree = "<group>"; };
 		EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerChoiceViewController.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		ED121A972D0D91B5001EE8C5 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */,
 				ED121A9E2D0D91EA001EE8C5 /* CustomTextField.swift */,
 				ED121AA02D0D9C68001EE8C5 /* NotificationCenter.swift */,
 			);
@@ -398,6 +401,7 @@
 				ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */,
 				EDE6A9512CCFD3800038CBBA /* UnregularEventCreaterViewController.swift in Sources */,
 				EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */,
+				EDA91B212D1AF55100A00F86 /* HideKeyboardExtension.swift in Sources */,
 				EDFE370D2CC6783400C672E1 /* ScheduleViewController.swift in Sources */,
 				ED121A982D0D91B5001EE8C5 /* TrackerStorage.swift in Sources */,
 				ED121A992D0D91B5001EE8C5 /* TrackerCategory.swift in Sources */,

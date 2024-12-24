@@ -17,7 +17,7 @@ final class ScheduleViewController: UIViewController {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Расписание"
-        label.font = UIFont(name: "YS Display-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
     }()
@@ -36,7 +36,7 @@ final class ScheduleViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.backgroundColor = .black
         button.setTitle("Готово", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(popViewController), for: .touchUpInside)
         return button
     }()
@@ -133,6 +133,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         //switch
         let uiSwitch = UISwitch(frame: .zero)
         uiSwitch.setOn(false, animated: true)
+        uiSwitch.onTintColor = UIColor(red: 55/255, green: 114/255, blue: 231/255, alpha: 1)
         uiSwitch.tag = indexPath.row + 1
         uiSwitch.addTarget(self, action: #selector(changeDayOfWeek), for: .touchUpInside)
         
@@ -145,6 +146,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.imageView?.image = UIImage(named: "chevron.right")
         cell.textLabel?.text = daysOfWeek[indexPath.row]
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         cell.accessoryView = uiSwitch
         cell.selectionStyle = .none

@@ -20,7 +20,7 @@ final class HabitCreaterViewController: UIViewController {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
-        label.font = UIFont(name: "YS Display-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
     }()
@@ -29,7 +29,7 @@ final class HabitCreaterViewController: UIViewController {
         let textField = CustomTextField()
         textField.placeholder = "Введите название трекера"
         textField.clearButtonMode = .whileEditing
-        textField.font = UIFont(name: "YS Display-Medium", size: 16)
+        textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
         textField.keyboardType = .default
@@ -50,7 +50,7 @@ final class HabitCreaterViewController: UIViewController {
         button.layer.borderColor = CGColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1)
         button.layer.borderWidth = 1.0
         button.setTitle("Отменить", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(UIColor(named: "YP Red"), for: .normal)
         button.layer.masksToBounds = false
         button.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
@@ -62,7 +62,7 @@ final class HabitCreaterViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         button.setTitle("Создать", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
         button.isEnabled = false
         return button
@@ -75,6 +75,7 @@ final class HabitCreaterViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         menu.dataSource = self
         menu.delegate = self
+        trackerNameTextField.delegate = self
         addSubviews()
         makeConstraints()
     }
@@ -188,7 +189,8 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         cell.accessoryType = .disclosureIndicator
-        cell.detailTextLabel?.font = .systemFont(ofSize: 17)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
         
         

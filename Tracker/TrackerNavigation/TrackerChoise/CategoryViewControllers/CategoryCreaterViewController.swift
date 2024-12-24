@@ -13,15 +13,15 @@ final class CategoryCreaterViewController: UIViewController {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
-        label.font = UIFont(name: "YS Display-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
     }()
     
-    private lazy var categoryNameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "   Введите название категории"
-        textField.font = UIFont(name: "YS Display-Medium", size: 16)
+    private lazy var categoryNameTextField: CustomTextField = {
+        let textField = CustomTextField()
+        textField.placeholder = "Введите название категории"
+        textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.clearButtonMode = .whileEditing
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         textField.layer.cornerRadius = 16
@@ -32,7 +32,7 @@ final class CategoryCreaterViewController: UIViewController {
     private lazy var warningTextLimitLabel: UILabel = {
         let label = UILabel()
         label.text = "Ограничение 38 символов"
-        label.font = UIFont(name: "YS Display-Medium", size: 17)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textColor = UIColor(red: 245, green: 107, blue: 108, alpha: 1)
         label.textAlignment = .center
         return label
@@ -43,7 +43,7 @@ final class CategoryCreaterViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
         button.setTitle("Готово", for: .normal)
-        button.titleLabel?.font = UIFont(name: "YS Display-Medium", size: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.isEnabled = false
         button.addTarget(self, action: #selector(createCategoryButtonAction), for: .touchUpInside)
         return button
@@ -52,6 +52,7 @@ final class CategoryCreaterViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        categoryNameTextField.delegate = self
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = true
         addSubviews()
