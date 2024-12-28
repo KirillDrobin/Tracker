@@ -10,14 +10,11 @@ import UIKit
 final class CategoryMainViewController: UIViewController {
     // MARK: Delegate
     weak var delegate: CategoryNameSenderProtocol?
-//    static var shared = CategoryMainViewController()
     
     // MARK: - Properties
     private var trackerCategoryName = String()
     
-    // MARK: - Private Properties
-//    private var trackersViewController = TrackersViewController.shared
-    
+    // MARK: - Private Properties    
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
