@@ -8,14 +8,16 @@
 import UIKit
 
 final class UnregularEventCreaterViewController: UIViewController {
-    // MARK: - Static Properties
-    static var shared = UnregularEventCreaterViewController()
+    // MARK: - Delegate
+    weak var delegate: TrackerSender?
     
     // MARK: - Private Properties
     private let cellId = "unregular"
-    private let date = Date()
-    private var trackerCategoryStorage = TrackerCategoryStorage.shared
-    private var trackerStorage = TrackerStorage.shared
+    
+    private var trackerNameText = String()
+    private var trackerCategoryName = String()
+    private var date = [Date]()
+    private let currentDate = Date()
     
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -78,7 +80,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         menu.delegate = self
         addSubviews()
         makeConstraints()
-        trackerStorage.date.append(date)
+        date.append(currentDate)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,7 +92,10 @@ final class UnregularEventCreaterViewController: UIViewController {
         addSubviews()
         makeConstraints()
         
-        if trackerStorage.trackerNameText.isEmpty == false, trackerCategoryStorage.trackerCategoryName.isEmpty == false, trackerStorage.date.isEmpty == false {
+        if trackerNameText.isEmpty == false,
+            trackerCategoryName.isEmpty == false,
+            date.isEmpty == false
+        {
             createButton.isEnabled = true
             createButton.backgroundColor = .black
         }
@@ -146,16 +151,17 @@ final class UnregularEventCreaterViewController: UIViewController {
         
         let randomId = UInt.random(in: 10001..<20000)
         
-        trackerStorage.tracker.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
+        delegate?.categoryChecker(id: randomId,
+                                  trackerCategoryName: trackerCategoryName,
+                                  trackerNameText: trackerNameText,
+                                  date: date)
         
-        for i in trackerCategoryStorage.categories {
-            var trackersForCategory = i.trackers
-            if i.categoryName == trackerCategoryStorage.trackerCategoryName {
-                trackersForCategory.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
-                trackerCategoryStorage.categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
-            }
-        }
+        delegate?.trackerSender(trackerData: Tracker(id: randomId,
+                                                     trackerName: trackerNameText,
+                                                     trackerDate: date))
+        
         NotificationCenter.default.post(name: .valueChange, object: nil)
+
         dismissViewController()
     }
     
@@ -167,7 +173,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     }
     
     @objc private func textFieldDidEndEditing() {
-        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
+        trackerNameText = trackerNameTextField.text ?? ""
     }
 }
 
@@ -189,13 +195,14 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
         
         cell.textLabel?.text = "Категория"
-        cell.detailTextLabel?.text = trackerCategoryStorage.trackerCategoryName
+        cell.detailTextLabel?.text = trackerCategoryName
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let categoryMainViewController = CategoryMainViewController()
+        categoryMainViewController.delegate = self
         navigationController?.pushViewController(categoryMainViewController, animated: true)
     }
     
@@ -203,4 +210,17 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
         return 75
     }
 }
+
+extension UnregularEventCreaterViewController: DateSenderProtocol, CategoryNameSenderProtocol {
+    func dateSender(dateSender: [Date]) {
+        date = dateSender
+    }
+    
+    func dateShortSender(daysOfWeekShortArraySender: [String]) { }
+        
+    func categoryNameSender(categoryName: String) {
+        self.trackerCategoryName = categoryName
+    }
+}
+
 

@@ -7,14 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ED121A982D0D91B5001EE8C5 /* TrackerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A952D0D91B5001EE8C5 /* TrackerStorage.swift */; };
 		ED121A992D0D91B5001EE8C5 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A902D0D91B5001EE8C5 /* TrackerCategory.swift */; };
 		ED121A9A2D0D91B5001EE8C5 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A912D0D91B5001EE8C5 /* TrackerRecord.swift */; };
 		ED121A9B2D0D91B5001EE8C5 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A8F2D0D91B5001EE8C5 /* Tracker.swift */; };
-		ED121A9C2D0D91B5001EE8C5 /* TrackerCategoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A932D0D91B5001EE8C5 /* TrackerCategoryStorage.swift */; };
-		ED121A9D2D0D91B5001EE8C5 /* TrackerRecordStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A942D0D91B5001EE8C5 /* TrackerRecordStorage.swift */; };
 		ED121A9F2D0D91EA001EE8C5 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121A9E2D0D91EA001EE8C5 /* CustomTextField.swift */; };
-		ED121AA12D0D9C68001EE8C5 /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121AA02D0D9C68001EE8C5 /* NotificationCenter.swift */; };
+		ED121AA12D0D9C68001EE8C5 /* Notification.Name + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED121AA02D0D9C68001EE8C5 /* Notification.Name + extension.swift */; };
 		ED67B1F92CDD333400347C20 /* TrackerCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B1F82CDD333400347C20 /* TrackerCellView.swift */; };
 		ED67B1FB2CDE904700347C20 /* TrackerCellHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B1FA2CDE904700347C20 /* TrackerCellHeaderView.swift */; };
 		ED7890B62CAC727600721730 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED7890AD2CAC727600721730 /* Assets.xcassets */; };
@@ -25,6 +22,10 @@
 		ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890C92CB29F5E00721730 /* StatsViewController.swift */; };
 		ED7890CC2CB29F6A00721730 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */; };
 		EDA91B212D1AF55100A00F86 /* HideKeyboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */; };
+		EDA91B702D1C615700A00F86 /* DateSenderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */; };
+		EDA91B722D1C62EE00A00F86 /* CategorySenderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */; };
+		EDA91B742D1C770F00A00F86 /* TrackerSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B732D1C770F00A00F86 /* TrackerSender.swift */; };
+		EDA91BC22D1F4A1F00A00F86 /* RecordSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91BC12D1F4A1F00A00F86 /* RecordSender.swift */; };
 		EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */; };
 		EDE6A9512CCFD3800038CBBA /* UnregularEventCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9502CCFD3800038CBBA /* UnregularEventCreaterViewController.swift */; };
 		EDFE37072CC031A800C672E1 /* TrackerChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */; };
@@ -54,11 +55,8 @@
 		ED121A8F2D0D91B5001EE8C5 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		ED121A902D0D91B5001EE8C5 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		ED121A912D0D91B5001EE8C5 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
-		ED121A932D0D91B5001EE8C5 /* TrackerCategoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStorage.swift; sourceTree = "<group>"; };
-		ED121A942D0D91B5001EE8C5 /* TrackerRecordStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStorage.swift; sourceTree = "<group>"; };
-		ED121A952D0D91B5001EE8C5 /* TrackerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStorage.swift; sourceTree = "<group>"; };
 		ED121A9E2D0D91EA001EE8C5 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
-		ED121AA02D0D9C68001EE8C5 /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
+		ED121AA02D0D9C68001EE8C5 /* Notification.Name + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name + extension.swift"; sourceTree = "<group>"; };
 		ED67B1F82CDD333400347C20 /* TrackerCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellView.swift; sourceTree = "<group>"; };
 		ED67B1FA2CDE904700347C20 /* TrackerCellHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellHeaderView.swift; sourceTree = "<group>"; };
 		ED7890782CAC722B00721730 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +71,10 @@
 		ED7890C92CB29F5E00721730 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKeyboardExtension.swift; sourceTree = "<group>"; };
+		EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSenderProtocol.swift; sourceTree = "<group>"; };
+		EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySenderProtocol.swift; sourceTree = "<group>"; };
+		EDA91B732D1C770F00A00F86 /* TrackerSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSender.swift; sourceTree = "<group>"; };
+		EDA91BC12D1F4A1F00A00F86 /* RecordSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSender.swift; sourceTree = "<group>"; };
 		EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreaterViewController.swift; sourceTree = "<group>"; };
 		EDE6A9502CCFD3800038CBBA /* UnregularEventCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnregularEventCreaterViewController.swift; sourceTree = "<group>"; };
 		EDFE37062CC031A800C672E1 /* TrackerChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerChoiceViewController.swift; sourceTree = "<group>"; };
@@ -120,9 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				ED121A922D0D91B5001EE8C5 /* Models */,
-				ED121A952D0D91B5001EE8C5 /* TrackerStorage.swift */,
-				ED121A932D0D91B5001EE8C5 /* TrackerCategoryStorage.swift */,
-				ED121A942D0D91B5001EE8C5 /* TrackerRecordStorage.swift */,
 				ED121A972D0D91B5001EE8C5 /* Helpers */,
 			);
 			path = Data;
@@ -133,7 +132,7 @@
 			children = (
 				EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */,
 				ED121A9E2D0D91EA001EE8C5 /* CustomTextField.swift */,
-				ED121AA02D0D9C68001EE8C5 /* NotificationCenter.swift */,
+				ED121AA02D0D9C68001EE8C5 /* Notification.Name + extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -142,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				ED7890B52CAC727600721730 /* Tracker */,
+				EDA91B6E2D1C5FDC00A00F86 /* DelegateProtocols */,
 				ED121A962D0D91B5001EE8C5 /* Data */,
 				EDFE367D2CB3E54C00C672E1 /* Resources */,
 				ED7890792CAC722B00721730 /* Products */,
@@ -171,6 +171,17 @@
 				EDE6A9582CD16EA60038CBBA /* TrackerNavigation */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		EDA91B6E2D1C5FDC00A00F86 /* DelegateProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */,
+				EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */,
+				EDA91B732D1C770F00A00F86 /* TrackerSender.swift */,
+				EDA91BC12D1F4A1F00A00F86 /* RecordSender.swift */,
+			);
+			path = DelegateProtocols;
 			sourceTree = "<group>";
 		};
 		EDE6A9432CC6B4D90038CBBA /* Schedule */ = {
@@ -389,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDA91B722D1C62EE00A00F86 /* CategorySenderProtocol.swift in Sources */,
 				ED7890BA2CAC727600721730 /* AppDelegate.swift in Sources */,
 				ED67B1F92CDD333400347C20 /* TrackerCellView.swift in Sources */,
 				EDFE37072CC031A800C672E1 /* TrackerChoiceViewController.swift in Sources */,
@@ -403,13 +415,13 @@
 				EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */,
 				EDA91B212D1AF55100A00F86 /* HideKeyboardExtension.swift in Sources */,
 				EDFE370D2CC6783400C672E1 /* ScheduleViewController.swift in Sources */,
-				ED121A982D0D91B5001EE8C5 /* TrackerStorage.swift in Sources */,
 				ED121A992D0D91B5001EE8C5 /* TrackerCategory.swift in Sources */,
+				EDA91BC22D1F4A1F00A00F86 /* RecordSender.swift in Sources */,
+				EDA91B742D1C770F00A00F86 /* TrackerSender.swift in Sources */,
 				ED121A9A2D0D91B5001EE8C5 /* TrackerRecord.swift in Sources */,
-				ED121AA12D0D9C68001EE8C5 /* NotificationCenter.swift in Sources */,
+				EDA91B702D1C615700A00F86 /* DateSenderProtocol.swift in Sources */,
+				ED121AA12D0D9C68001EE8C5 /* Notification.Name + extension.swift in Sources */,
 				ED121A9B2D0D91B5001EE8C5 /* Tracker.swift in Sources */,
-				ED121A9C2D0D91B5001EE8C5 /* TrackerCategoryStorage.swift in Sources */,
-				ED121A9D2D0D91B5001EE8C5 /* TrackerRecordStorage.swift in Sources */,
 				ED67B1FB2CDE904700347C20 /* TrackerCellHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

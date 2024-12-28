@@ -8,14 +8,15 @@
 import UIKit
 
 final class HabitCreaterViewController: UIViewController {
-    // MARK: - Static Properties
-    static var shared = HabitCreaterViewController()
+    // MARK: - Delegate
+    weak var delegate: TrackerSender?    
     
-    // MARK: - Properties
-    var trackerCategoryStorage = TrackerCategoryStorage.shared
-    var trackerStorage = TrackerStorage.shared
-   
     // MARK: - Private Properties
+    private var trackerNameText = String()
+    private var date = [Date]()
+    private var trackerCategoryName = String()
+    private var daysOfWeekShortArray: [String] = []
+
     private let cellId = "habitcell"
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -88,7 +89,7 @@ final class HabitCreaterViewController: UIViewController {
         addSubviews()
         makeConstraints()
         
-        if trackerStorage.trackerNameText.isEmpty == false, trackerCategoryStorage.trackerCategoryName.isEmpty == false, trackerStorage.date.isEmpty == false {
+        if trackerNameText.isEmpty == false, trackerCategoryName.isEmpty == false, date.isEmpty == false {
             createButton.isEnabled = true
             createButton.backgroundColor = .black
         }
@@ -139,11 +140,11 @@ final class HabitCreaterViewController: UIViewController {
         ])
     }
     
-    private func clearTrackerParams() {
-        trackerStorage.trackerNameText.removeAll()
-        trackerCategoryStorage.trackerCategoryName.removeAll()
-        trackerStorage.date.removeAll()
-        trackerStorage.daysOfWeekCellTextArray.removeAll()
+    private func clearCellParams() {
+        trackerNameText.removeAll()
+        trackerCategoryName.removeAll()
+        date.removeAll()
+        daysOfWeekShortArray.removeAll()
     }
     
     // MARK: - Objc Methods
@@ -151,29 +152,19 @@ final class HabitCreaterViewController: UIViewController {
         
         let randomId = UInt.random(in: 0..<10000)
         
-        trackerStorage.tracker.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
-        
-        for i in trackerCategoryStorage.categories {
-            var trackersForCategory = i.trackers
-            if i.categoryName == trackerCategoryStorage.trackerCategoryName {
-                trackersForCategory.append(Tracker(id: randomId, trackerName: trackerStorage.trackerNameText, trackerDate: trackerStorage.date))
-                trackerCategoryStorage.categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
-            }
-        }
+        delegate?.categoryChecker(id: randomId, trackerCategoryName: trackerCategoryName, trackerNameText: trackerNameText, date: date)
+        delegate?.trackerSender(trackerData: Tracker(id: randomId, trackerName: trackerNameText, trackerDate: date))
         NotificationCenter.default.post(name: .valueChange, object: nil)
+
         dismissViewController()
     }
     
     @objc private func dismissViewController() {
-        let trackersViewController = TrackersViewController()
-        clearTrackerParams()
-        trackersViewController.viewWillAppear(true)
-        
         self.dismiss(animated: true)
     }
     
     @objc private func textFieldDidEndEditing() {
-        trackerStorage.trackerNameText = trackerNameTextField.text ?? ""
+        trackerNameText = trackerNameTextField.text ?? ""
     }
 }
 
@@ -196,15 +187,15 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
         
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Категория"
-            cell.detailTextLabel?.text = trackerCategoryStorage.trackerCategoryName
+            cell.detailTextLabel?.text = trackerCategoryName
             cell.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         } else {
             cell.textLabel?.text = "Расписание"
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-            if trackerStorage.daysOfWeekCellTextArray.count == 7 {
+            if daysOfWeekShortArray.count == 7 {
                 cell.detailTextLabel?.text = "Каждый день"
             } else {
-                cell.detailTextLabel?.text = trackerStorage.daysOfWeekCellTextArray.joined(separator: ", ")
+                cell.detailTextLabel?.text = daysOfWeekShortArray.joined(separator: ", ")
             }
         }
         return cell
@@ -213,9 +204,11 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 0) {
             let categoryMainViewController = CategoryMainViewController()
+            categoryMainViewController.delegate = self
             navigationController?.pushViewController(categoryMainViewController, animated: true)
         } else {
             let scheduleViewController = ScheduleViewController()
+            scheduleViewController.delegate = self
             navigationController?.pushViewController(scheduleViewController, animated: true)
         }
     }
@@ -225,3 +218,17 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
     }
 }
 
+// MARK: - Delegate methods
+extension HabitCreaterViewController: DateSenderProtocol, CategoryNameSenderProtocol {
+    func dateSender(dateSender: [Date]) {
+        date = dateSender
+    }
+    
+    func dateShortSender(daysOfWeekShortArraySender: [String]) {
+        self.daysOfWeekShortArray = daysOfWeekShortArraySender
+    }
+        
+    func categoryNameSender(categoryName: String) {
+        self.trackerCategoryName = categoryName
+    }
+}

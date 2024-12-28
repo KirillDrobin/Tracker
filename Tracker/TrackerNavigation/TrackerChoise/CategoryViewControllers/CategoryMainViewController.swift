@@ -8,8 +8,15 @@
 import UIKit
 
 final class CategoryMainViewController: UIViewController {
+    // MARK: Delegate
+    weak var delegate: CategoryNameSenderProtocol?
+//    static var shared = CategoryMainViewController()
+    
+    // MARK: - Properties
+    private var trackerCategoryName = String()
+    
     // MARK: - Private Properties
-    private var trackerCategoryStorage = TrackerCategoryStorage.shared
+//    private var trackersViewController = TrackersViewController.shared
     
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -95,7 +102,6 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         //cell
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.text = "Важное"
@@ -107,10 +113,10 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
-            trackerCategoryStorage.trackerCategoryName = ""
+            delegate?.categoryNameSender(categoryName: "")
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            trackerCategoryStorage.trackerCategoryName = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
+            delegate?.categoryNameSender(categoryName: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? "")
         }
     }
 }

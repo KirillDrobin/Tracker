@@ -10,6 +10,8 @@ import UIKit
 final class CategoryCreaterViewController: UIViewController {
     
     // MARK: - Private Properties
+    private var trackerCategoryName = String()
+
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = "Категория"

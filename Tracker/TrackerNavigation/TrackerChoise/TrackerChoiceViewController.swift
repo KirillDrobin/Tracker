@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackerChoiceViewController: UIViewController {
     
+    weak var delegate: TrackerSender?
+    
     // MARK: - Private Properties
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -83,11 +85,13 @@ final class TrackerChoiceViewController: UIViewController {
     // MARK: - Objc Methods
     @objc private func switchToHabitViewController() {
         let habitCreaterViewController = HabitCreaterViewController()
+        habitCreaterViewController.delegate = delegate
         navigationController?.pushViewController(habitCreaterViewController, animated: true)
     }
     
     @objc private func switchToUnregularEventCreaterViewController() {
         let unregularEventCreaterViewController = UnregularEventCreaterViewController()
+        unregularEventCreaterViewController.delegate = delegate
         navigationController?.pushViewController(unregularEventCreaterViewController, animated: true)
     }
 }

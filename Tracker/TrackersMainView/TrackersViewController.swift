@@ -8,22 +8,17 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
-    static var shared = TrackersViewController()
-    // MARK: - Properties
-    
-   
-    
     // MARK: - Private Properties
+    // Storage
+    private var tracker = [Tracker]()
+    private var categories = [TrackerCategory]()
+    private var completedTrackers = [TrackerRecord]()
+
     private var trackersViewControllerObserver: NSObjectProtocol?
-    
-    private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
+    private var currentDate = Date()
+    private var currentTrackersIndexes = [Int]()
     private var currentTrackerDataArray = [Tracker]()
     
-    private let trackerRecordStorage = TrackerRecordStorage.shared
-    private let trackerStorage = TrackerStorage.shared
-    private let trackerCathegoryStorage = TrackerCategoryStorage.shared
-
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Figma plus"), for: .normal)
@@ -76,6 +71,7 @@ final class TrackersViewController: UIViewController {
         return label
     }()
     
+    
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,27 +81,20 @@ final class TrackersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        trackersViewControllerObserver = NotificationCenter.default
+        self.trackersViewControllerObserver = NotificationCenter.default
             .addObserver(forName: .valueChange,
                          object: nil,
                          queue: .main
             ) { [weak self] _ in
-            guard let self = self else { return }
+                guard let self = self else { return }
                 self.reloadMainScreen()
-        }
+            }
         dateChecker(datePicker)
-
     }
-    
-    
-
-    
-    
-    
     
     // MARK: - Private Methods
     private func reloadMainScreen() {
-        if trackerStorage.currentTrackersIndexes.isEmpty == false {
+        if currentTrackersIndexes.isEmpty == false {
             addSubviewsWithCollection()
             makeConstraintsWithCollection()
             collectionView.dataSource = self
@@ -120,19 +109,19 @@ final class TrackersViewController: UIViewController {
     }
     
     private func dateChecker(_ sender: UIDatePicker) {
-        let senderDate = sender.date
-        trackerStorage.currentTrackersIndexes.removeAll()
+        currentDate = sender.date
+        currentTrackersIndexes.removeAll()
         let calendar = Calendar.current
-
-        for (index, item) in trackerStorage.tracker.enumerated() {
+        
+        for (index, item) in tracker.enumerated() {
             for i in item.trackerDate {
                 var cellDatecomponents = DateComponents()
                 var senderDatecomponets = DateComponents()
                 
-                senderDatecomponets.weekday = calendar.dateComponents([.weekday], from: senderDate).weekday
+                senderDatecomponets.weekday = calendar.dateComponents([.weekday], from: currentDate).weekday
                 cellDatecomponents.weekday = calendar.dateComponents([.weekday], from: i).weekday
                 if cellDatecomponents == senderDatecomponets && item.id <= 10000 {
-                    trackerStorage.currentTrackersIndexes.append(index)
+                    currentTrackersIndexes.append(index)
                 } else {
                     print("индексы не записались")
                 }
@@ -145,12 +134,12 @@ final class TrackersViewController: UIViewController {
                 cellDatecomponents.month = calendar.dateComponents([.month], from: i).month
                 cellDatecomponents.year = calendar.dateComponents([.year], from: i).year
                 
-                senderDatecomponets.day = calendar.dateComponents([.day], from: senderDate).day
-                senderDatecomponets.month = calendar.dateComponents([.month], from: senderDate).month
-                senderDatecomponets.year = calendar.dateComponents([.year], from: senderDate).year
-                                
+                senderDatecomponets.day = calendar.dateComponents([.day], from: currentDate).day
+                senderDatecomponets.month = calendar.dateComponents([.month], from: currentDate).month
+                senderDatecomponets.year = calendar.dateComponents([.year], from: currentDate).year
+                
                 if cellDatecomponents == senderDatecomponets && item.id > 10000 {
-                    trackerStorage.currentTrackersIndexes.append(index)
+                    currentTrackersIndexes.append(index)
                 } else {
                     print("индексы не записались")
                 }
@@ -158,7 +147,7 @@ final class TrackersViewController: UIViewController {
             NotificationCenter.default.post(name:.valueChange, object: nil)
         }
     }
-  
+    
     private func addSubviewsDefault() {
         [
             addTrackerButton,
@@ -247,10 +236,10 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
-    
     // MARK: - Objc Methods
     @objc private func switchToTrackerChoiceViewController() {
         let trackerChoiceViewController = TrackerChoiceViewController()
+        trackerChoiceViewController.delegate = self
         let trackerNavigationController = UINavigationController(rootViewController: trackerChoiceViewController)
         present(trackerNavigationController, animated: true)
     }
@@ -264,32 +253,35 @@ final class TrackersViewController: UIViewController {
 extension TrackersViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return trackerStorage.currentTrackersIndexes.count
+        return currentTrackersIndexes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCellView else { return TrackerCellView()}
         currentTrackerDataArray.removeAll()
-        for i in trackerStorage.currentTrackersIndexes{
-            currentTrackerDataArray.append(trackerStorage.tracker[i])
+        for i in currentTrackersIndexes{
+            currentTrackerDataArray.append(tracker[i])
         }
         
         let currentDate = Date()
-
+        
         if datePicker.date > currentDate {
             cell.checkButton.isEnabled = false
         } else {
             cell.checkButton.isEnabled = true
         }
-
+        
+        cell.delegate = self
         cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
         cell.emojiView.text = currentTrackerDataArray[indexPath.row].trackerEmoji
         cell.cardView.backgroundColor = currentTrackerDataArray[indexPath.row].trackerColor
-
+        
+        cell.completedTrackers = completedTrackers
         cell.id = currentTrackerDataArray[indexPath.row].id
         cell.datePickerDate = datePicker.date
+        
         cell.cellViewInit()
-
+        
         return cell
     }
     
@@ -303,8 +295,8 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         }
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackerHeaderView
-        if trackerStorage.currentTrackersIndexes.isEmpty == false {
-            view.headerLabel.text = "Ваэное"
+        if currentTrackersIndexes.isEmpty == false {
+            view.headerLabel.text = "Важное"
         }
         return view
     }
@@ -345,3 +337,50 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         UIEdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
     }
 }
+
+extension TrackersViewController: TrackerSender {
+    func categoryChecker(id: UInt, trackerCategoryName: String, trackerNameText: String, date: [Date]) {
+        if categories.isEmpty {
+            categories.append(TrackerCategory(categoryName: trackerCategoryName, trackers: [Tracker(id: id, trackerName: trackerNameText, trackerDate: date)]))
+        }
+
+        for i in categories {
+            var trackersForCategory = i.trackers
+            if i.categoryName == trackerCategoryName {
+                trackersForCategory.append(Tracker(id: id, trackerName: trackerNameText, trackerDate: date))
+                categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
+            }
+        }
+        
+        NotificationCenter.default.post(name: .valueChange, object: nil)
+    }
+    
+    func trackerSender(trackerData: Tracker) {
+        tracker.append(trackerData)
+        viewWillAppear(true)
+        NotificationCenter.default.post(name: .valueChange, object: nil)
+    }
+}
+
+extension TrackersViewController: RecordSender {
+    func recordSet(cellId: UInt, cellDate: Date) {
+        completedTrackers.append(TrackerRecord(id: cellId, date: cellDate))
+    }
+    
+    func recordDel(cellId: UInt, cellDate: Date) {
+        completedTrackers.removeAll { trackers in
+            let calendar = Calendar.current
+            var currentDateComponents = DateComponents()
+            var trackersDateComponents = DateComponents()
+            currentDateComponents.day = calendar.dateComponents([.day], from: cellDate).day
+            currentDateComponents.month = calendar.dateComponents([.month], from: cellDate).month
+            currentDateComponents.year = calendar.dateComponents([.year], from: cellDate).year
+            
+            trackersDateComponents.day = calendar.dateComponents([.day], from: trackers.date).day
+            trackersDateComponents.month = calendar.dateComponents([.month], from: trackers.date).month
+            trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
+            return trackersDateComponents == currentDateComponents && trackers.id == cellId
+        }
+    }
+}
+

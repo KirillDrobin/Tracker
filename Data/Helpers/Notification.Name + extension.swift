@@ -1,5 +1,5 @@
 //
-//  NotificationCenter.swift
+//  Notification.Name.swift
 //  Tracker
 //
 //  Created by Кирилл Дробин on 14.12.2024.

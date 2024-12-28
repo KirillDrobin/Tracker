@@ -8,11 +8,10 @@
 import UIKit
 
 final class TrackerCellView: UICollectionViewCell {
-    // MARK: - Properties
-    let trackerRecordStorage = TrackerRecordStorage.shared
-    let trackerStorage = TrackerStorage.shared
-    let trackersViewController = TrackersViewController.shared
+    // MARK: - Delegate
+    weak var delegate: RecordSender?
     
+    // MARK: - Properties
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
@@ -60,7 +59,7 @@ final class TrackerCellView: UICollectionViewCell {
         button.tintColor = .white
         button.setPreferredSymbolConfiguration(.init(scale: .small), forImageIn: .normal)
         button.addTarget(self, action: #selector(checkButtonAction), for: .touchUpInside)
-        button.isEnabled = true
+        //        button.isEnabled = true
         return button
     }()
     
@@ -72,13 +71,15 @@ final class TrackerCellView: UICollectionViewCell {
         return datePickerDate
     }()
     
+    lazy var completedTrackers = [TrackerRecord]()
+    
     // MARK: - Cell init
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
         addSubviews()
         makeConstraints()
-
+        
         checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
         checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
     }
@@ -89,7 +90,6 @@ final class TrackerCellView: UICollectionViewCell {
     
     // MARK: - Methods
     func cellViewInit() {
-        print("4")
         let currentDate = Date()
         let calendar = Calendar.current
         var datePicker = DateComponents()
@@ -100,8 +100,8 @@ final class TrackerCellView: UICollectionViewCell {
         } else {
             checkButton.isEnabled = true
         }
-
-        for i in trackerRecordStorage.completedTrackers {
+        
+        for i in completedTrackers {
             trackersDate.day = calendar.dateComponents([.day], from: i.date).day
             trackersDate.month = calendar.dateComponents([.month], from: i.date).month
             trackersDate.year = calendar.dateComponents([.year], from: i.date).year
@@ -109,7 +109,7 @@ final class TrackerCellView: UICollectionViewCell {
             datePicker.day = calendar.dateComponents([.day], from: datePickerDate).day
             datePicker.month = calendar.dateComponents([.month], from: datePickerDate).month
             datePicker.year = calendar.dateComponents([.year], from: datePickerDate).year
-           
+            
             if trackersDate == datePicker && i.id == id {
                 recordLabelTextMaker(count: countForRecordLabel(id: id))
                 checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
@@ -126,12 +126,12 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Private Methods
     private func countForRecordLabel(id: UInt) -> Int {
         var count = Int()
-        for i in trackerRecordStorage.completedTrackers {
+        for i in completedTrackers {
             if i.id == id {
                 count += 1
             }
         }
-        if trackerRecordStorage.completedTrackers.isEmpty {
+        if completedTrackers.isEmpty {
             count = 0
         }
         return count
@@ -144,6 +144,26 @@ final class TrackerCellView: UICollectionViewCell {
             recordLabel.text = "\(count) день"
         } else {
             recordLabel.text = "\(count) дня"
+        }
+    }
+    
+    private func recordSet(cellId: UInt, cellDate: Date) {
+        completedTrackers.append(TrackerRecord(id: cellId, date: cellDate))
+    }
+    
+    private func recordDel(cellId: UInt, cellDate: Date) {
+        completedTrackers.removeAll { trackers in
+            let calendar = Calendar.current
+            var currentDateComponents = DateComponents()
+            var trackersDateComponents = DateComponents()
+            currentDateComponents.day = calendar.dateComponents([.day], from: cellDate).day
+            currentDateComponents.month = calendar.dateComponents([.month], from: cellDate).month
+            currentDateComponents.year = calendar.dateComponents([.year], from: cellDate).year
+            
+            trackersDateComponents.day = calendar.dateComponents([.day], from: trackers.date).day
+            trackersDateComponents.month = calendar.dateComponents([.month], from: trackers.date).month
+            trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
+            return trackersDateComponents == currentDateComponents && trackers.id == cellId
         }
     }
     
@@ -191,27 +211,18 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Objc Methods
     @objc func checkButtonAction() {
         if checkButton.currentImage == UIImage(systemName: "plus") {
-            trackerRecordStorage.completedTrackers.append(TrackerRecord(id: id, date: datePickerDate))
+            delegate?.recordSet(cellId: id, cellDate: datePickerDate)
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
+            recordSet(cellId: id, cellDate: datePickerDate)
             recordLabelTextMaker(count: countForRecordLabel(id: id))
         } else {
-            trackerRecordStorage.completedTrackers.removeAll { trackers in
-                let calendar = Calendar.current
-                var currentDateComponents = DateComponents()
-                var trackersDateComponents = DateComponents()
-                currentDateComponents.day = calendar.dateComponents([.day], from: datePickerDate).day
-                currentDateComponents.month = calendar.dateComponents([.month], from: datePickerDate).month
-                currentDateComponents.year = calendar.dateComponents([.year], from: datePickerDate).year
-                
-                trackersDateComponents.day = calendar.dateComponents([.day], from: trackers.date).day
-                trackersDateComponents.month = calendar.dateComponents([.month], from: trackers.date).month
-                trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
-                return trackersDateComponents == currentDateComponents && trackers.id == id
-            }
+            delegate?.recordDel(cellId: id, cellDate: datePickerDate)
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+            recordDel(cellId: id, cellDate: datePickerDate)
             recordLabelTextMaker(count: countForRecordLabel(id: id))
         }
     }
 }
+

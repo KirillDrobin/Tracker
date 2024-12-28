@@ -8,11 +8,15 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
+    // MARK: - Delegate
+    weak var delegate: DateSenderProtocol?
+        
     // MARK: - Private Properties
     private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     private let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-    private var trackerStorage = TrackerStorage.shared
-    private var habitCreaterViewController = HabitCreaterViewController.shared
+    var date = [Date]()
+    var daysOfWeekShortArray: [String] = []
+
     
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -44,14 +48,16 @@ final class ScheduleViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        trackerStorage.date.removeAll()
-        trackerStorage.daysOfWeekCellTextArray.removeAll()
         view.backgroundColor = .white
         weekTableView.dataSource = self
         weekTableView.delegate = self
         navigationController?.navigationBar.isHidden = true
         addSubviews()
         makeConstraints()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     // MARK: - Private Methods
@@ -104,18 +110,20 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Objc Methods
     @objc private func popViewController() {
+        self.delegate?.dateSender(dateSender: date)
+        self.delegate?.dateShortSender(daysOfWeekShortArraySender: daysOfWeekShortArray)
         navigationController?.popViewController(animated: true)
     }
     
     @objc func changeDayOfWeek(_ sender: UISwitch) {
         if sender.isOn {
-            trackerStorage.date.append(selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag))
-            trackerStorage.daysOfWeekCellTextArray.append(daysOfWeekShort[sender.tag - 1])
+            date.append(selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag))
+            daysOfWeekShortArray.append(daysOfWeekShort[sender.tag - 1])
         } else {
-            trackerStorage.date.removeAll { value in
+            date.removeAll { value in
                 return value == selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag)
             }
-            trackerStorage.daysOfWeekCellTextArray.removeAll { value in
+            daysOfWeekShortArray.removeAll { value in
                 return value == daysOfWeekShort[sender.tag - 1]
             }
         }
@@ -140,7 +148,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         //cell
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         
-        if (indexPath.row == 6) {
+        if indexPath.row == 6 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         }
         
@@ -148,6 +156,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.text = daysOfWeek[indexPath.row]
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+
         cell.accessoryView = uiSwitch
         cell.selectionStyle = .none
         return cell
@@ -156,6 +165,4 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
-
 }
