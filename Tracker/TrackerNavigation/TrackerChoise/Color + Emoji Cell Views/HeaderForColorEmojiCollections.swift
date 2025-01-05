@@ -1,13 +1,13 @@
 //
-//  File.swift
+//  HeaderForColorEmojiCollections.swift
 //  Tracker
 //
-//  Created by Кирилл Дробин on 08.11.2024.
+//  Created by Кирилл Дробин on 03.01.2025.
 //
 
 import UIKit
 
-final class TrackerHeaderView: UICollectionReusableView {
+final class HeaderForColorEmojiCollections: UICollectionReusableView {
     // MARK: - Properties
     let headerLabel: UILabel = {
         let label = UILabel()
@@ -23,9 +23,9 @@ final class TrackerHeaderView: UICollectionReusableView {
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
-            headerLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 12),
+            headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
+            headerLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            headerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 5),
         ])
     }
     

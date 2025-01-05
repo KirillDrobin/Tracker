@@ -1,5 +1,5 @@
 //
-//  TrackerCellViewController.swift
+//  TrackerCellView.swift
 //  Tracker
 //
 //  Created by Кирилл Дробин on 07.11.2024.
@@ -12,7 +12,11 @@ final class TrackerCellView: UICollectionViewCell {
     weak var delegate: RecordSender?
     
     // MARK: - Properties
-    lazy var titleLabel: UILabel = {
+    var id = UInt()
+    var datePickerDate = Date()
+    var completedTrackers = [TrackerRecord]()
+    
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.numberOfLines = 2
@@ -20,7 +24,7 @@ final class TrackerCellView: UICollectionViewCell {
         return label
     }()
     
-    lazy var recordLabel: UILabel = {
+    let recordLabel: UILabel = {
         let label = UILabel()
         label.text = "0 дней"
         label.font = .systemFont(ofSize: 12)
@@ -29,14 +33,14 @@ final class TrackerCellView: UICollectionViewCell {
         return label
     }()
     
-    lazy var cardView: UIView = {
+    let cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
         view.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
         return view
     }()
     
-    lazy var emojiView: UILabel = {
+    let emojiView: UILabel = {
         let view = UILabel()
         view.frame.size.width = 24
         view.layer.cornerRadius = view.frame.size.width / 2
@@ -55,24 +59,13 @@ final class TrackerCellView: UICollectionViewCell {
         button.clipsToBounds = true
         button.layer.masksToBounds = true
         button.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
+//        button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .white
         button.setPreferredSymbolConfiguration(.init(scale: .small), forImageIn: .normal)
         button.addTarget(self, action: #selector(checkButtonAction), for: .touchUpInside)
-        //        button.isEnabled = true
         return button
     }()
-    
-    lazy var id: UInt = {
-        return id
-    }()
-    
-    lazy var datePickerDate: Date = {
-        return datePickerDate
-    }()
-    
-    lazy var completedTrackers = [TrackerRecord]()
-    
+        
     // MARK: - Cell init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,7 +81,7 @@ final class TrackerCellView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
+//    // MARK: - Methods
     func cellViewInit() {
         let currentDate = Date()
         let calendar = Calendar.current
@@ -113,12 +106,12 @@ final class TrackerCellView: UICollectionViewCell {
             if trackersDate == datePicker && i.id == id {
                 recordLabelTextMaker(count: countForRecordLabel(id: id))
                 checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-                checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
+                checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
                 break
             } else {
                 recordLabelTextMaker(count: countForRecordLabel(id: id))
                 checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-                checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+                checkButton.backgroundColor?.withAlphaComponent(1)
             }
         }
     }
@@ -174,9 +167,9 @@ final class TrackerCellView: UICollectionViewCell {
             recordLabel,
             emojiView,
             checkButton,
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.contentView.addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
@@ -210,16 +203,16 @@ final class TrackerCellView: UICollectionViewCell {
     
     // MARK: - Objc Methods
     @objc func checkButtonAction() {
-        if checkButton.currentImage == UIImage(systemName: "plus") {
+        if checkButton.imageView?.image == UIImage(systemName: "plus") {
             delegate?.recordSet(cellId: id, cellDate: datePickerDate)
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-            checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
+            checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
             recordSet(cellId: id, cellDate: datePickerDate)
             recordLabelTextMaker(count: countForRecordLabel(id: id))
         } else {
             delegate?.recordDel(cellId: id, cellDate: datePickerDate)
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-            checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+            checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(1)
             recordDel(cellId: id, cellDate: datePickerDate)
             recordLabelTextMaker(count: countForRecordLabel(id: id))
         }

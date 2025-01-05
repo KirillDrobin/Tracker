@@ -17,9 +17,19 @@ final class UnregularEventCreaterViewController: UIViewController {
     private var trackerNameText = String()
     private var trackerCategoryName = String()
     private var date = [Date]()
+    private var emoji = String()
+    private var color = UIColor()
     private let currentDate = Date()
     
-    private lazy var label: UILabel = {
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .clear
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.alwaysBounceVertical = true
+        return scrollView
+    }()
+    
+    private let label: UILabel = {
         let label = UILabel()
         label.text = "Новое нерегулярное событие"
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -27,7 +37,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         return label
     }()
     
-    private lazy var trackerNameTextField: CustomTextField = {
+    private let trackerNameTextField: CustomTextField = {
         let textField = CustomTextField()
         textField.placeholder = "Введите название трекера"
         textField.clearButtonMode = .whileEditing
@@ -39,7 +49,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         return textField
     }()
     
-    private lazy var menu: UITableView = {
+    private let moveToCategoryСhoiceTableView: UITableView = {
         let table = UITableView()
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
@@ -47,7 +57,27 @@ final class UnregularEventCreaterViewController: UIViewController {
         return table
     }()
     
-    private lazy var canselButton: UIButton = {
+    private let emojiCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isScrollEnabled = false
+        collectionView.allowsMultipleSelection = false
+        return collectionView
+    }()
+    
+    private let colorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isScrollEnabled = false
+        collectionView.allowsMultipleSelection = false
+        return collectionView
+    }()
+    
+    private let canselButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.layer.borderColor = CGColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1)
@@ -60,7 +90,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         return button
     }()
     
-    private lazy var createButton: UIButton = {
+    private let createButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
@@ -76,8 +106,27 @@ final class UnregularEventCreaterViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = true
-        menu.dataSource = self
-        menu.delegate = self
+        
+        moveToCategoryСhoiceTableView.dataSource = self
+        moveToCategoryСhoiceTableView.delegate = self
+        trackerNameTextField.delegate = self
+        
+        emojiCollectionView.register(EmojiCellView.self, forCellWithReuseIdentifier: "emojiCell")
+        emojiCollectionView.register(HeaderForColorEmojiCollections.self,
+                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                     withReuseIdentifier: "header")
+        
+        emojiCollectionView.delegate = self
+        emojiCollectionView.dataSource = self
+        
+        colorCollectionView.register(ColorCellView.self, forCellWithReuseIdentifier: "colorCell")
+        colorCollectionView.register(HeaderForColorEmojiCollections.self,
+                                     forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                     withReuseIdentifier: "header")
+        
+        colorCollectionView.delegate = self
+        colorCollectionView.dataSource = self
+        
         addSubviews()
         makeConstraints()
         date.append(currentDate)
@@ -85,17 +134,15 @@ final class UnregularEventCreaterViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        menu.dataSource = self
-        menu.delegate = self
-        trackerNameTextField.delegate = self
-        menu.reloadData()
+        moveToCategoryСhoiceTableView.reloadData()
         addSubviews()
         makeConstraints()
         
         if trackerNameText.isEmpty == false,
-            trackerCategoryName.isEmpty == false,
-            date.isEmpty == false
-        {
+           trackerCategoryName.isEmpty == false,
+           date.isEmpty == false,
+           emoji.isEmpty == false,
+           color != UIColor() {
             createButton.isEnabled = true
             createButton.backgroundColor = .black
         }
@@ -103,47 +150,74 @@ final class UnregularEventCreaterViewController: UIViewController {
     
     // MARK: - Private Methods
     private func addSubviews() {
+        view.addSubview(scrollView)
         [
             label,
             trackerNameTextField,
             trackerNameTextField.textInputView,
-            menu,
+            moveToCategoryСhoiceTableView,
+            emojiCollectionView,
+            colorCollectionView,
             canselButton,
             createButton
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            scrollView.addSubview($0)
         }
     }
     
     private func makeConstraints() {
         NSLayoutConstraint.activate([
+        
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
-            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 38),
-            label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 68),
+            label.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 38),
+            label.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 68),
             label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -66),
             
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
-            trackerNameTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            trackerNameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             trackerNameTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            trackerNameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
+            trackerNameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 98),
             trackerNameTextField.textInputView.leadingAnchor.constraint(equalTo: trackerNameTextField.leadingAnchor, constant: 16),
             
-            menu.heightAnchor.constraint(equalToConstant: 75),
-            menu.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            menu.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 197),
+            moveToCategoryСhoiceTableView.heightAnchor.constraint(equalToConstant: 75),
+            moveToCategoryСhoiceTableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            moveToCategoryСhoiceTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            moveToCategoryСhoiceTableView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 197),
+            
+            emojiCollectionView.topAnchor.constraint(equalTo: moveToCategoryСhoiceTableView.bottomAnchor, constant: 32),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: 204),
+            
+            colorCollectionView.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 34),
+            colorCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            colorCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
             
             canselButton.heightAnchor.constraint(equalToConstant: 60),
             canselButton.widthAnchor.constraint(equalToConstant: 166),
             canselButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            canselButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 1),
+            canselButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
+            canselButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             
             createButton.heightAnchor.constraint(equalToConstant: 60),
             createButton.widthAnchor.constraint(equalToConstant: 166),
             createButton.centerYAnchor.constraint(equalTo: canselButton.centerYAnchor),
-            createButton.leadingAnchor.constraint(equalTo: canselButton.trailingAnchor, constant: 8)
+            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
+    }
+    
+    private func clearCellParams() {
+        trackerNameText.removeAll()
+        trackerCategoryName.removeAll()
+        date.removeAll()
+        emoji.removeAll()
+        color = UIColor()
     }
     
     // MARK: - Objc Methods
@@ -154,13 +228,17 @@ final class UnregularEventCreaterViewController: UIViewController {
         delegate?.categoryChecker(id: randomId,
                                   trackerCategoryName: trackerCategoryName,
                                   trackerNameText: trackerNameText,
-                                  date: date)
+                                  date: date,
+                                  color: color,
+                                  emoji: emoji)
         
         delegate?.trackerSender(trackerData: Tracker(id: randomId,
                                                      trackerName: trackerNameText,
+                                                     trackerColor: color,
+                                                     trackerEmoji: emoji,
                                                      trackerDate: date))
         
-        NotificationCenter.default.post(name: .valueChange, object: nil)
+        NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
 
         dismissViewController()
     }
@@ -168,6 +246,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     @objc private func dismissViewController() {
         let trackersViewController = TrackersViewController()
         trackersViewController.viewWillAppear(true)
+        clearCellParams()
         
         self.dismiss(animated: true)
     }
@@ -211,6 +290,122 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
     }
 }
 
+// MARK: - extension HabitCreaterViewController: CollectionView Setups
+extension UnregularEventCreaterViewController: UICollectionViewDelegate,
+                                      UICollectionViewDataSource,
+                                      UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        Constants.colorsForCell.count
+    }
+    
+    //cell setup
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as! EmojiCellView
+            cell.emojiSetup(emoji: Constants.emojisForCell[indexPath.item])
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as! ColorCellView
+            cell.colorSetup(color: Constants.colorsForCell[indexPath.item])
+            return cell
+        }
+    }
+    
+    //cell size
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize { CGSize(width: 52, height: 52) }
+    
+    // header setup
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        var id: String
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "header"
+        default:
+            id = ""
+        }
+        
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                   withReuseIdentifier: id,
+                                                                   for: indexPath) as! HeaderForColorEmojiCollections
+        
+        if collectionView == emojiCollectionView {
+            view.headerLabel.text = "Emoji"
+            return view
+        } else {
+            view.headerLabel.text = "Цвет"
+            return view
+        }
+    }
+    
+    // header size
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView,
+                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+                                             at: indexPath)
+        
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28, height: 18),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    // collectionView setups
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat { 5 }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat { .zero }
+        
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
+    }
+    
+    // collectionView actions
+    // did select
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellView
+            cell?.contentView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+            cell?.contentView.layer.cornerRadius = 16
+            emoji = cell?.emojiCell.text ?? ""
+        } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
+            cell?.contentView.layer.borderWidth = 3
+            cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
+            cell?.contentView.layer.cornerRadius = 8
+            color = cell?.colorCell.backgroundColor ?? UIColor()
+        }
+    }
+    
+    // did deselect
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellView
+            cell?.contentView.backgroundColor = .clear
+            emoji = String()
+        } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
+            cell?.contentView.layer.borderWidth = .zero
+            color = UIColor()
+        }
+    }
+}
 extension UnregularEventCreaterViewController: DateSenderProtocol, CategoryNameSenderProtocol {
     func dateSender(dateSender: [Date]) {
         date = dateSender

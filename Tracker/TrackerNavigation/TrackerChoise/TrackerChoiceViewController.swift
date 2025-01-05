@@ -12,7 +12,7 @@ final class TrackerChoiceViewController: UIViewController {
     weak var delegate: TrackerSender?
     
     // MARK: - Private Properties
-    private lazy var label: UILabel = {
+    private let label: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -20,7 +20,7 @@ final class TrackerChoiceViewController: UIViewController {
         return label
     }()
     
-    private lazy var addHabitButton: UIButton = {
+    private let addHabitButton: UIButton = {
         let button = UIButton()
         button.setTitle("Привычка", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -31,7 +31,7 @@ final class TrackerChoiceViewController: UIViewController {
         return button
     }()
     
-    private lazy var addEventButton: UIButton = {
+    private let addEventButton: UIButton = {
         let button = UIButton()
         button.setTitle("Нерегулярное событие", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -57,9 +57,9 @@ final class TrackerChoiceViewController: UIViewController {
             label,
             addHabitButton,
             addEventButton
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            view.addSubview($0)
         }
     }
     

@@ -13,20 +13,20 @@ final class TrackersViewController: UIViewController {
     private var tracker = [Tracker]()
     private var categories = [TrackerCategory]()
     private var completedTrackers = [TrackerRecord]()
-
+    
     private var trackersViewControllerObserver: NSObjectProtocol?
     private var currentDate = Date()
     private var currentTrackersIndexes = [Int]()
     private var currentTrackerDataArray = [Tracker]()
     
-    private lazy var addTrackerButton: UIButton = {
+    private let addTrackerButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Figma plus"), for: .normal)
         button.addTarget(self, action: #selector(switchToTrackerChoiceViewController), for: .touchUpInside)
         return button
     }()
     
-    private lazy var datePicker: UIDatePicker = {
+    private let datePicker: UIDatePicker = {
         let date = UIDatePicker()
         date.datePickerMode = .date
         date.preferredDatePickerStyle = .compact
@@ -35,14 +35,14 @@ final class TrackersViewController: UIViewController {
         return date
     }()
     
-    private lazy var label: UILabel = {
+    private let label: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
-    private lazy var searchField: UISearchTextField = {
+    private let searchField: UISearchTextField = {
         let search = UISearchTextField()
         search.placeholder = "Поиск"
         search.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -51,19 +51,19 @@ final class TrackersViewController: UIViewController {
         return search
     }()
     
-    private lazy var collectionView: UICollectionView = {
+    private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collection
     }()
     
-    private lazy var mainTrackersViewImage: UIImageView = {
+    private let mainTrackersViewImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "TrackersDefaultLogo")
         return image
     }()
     
-    private lazy var mainTrackersViewImageLabel: UILabel = {
+    private let mainTrackersViewImageLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -81,14 +81,14 @@ final class TrackersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.trackersViewControllerObserver = NotificationCenter.default
-            .addObserver(forName: .valueChange,
-                         object: nil,
-                         queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.reloadMainScreen()
-            }
+        self.trackersViewControllerObserver = NotificationCenter.default.addObserver(
+            forName: NotificationNames.valueChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.reloadMainScreen()
+        }
         dateChecker(datePicker)
     }
     
@@ -122,8 +122,6 @@ final class TrackersViewController: UIViewController {
                 cellDatecomponents.weekday = calendar.dateComponents([.weekday], from: i).weekday
                 if cellDatecomponents == senderDatecomponets && item.id <= 10000 {
                     currentTrackersIndexes.append(index)
-                } else {
-                    print("индексы не записались")
                 }
             }
             
@@ -140,11 +138,9 @@ final class TrackersViewController: UIViewController {
                 
                 if cellDatecomponents == senderDatecomponets && item.id > 10000 {
                     currentTrackersIndexes.append(index)
-                } else {
-                    print("индексы не записались")
                 }
             }
-            NotificationCenter.default.post(name:.valueChange, object: nil)
+            NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
         }
     }
     
@@ -156,9 +152,9 @@ final class TrackersViewController: UIViewController {
             searchField,
             mainTrackersViewImage,
             mainTrackersViewImageLabel
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            view.addSubview($0)
         }
     }
     
@@ -169,9 +165,9 @@ final class TrackersViewController: UIViewController {
             label,
             searchField,
             collectionView,
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            view.addSubview($0)
         }
     }
     
@@ -236,6 +232,84 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    // MARK: - Methods
+    private func cellButtonImage (id: UInt) -> UIImage {
+        var image = UIImage()
+        let calendar = Calendar.current
+        var datePicker = DateComponents()
+        var trackersDate = DateComponents()
+             
+        for i in completedTrackers {
+            trackersDate.day = calendar.dateComponents([.day], from: i.date).day
+            trackersDate.month = calendar.dateComponents([.month], from: i.date).month
+            trackersDate.year = calendar.dateComponents([.year], from: i.date).year
+            
+            datePicker.day = calendar.dateComponents([.day], from: currentDate).day
+            datePicker.month = calendar.dateComponents([.month], from: currentDate).month
+            datePicker.year = calendar.dateComponents([.year], from: currentDate).year
+            
+            if trackersDate == datePicker && i.id == id {
+                image = UIImage(systemName: "checkmark") ?? UIImage()
+                break
+            } else {
+                image = UIImage(systemName: "plus") ?? UIImage()
+            }
+            
+        }
+        return image
+    }
+    
+    private func cellButtonColor (id: UInt) -> UIColor {
+        var color = UIColor()
+        let calendar = Calendar.current
+        var datePicker = DateComponents()
+        var trackersDate = DateComponents()
+             
+        for i in completedTrackers {
+            trackersDate.day = calendar.dateComponents([.day], from: i.date).day
+            trackersDate.month = calendar.dateComponents([.month], from: i.date).month
+            trackersDate.year = calendar.dateComponents([.year], from: i.date).year
+            
+            datePicker.day = calendar.dateComponents([.day], from: currentDate).day
+            datePicker.month = calendar.dateComponents([.month], from: currentDate).month
+            datePicker.year = calendar.dateComponents([.year], from: currentDate).year
+            
+            if trackersDate == datePicker && i.id == id {
+                color = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 0.5)
+                break
+            } else {
+                color = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+            }
+        }
+        return color
+    }
+    
+    // MARK: - Private Methods
+    private func countForRecordLabel(id: UInt) -> Int {
+        var count = Int()
+        for i in completedTrackers {
+            if i.id == id {
+                count += 1
+            }
+        }
+        if completedTrackers.isEmpty {
+            count = 0
+        }
+        return count
+    }
+    
+    private func recordLabelTextMaker(count: Int) -> String {
+        var text = String()
+        if count == 0 || count >= 5 {
+            text = "\(count) дней"
+        } else if count == 1 {
+            text = "\(count) день"
+        } else {
+            text = "\(count) дня"
+        }
+        return text
+    }
+        
     // MARK: - Objc Methods
     @objc private func switchToTrackerChoiceViewController() {
         let trackerChoiceViewController = TrackerChoiceViewController()
@@ -250,22 +324,29 @@ final class TrackersViewController: UIViewController {
 }
 
 // MARK: - extension TrackersViewController
-extension TrackersViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension TrackersViewController: UICollectionViewDelegate,
+                                  UICollectionViewDataSource,
+                                  UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int
+    ) -> Int {
         return currentTrackersIndexes.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    // cell setup
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCellView else { return TrackerCellView()}
+        let date = Date()
         currentTrackerDataArray.removeAll()
-        for i in currentTrackersIndexes{
+        
+        for i in currentTrackersIndexes {
             currentTrackerDataArray.append(tracker[i])
         }
         
-        let currentDate = Date()
-        
-        if datePicker.date > currentDate {
+        if currentDate > date {
             cell.checkButton.isEnabled = false
         } else {
             cell.checkButton.isEnabled = true
@@ -275,17 +356,26 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
         cell.emojiView.text = currentTrackerDataArray[indexPath.row].trackerEmoji
         cell.cardView.backgroundColor = currentTrackerDataArray[indexPath.row].trackerColor
+        cell.checkButton.backgroundColor = currentTrackerDataArray[indexPath.row].trackerColor
         
         cell.completedTrackers = completedTrackers
         cell.id = currentTrackerDataArray[indexPath.row].id
         cell.datePickerDate = datePicker.date
         
-        cell.cellViewInit()
+        // toDo: перенос логики из ячейки во вью
+//        cell.checkButton.imageView?.image =  cellButtonImage(id: currentTrackerDataArray[indexPath.row].id)
+//        cell.checkButton.backgroundColor = cellButtonColor(id: currentTrackerDataArray[indexPath.row].id)
+//        cell.recordLabel.text = recordLabelTextMaker(count: countForRecordLabel(id: currentTrackerDataArray[indexPath.row].id))
         
+        cell.cellViewInit()
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    // header setup
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         var id: String
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -294,26 +384,35 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
             id = ""
         }
         
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackerHeaderView
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                   withReuseIdentifier: id,
+                                                                   for: indexPath) as! TrackerHeaderView
         if currentTrackersIndexes.isEmpty == false {
             view.headerLabel.text = "Важное"
         }
         return view
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
+    // header size
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        let headerView = self.collectionView(collectionView,
+                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+                                             at: indexPath)
         
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28,
-                                                         height: 18),
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28, height: 18),
                                                   withHorizontalFittingPriority: .required,
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
     
     // cell size
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let cellHeight: CGFloat = 148.0
         let cellsPerRow: CGFloat = 2.0
         let cellSpacing: CGFloat = 9.0
@@ -325,46 +424,51 @@ extension TrackersViewController: UICollectionViewDelegate, UICollectionViewData
         return CGSize(width: cellWidth, height: cellHeight)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
-    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat { 9 }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat { .zero }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
     }
 }
 
 extension TrackersViewController: TrackerSender {
-    func categoryChecker(id: UInt, trackerCategoryName: String, trackerNameText: String, date: [Date]) {
+    func categoryChecker(id: UInt, trackerCategoryName: String, trackerNameText: String, date: [Date], color: UIColor, emoji: String) {
         if categories.isEmpty {
-            categories.append(TrackerCategory(categoryName: trackerCategoryName, trackers: [Tracker(id: id, trackerName: trackerNameText, trackerDate: date)]))
-        }
-
-        for i in categories {
-            var trackersForCategory = i.trackers
-            if i.categoryName == trackerCategoryName {
-                trackersForCategory.append(Tracker(id: id, trackerName: trackerNameText, trackerDate: date))
-                categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
-            }
+            categories.append(TrackerCategory(categoryName: trackerCategoryName, trackers: [Tracker(id: id, trackerName: trackerNameText, trackerColor: color, trackerEmoji: emoji, trackerDate: date)]))
         }
         
-        NotificationCenter.default.post(name: .valueChange, object: nil)
+        for i in categories {
+            var trackersForCategory = i.trackers
+            guard i.categoryName == trackerCategoryName else { return }
+            trackersForCategory.append(Tracker(id: id, trackerName: trackerNameText, trackerColor: color, trackerEmoji: emoji, trackerDate: date))
+            categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
+        }
+        NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
     }
     
     func trackerSender(trackerData: Tracker) {
         tracker.append(trackerData)
         viewWillAppear(true)
-        NotificationCenter.default.post(name: .valueChange, object: nil)
+        NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
     }
 }
 
 extension TrackersViewController: RecordSender {
     func recordSet(cellId: UInt, cellDate: Date) {
         completedTrackers.append(TrackerRecord(id: cellId, date: cellDate))
+        reloadMainScreen()
+        print("\(completedTrackers)")
     }
     
     func recordDel(cellId: UInt, cellDate: Date) {
@@ -381,6 +485,7 @@ extension TrackersViewController: RecordSender {
             trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
             return trackersDateComponents == currentDateComponents && trackers.id == cellId
         }
+        reloadMainScreen()
     }
 }
 

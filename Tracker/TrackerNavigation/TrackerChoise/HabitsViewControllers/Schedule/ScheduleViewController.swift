@@ -10,15 +10,12 @@ import UIKit
 final class ScheduleViewController: UIViewController {
     // MARK: - Delegate
     weak var delegate: DateSenderProtocol?
-        
-    // MARK: - Private Properties
-    private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    private let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-    var date = [Date]()
-    var daysOfWeekShortArray: [String] = []
-
     
-    private lazy var label: UILabel = {
+    // MARK: - Private Properties
+    private var date = [Date]()
+    private var daysOfWeekShortArray: [String] = []
+    
+    private let label: UILabel = {
         let label = UILabel()
         label.text = "Расписание"
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -26,7 +23,7 @@ final class ScheduleViewController: UIViewController {
         return label
     }()
     
-    private lazy var weekTableView: UITableView = {
+    private let weekTableView: UITableView = {
         let table = UITableView()
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
@@ -35,7 +32,7 @@ final class ScheduleViewController: UIViewController {
         return table
     }()
     
-    private lazy var readyButton: UIButton = {
+    private let readyButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = .black
@@ -56,19 +53,15 @@ final class ScheduleViewController: UIViewController {
         makeConstraints()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     // MARK: - Private Methods
     private func addSubviews() {
         [
             label,
             weekTableView,
             readyButton
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            view.addSubview($0)
         }
     }
     
@@ -118,14 +111,10 @@ final class ScheduleViewController: UIViewController {
     @objc func changeDayOfWeek(_ sender: UISwitch) {
         if sender.isOn {
             date.append(selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag))
-            daysOfWeekShortArray.append(daysOfWeekShort[sender.tag - 1])
+            daysOfWeekShortArray.append(Constants.daysOfWeekShort[sender.tag - 1])
         } else {
-            date.removeAll { value in
-                return value == selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag)
-            }
-            daysOfWeekShortArray.removeAll { value in
-                return value == daysOfWeekShort[sender.tag - 1]
-            }
+            date.removeAll { $0 == selectedDaysOfWeekToDateConverter(selectedDayOfWeek: sender.tag) }
+            daysOfWeekShortArray.removeAll { $0 == Constants.daysOfWeekShort[sender.tag - 1] }
         }
     }
 }
@@ -153,7 +142,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.imageView?.image = UIImage(named: "chevron.right")
-        cell.textLabel?.text = daysOfWeek[indexPath.row]
+        cell.textLabel?.text = Constants.daysOfWeek[indexPath.row]
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
 

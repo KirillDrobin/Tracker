@@ -10,12 +10,9 @@ import UIKit
 final class CategoryMainViewController: UIViewController {
     // MARK: Delegate
     weak var delegate: CategoryNameSenderProtocol?
-    
-    // MARK: - Properties
-    private var trackerCategoryName = String()
-    
+        
     // MARK: - Private Properties    
-    private lazy var label: UILabel = {
+    private let label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -23,7 +20,7 @@ final class CategoryMainViewController: UIViewController {
         return label
     }()
     
-    private lazy var categoryTableView: UITableView = {
+    private let categoryTableView: UITableView = {
         let table = UITableView()
         table.rowHeight = 75
         table.layer.cornerRadius = 16
@@ -32,7 +29,7 @@ final class CategoryMainViewController: UIViewController {
         return table
     }()
     
-    private lazy var addButton: UIButton = {
+    private let addButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = .black
@@ -60,9 +57,9 @@ final class CategoryMainViewController: UIViewController {
             label,
             categoryTableView,
             addButton
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            view.addSubview($0)
         }
     }
     

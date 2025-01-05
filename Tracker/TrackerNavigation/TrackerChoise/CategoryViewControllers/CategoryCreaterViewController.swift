@@ -10,9 +10,7 @@ import UIKit
 final class CategoryCreaterViewController: UIViewController {
     
     // MARK: - Private Properties
-    private var trackerCategoryName = String()
-
-    private lazy var label: UILabel = {
+    private let label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -20,7 +18,7 @@ final class CategoryCreaterViewController: UIViewController {
         return label
     }()
     
-    private lazy var categoryNameTextField: CustomTextField = {
+    private let categoryNameTextField: CustomTextField = {
         let textField = CustomTextField()
         textField.placeholder = "Введите название категории"
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -31,7 +29,7 @@ final class CategoryCreaterViewController: UIViewController {
         return textField
     }()
     
-    private lazy var warningTextLimitLabel: UILabel = {
+    private let warningTextLimitLabel: UILabel = {
         let label = UILabel()
         label.text = "Ограничение 38 символов"
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -40,7 +38,7 @@ final class CategoryCreaterViewController: UIViewController {
         return label
     }()
     
-    private lazy var createCategoryButton: UIButton = {
+    private let createCategoryButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
@@ -68,9 +66,9 @@ final class CategoryCreaterViewController: UIViewController {
             categoryNameTextField,
             categoryNameTextField.textInputView,
             createCategoryButton
-        ].forEach { [weak self] in
+        ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            self?.view.addSubview($0)
+            view.addSubview($0)
         }
     }
     
@@ -101,14 +99,9 @@ final class CategoryCreaterViewController: UIViewController {
     }
     
     @objc private func unlockCategoryButton() {
-        if categoryNameTextField.text != "" {
-            createCategoryButton.isEnabled = true
-            createCategoryButton.backgroundColor = .black
-        } else {
-            createCategoryButton.isEnabled = false
-            createCategoryButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
-        }
-        if categoryNameTextField.text?.count == 38 {
-        }
+        let isNotEmptyText = categoryNameTextField.text?.isEmpty == false
+        createCategoryButton.isEnabled = isNotEmptyText
+        createCategoryButton.backgroundColor = isNotEmptyText ? .black : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
+        if categoryNameTextField.text?.count == 38 { /*toDo ограничение названия категории в 28 символа*/ }
     }
 }
