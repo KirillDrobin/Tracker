@@ -1,20 +1,18 @@
 //
-//  MainView.swift
+//  Nav.swift
 //  Tracker
 //
-//  Created by Кирилл Дробин on 03.10.2024.
+//  Created by Кирилл Дробин on 29.10.2024.
 //
 
 import UIKit
 
-class TabBarController: UITabBarController {
+class TrackerNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        tabBar.layer.borderColor = CGColor(gray: 0.5, alpha: 0.5)
-        tabBar.layer.borderWidth = 1
-        tabBar.layer.masksToBounds = true
+        view.backgroundColor = .ypWhite
+        navigationBar.isHidden = true
         
         // initialization TrackersViewController
         let trackersViewController = TrackersViewController()
@@ -30,7 +28,8 @@ class TabBarController: UITabBarController {
             image: UIImage(named: "Stats TabBar"),
             selectedImage: nil)
         
+        
+        
         self.viewControllers = [trackersViewController, statsViewController]
     }
 }
-

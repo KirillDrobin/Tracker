@@ -7,10 +7,10 @@
 
 import UIKit
 
-struct Tracker {
-    let id: Int
+struct Tracker {  
+    let id: Int64
     let trackerName: String
-    let trackerColor: CGColor
+    let trackerColor: UIColor
     let trackerEmoji: String
-    let trackerDate: Date
+    let trackerDate: [Date]
 }
