@@ -12,7 +12,7 @@ final class TrackerCellView: UICollectionViewCell {
     weak var delegate: RecordSender?
     
     // MARK: - Properties
-    var id = UInt()
+    var id = Int64()
     var datePickerDate = Date()
     var completedTrackers = [TrackerRecord]()
     
@@ -117,7 +117,7 @@ final class TrackerCellView: UICollectionViewCell {
     }
     
     // MARK: - Private Methods
-    private func countForRecordLabel(id: UInt) -> Int {
+    private func countForRecordLabel(id: Int64) -> Int {
         var count = Int()
         for i in completedTrackers {
             if i.id == id {
@@ -140,11 +140,11 @@ final class TrackerCellView: UICollectionViewCell {
         }
     }
     
-    private func recordSet(cellId: UInt, cellDate: Date) {
+    private func recordSet(cellId: Int64, cellDate: Date) {
         completedTrackers.append(TrackerRecord(id: cellId, date: cellDate))
     }
     
-    private func recordDel(cellId: UInt, cellDate: Date) {
+    private func recordDel(cellId: Int64, cellDate: Date) {
         completedTrackers.removeAll { trackers in
             let calendar = Calendar.current
             var currentDateComponents = DateComponents()

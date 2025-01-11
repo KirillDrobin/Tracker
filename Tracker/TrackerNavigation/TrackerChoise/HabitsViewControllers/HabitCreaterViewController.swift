@@ -8,6 +8,9 @@
 import UIKit
 
 final class HabitCreaterViewController: UIViewController {
+    // MARK: - Singletone
+    let trackerStore = TrackerStore.shared
+    
     // MARK: - Delegate
     weak var delegate: TrackerSender?
     
@@ -18,6 +21,8 @@ final class HabitCreaterViewController: UIViewController {
     private var emoji = String()
     private var color = UIColor()
     private var daysOfWeekShortArray: [String] = []
+    
+    private var colorInt = Int16()
     
     private let cellId = "habitcell"
     
@@ -222,7 +227,7 @@ final class HabitCreaterViewController: UIViewController {
     // MARK: - Objc Methods
     @objc private func createTracker() {
         
-        let randomId = UInt.random(in: 0..<10000)
+        let randomId = Int64.random(in: 0..<10000)
         
         delegate?.categoryChecker(id: randomId,
                                   trackerCategoryName: trackerCategoryName,
@@ -236,6 +241,12 @@ final class HabitCreaterViewController: UIViewController {
                                                      trackerColor: color,
                                                      trackerEmoji: emoji,
                                                      trackerDate: date))
+        
+        trackerStore.createTracker(id: randomId,
+                                   trackerName: trackerNameText,
+                                   trackerColor: colorInt,
+                                   trackerEmoji: emoji,
+                                   trackerDate: date)
         
         NotificationCenter.default.post(name: NotificationNames.valueChange,
                                         object: nil)
@@ -405,7 +416,8 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
             cell?.contentView.layer.borderWidth = 3
             cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
             cell?.contentView.layer.cornerRadius = 8
-            color = cell?.colorCell.backgroundColor ?? UIColor()
+            color = Constants.colorsForCell[indexPath.item]
+            colorInt = Int16(indexPath.item)
         }
     }
     

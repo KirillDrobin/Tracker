@@ -443,7 +443,7 @@ extension TrackersViewController: UICollectionViewDelegate,
 }
 
 extension TrackersViewController: TrackerSender {
-    func categoryChecker(id: UInt, trackerCategoryName: String, trackerNameText: String, date: [Date], color: UIColor, emoji: String) {
+    func categoryChecker(id: Int64, trackerCategoryName: String, trackerNameText: String, date: [Date], color: UIColor, emoji: String) {
         if categories.isEmpty {
             categories.append(TrackerCategory(categoryName: trackerCategoryName, trackers: [Tracker(id: id, trackerName: trackerNameText, trackerColor: color, trackerEmoji: emoji, trackerDate: date)]))
         }
@@ -465,13 +465,13 @@ extension TrackersViewController: TrackerSender {
 }
 
 extension TrackersViewController: RecordSender {
-    func recordSet(cellId: UInt, cellDate: Date) {
+    func recordSet(cellId: Int64, cellDate: Date) {
         completedTrackers.append(TrackerRecord(id: cellId, date: cellDate))
         reloadMainScreen()
         print("\(completedTrackers)")
     }
     
-    func recordDel(cellId: UInt, cellDate: Date) {
+    func recordDel(cellId: Int64, cellDate: Date) {
         completedTrackers.removeAll { trackers in
             let calendar = Calendar.current
             var currentDateComponents = DateComponents()

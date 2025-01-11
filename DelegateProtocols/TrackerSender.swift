@@ -9,5 +9,5 @@ import UIKit
 
 protocol TrackerSender: AnyObject {
     func trackerSender(trackerData: Tracker)
-    func categoryChecker(id: UInt, trackerCategoryName: String, trackerNameText: String, date: [Date], color: UIColor, emoji: String)
+    func categoryChecker(id: Int64, trackerCategoryName: String, trackerNameText: String, date: [Date], color: UIColor, emoji: String)
 }

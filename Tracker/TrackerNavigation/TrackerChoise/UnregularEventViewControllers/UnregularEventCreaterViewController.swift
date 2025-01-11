@@ -223,7 +223,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     // MARK: - Objc Methods
     @objc private func createTracker() {
         
-        let randomId = UInt.random(in: 10001..<20000)
+        let randomId = Int64.random(in: 10001..<20000)
         
         delegate?.categoryChecker(id: randomId,
                                   trackerCategoryName: trackerCategoryName,

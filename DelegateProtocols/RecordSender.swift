@@ -8,6 +8,6 @@
 import Foundation
 
 protocol RecordSender: AnyObject {
-    func recordSet(cellId: UInt, cellDate: Date)
-    func recordDel(cellId: UInt, cellDate: Date)
+    func recordSet(cellId: Int64, cellDate: Date)
+    func recordDel(cellId: Int64, cellDate: Date)
 }
