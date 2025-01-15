@@ -18,7 +18,10 @@ final class UnregularEventCreaterViewController: UIViewController {
     private var trackerCategoryName = String()
     private var date = [Date]()
     private var emoji = String()
+    
     private var color = UIColor()
+    private var colorInt = Int16()
+    
     private let currentDate = Date()
     
     private let scrollView: UIScrollView = {
@@ -225,18 +228,18 @@ final class UnregularEventCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 10001..<20000)
         
-        delegate?.categoryChecker(id: randomId,
-                                  trackerCategoryName: trackerCategoryName,
-                                  trackerNameText: trackerNameText,
-                                  date: date,
-                                  color: color,
-                                  emoji: emoji)
+//        delegate?.categoryChecker(id: randomId,
+//                                  trackerCategoryName: trackerCategoryName,
+//                                  trackerNameText: trackerNameText,
+//                                  date: date,
+//                                  color: colorInt,
+//                                  emoji: emoji)
         
-        delegate?.trackerSender(trackerData: Tracker(id: randomId,
-                                                     trackerName: trackerNameText,
-                                                     trackerColor: color,
-                                                     trackerEmoji: emoji,
-                                                     trackerDate: date))
+//        delegate?.trackerSender(trackerData: Tracker(id: randomId,
+//                                                     trackerName: trackerNameText,
+//                                                     trackerColor: colorInt,
+//                                                     trackerEmoji: emoji,
+//                                                     trackerDate: date))
         
         NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
 

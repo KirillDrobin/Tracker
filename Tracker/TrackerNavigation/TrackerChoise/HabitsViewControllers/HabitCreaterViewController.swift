@@ -9,7 +9,8 @@ import UIKit
 
 final class HabitCreaterViewController: UIViewController {
     // MARK: - Singletone
-    let trackerStore = TrackerStore.shared
+    private let trackerStore = TrackerStore.shared
+    private let trackerCategoryStore = TrackerCategoryStore.shared
     
     // MARK: - Delegate
     weak var delegate: TrackerSender?
@@ -229,24 +230,25 @@ final class HabitCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 0..<10000)
         
-        delegate?.categoryChecker(id: randomId,
-                                  trackerCategoryName: trackerCategoryName,
-                                  trackerNameText: trackerNameText,
-                                  date: date,
-                                  color: color,
-                                  emoji: emoji)
+//        delegate?.categoryChecker(id: randomId,
+//                                  trackerCategoryName: trackerCategoryName,
+//                                  trackerNameText: trackerNameText,
+//                                  date: date,
+//                                  color: colorInt,
+//                                  emoji: emoji)
         
-        delegate?.trackerSender(trackerData: Tracker(id: randomId,
-                                                     trackerName: trackerNameText,
-                                                     trackerColor: color,
-                                                     trackerEmoji: emoji,
-                                                     trackerDate: date))
+//        trackerStore.createTracker(tracker: Tracker(id: randomId,
+//                                                    trackerName: trackerNameText,
+//                                                    trackerColor: colorInt,
+//                                                    trackerEmoji: emoji,
+//                                                    trackerDate: date))
         
-        trackerStore.createTracker(id: randomId,
-                                   trackerName: trackerNameText,
-                                   trackerColor: colorInt,
-                                   trackerEmoji: emoji,
-                                   trackerDate: date)
+        trackerCategoryStore.trackerAndcategoryCreater(trackerCategoryName:trackerCategoryName,
+                                                       tracker: Tracker(id: randomId,
+                                                                        trackerName: trackerNameText,
+                                                                        trackerColor: colorInt,
+                                                                        trackerEmoji: emoji,
+                                                                        trackerDate: date))
         
         NotificationCenter.default.post(name: NotificationNames.valueChange,
                                         object: nil)
@@ -255,10 +257,8 @@ final class HabitCreaterViewController: UIViewController {
     }
     
     @objc private func dismissViewController() {
-        let trackersViewController = TrackersViewController()
-        trackersViewController.viewWillAppear(true)
+        delegate?.trackerSender()
         clearCellParams()
-        
         self.dismiss(animated: true)
     }
     

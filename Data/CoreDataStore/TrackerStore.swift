@@ -12,6 +12,8 @@ final class TrackerStore: NSObject {
     static let shared = TrackerStore()
     private override init() {}
     
+    private let dateformatter = DateFormatter()
+    
     private var appDelegate: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
@@ -20,40 +22,95 @@ final class TrackerStore: NSObject {
         appDelegate.persistentContainer.viewContext
     }
     
-    func createTracker(id: Int64,
-                       trackerName: String,
-                       trackerColor: Int16,
-                       trackerEmoji: String,
-                       trackerDate: [Date])
-    {
-        guard let trackerentityDescription = NSEntityDescription.entity(forEntityName: "TrackerCore", in: context) else { return }
-        let trackerStore = TrackerCore(entity: trackerentityDescription, insertInto: context)
-        trackerStore.id = id
-        trackerStore.trackerName = trackerName
-        trackerStore.trackerColor = trackerColor
-        trackerStore.trackerDate = arrayToStringConverter(array: trackerDate)
-        trackerStore.trackerEmoji = trackerEmoji
+//    func createTracker(tracker: Tracker) {
+//        guard let trackerentityDescription = NSEntityDescription.entity(forEntityName: "TrackerCore", in: context) else { return }
+//        let trackerStore = TrackerCore(entity: trackerentityDescription, insertInto: context)
+//        trackerStore.id = tracker.id
+//        trackerStore.trackerName = tracker.trackerName
+//        trackerStore.trackerColor = tracker.trackerColor
+//        trackerStore.trackerDate = dateArrayToStringConverter(array: tracker.trackerDate)
+//        trackerStore.trackerEmoji = tracker.trackerEmoji
+//        print("создан трекер \(trackerStore)")
+//        appDelegate.saveContext()
+//    }
+    
+    func fetchCurrentIndexes(calendar: Calendar, sender: Date) -> [Int] {
         
-        appDelegate.saveContext()
-        print("\(trackerStore)")
+        let request = NSFetchRequest<TrackerCore>(entityName: "TrackerCore")
+        
+        guard let trackers = try? context.fetch(request) else { return [] }
+        let currentDate = sender
+        var currentTrackersIndexes = [Int]()
+        
+        for (index, item) in trackers.enumerated() {
+            let dateArray = stringToDateArrayConverter(string: item.trackerDate ?? "trackers Date error")
+            
+            for i in dateArray {
+                var cellDatecomponents = DateComponents()
+                var senderDatecomponets = DateComponents()
+                
+                senderDatecomponets.weekday = calendar.dateComponents([.weekday], from: currentDate).weekday
+                cellDatecomponents.weekday = calendar.dateComponents([.weekday], from: i).weekday
+                if cellDatecomponents == senderDatecomponets && item.id <= 10000 {
+                    currentTrackersIndexes.append(index)
+                }
+                
+                for i in dateArray {
+                    var cellDatecomponents = DateComponents()
+                    var senderDatecomponets = DateComponents()
+                    cellDatecomponents.day = calendar.dateComponents([.day], from: i).day
+                    cellDatecomponents.month = calendar.dateComponents([.month], from: i).month
+                    cellDatecomponents.year = calendar.dateComponents([.year], from: i).year
+                    
+                    senderDatecomponets.day = calendar.dateComponents([.day], from: currentDate).day
+                    senderDatecomponets.month = calendar.dateComponents([.month], from: currentDate).month
+                    senderDatecomponets.year = calendar.dateComponents([.year], from: currentDate).year
+                    
+                    if cellDatecomponents == senderDatecomponets && item.id > 10000 {
+                        currentTrackersIndexes.append(index)
+                    }
+                }
+            }
+        }
+        return currentTrackersIndexes
     }
     
-    func arrayToStringConverter(array: [Date]) -> String {
+    func fetchCurrentTrackersData(currentTrackersIndexes: [Int]) -> [Tracker] {
+        let request = NSFetchRequest<TrackerCore>(entityName: "TrackerCore")
+        
+        guard let trackers = try? context.fetch(request) else { return [] }
+
+        var currentTrackerDataArray = [Tracker]()
+        for i in currentTrackersIndexes {
+            currentTrackerDataArray.append(Tracker(id: trackers[i].id,
+                                                   trackerName: trackers[i].trackerName ?? "",
+                                                   trackerColor: trackers[i].trackerColor,
+                                                   trackerEmoji: trackers[i].trackerEmoji ?? "",
+                                                   trackerDate: stringToDateArrayConverter(string: trackers[i].trackerDate ?? "")))
+        }
+        return currentTrackerDataArray
+    }
+    
+    private func dateArrayToStringConverter(array: [Date]) -> String {
         var dateStringArray = [String]()
         var dateString = String()
+        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss +Z"
         for i in array {
-            dateStringArray.append("\(i)")
+            dateStringArray.append(dateformatter.string(from: i))
         }
+        
         dateString = dateStringArray.joined(separator: ",")
-        print("date string: \(dateString)")
         return dateString
     }
     
-//    func fetchTrackers() -> [TrackerCoreData] {
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerCoreData")
-//        do {
-//            return (try? context.fetch(fetchRequest) as? [TrackerCoreData]) ?? []
-//        }
-//    }
-    
+    private func stringToDateArrayConverter(string: String) -> [Date] {
+        var dateStringArray = [String]()
+        var dateArray = [Date]()
+        dateStringArray = string.components(separatedBy: ",")
+        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss +Z"
+        for i in dateStringArray {
+            dateArray.append(dateformatter.date(from: i) ?? Date())
+        }
+        return dateArray
+    }
 }

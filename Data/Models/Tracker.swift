@@ -10,7 +10,7 @@ import UIKit
 struct Tracker {  
     let id: Int64
     let trackerName: String
-    let trackerColor: UIColor
+    let trackerColor: Int16
     let trackerEmoji: String
     let trackerDate: [Date]
 }
