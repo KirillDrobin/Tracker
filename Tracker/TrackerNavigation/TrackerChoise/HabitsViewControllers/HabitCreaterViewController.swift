@@ -16,13 +16,13 @@ final class HabitCreaterViewController: UIViewController {
     weak var delegate: TrackerSender?
     
     // MARK: - Private Properties
+    private var habitCreaterViewControllerObserver: NSObjectProtocol?
+    
     private var trackerNameText = String()
     private var date = [Date]()
     private var trackerCategoryName = String()
     private var emoji = String()
-    private var color = UIColor()
     private var daysOfWeekShortArray: [String] = []
-    
     private var colorInt = Int16()
     
     private let cellId = "habitcell"
@@ -105,13 +105,13 @@ final class HabitCreaterViewController: UIViewController {
         button.isEnabled = false
         return button
     }()
-
+    
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = true
-                
+        
         habitSetupsTableView.dataSource = self
         habitSetupsTableView.delegate = self
         trackerNameTextField.delegate = self
@@ -142,13 +142,13 @@ final class HabitCreaterViewController: UIViewController {
         addSubviews()
         makeConstraints()
         
-        if trackerNameText.isEmpty == false,
-           trackerCategoryName.isEmpty == false,
-           date.isEmpty == false,
-           emoji.isEmpty == false,
-           color != UIColor() {
-            createButton.isEnabled = true
-            createButton.backgroundColor = .black
+        self.habitCreaterViewControllerObserver = NotificationCenter.default.addObserver(
+            forName: NotificationNames.buttonIsEnabled,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.didEnabledButton()
         }
     }
     
@@ -222,7 +222,18 @@ final class HabitCreaterViewController: UIViewController {
         date.removeAll()
         daysOfWeekShortArray.removeAll()
         emoji.removeAll()
-        color = UIColor()
+        colorInt = Int16()
+    }
+    
+    private func didEnabledButton() {
+        if trackerNameText.isEmpty == false,
+           trackerCategoryName.isEmpty == false,
+           date.isEmpty == false,
+           emoji.isEmpty == false,
+           colorInt != Int16() {
+            createButton.isEnabled = true
+            createButton.backgroundColor = .black
+        }
     }
     
     // MARK: - Objc Methods
@@ -230,20 +241,7 @@ final class HabitCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 0..<10000)
         
-//        delegate?.categoryChecker(id: randomId,
-//                                  trackerCategoryName: trackerCategoryName,
-//                                  trackerNameText: trackerNameText,
-//                                  date: date,
-//                                  color: colorInt,
-//                                  emoji: emoji)
-        
-//        trackerStore.createTracker(tracker: Tracker(id: randomId,
-//                                                    trackerName: trackerNameText,
-//                                                    trackerColor: colorInt,
-//                                                    trackerEmoji: emoji,
-//                                                    trackerDate: date))
-        
-        trackerCategoryStore.trackerAndcategoryCreater(trackerCategoryName:trackerCategoryName,
+        trackerCategoryStore.trackerAndcategoryCreater(trackerCategoryName: trackerCategoryName,
                                                        tracker: Tracker(id: randomId,
                                                                         trackerName: trackerNameText,
                                                                         trackerColor: colorInt,
@@ -257,13 +255,14 @@ final class HabitCreaterViewController: UIViewController {
     }
     
     @objc private func dismissViewController() {
-        delegate?.trackerSender()
+        delegate?.trackersViewControllerReloader()
         clearCellParams()
         self.dismiss(animated: true)
     }
     
     @objc private func textFieldDidEndEditing() {
         trackerNameText = trackerNameTextField.text ?? ""
+        NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
     }
 }
 
@@ -395,7 +394,7 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat { .zero }
-        
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int
@@ -411,13 +410,14 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
             cell?.contentView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
             cell?.contentView.layer.cornerRadius = 16
             emoji = cell?.emojiCell.text ?? ""
+            NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
             cell?.contentView.layer.borderWidth = 3
             cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
             cell?.contentView.layer.cornerRadius = 8
-            color = Constants.colorsForCell[indexPath.item]
             colorInt = Int16(indexPath.item)
+            NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         }
     }
     
@@ -426,11 +426,9 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
         if collectionView == emojiCollectionView {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellView
             cell?.contentView.backgroundColor = .clear
-            emoji = String()
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
             cell?.contentView.layer.borderWidth = .zero
-            color = UIColor()
         }
     }
 }

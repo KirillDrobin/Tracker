@@ -86,6 +86,7 @@ final class CategoryMainViewController: UIViewController {
     @objc private func switchToCategoryCreaterViewController() {
         let categoryCreaterViewController = CategoryCreaterViewController()
         navigationController?.pushViewController(categoryCreaterViewController, animated: true)
+        NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
     }
 }
 

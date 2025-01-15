@@ -9,7 +9,7 @@ import CoreData
 import UIKit
 
 final class TrackerCategoryStore: NSObject {
-    
+    // MARK: - Properties
     static let shared = TrackerCategoryStore()
     private override init() {}
     
@@ -23,8 +23,8 @@ final class TrackerCategoryStore: NSObject {
         appDelegate.persistentContainer.viewContext
     }
     
+    // MARK: - Methods
     func trackerAndcategoryCreater(trackerCategoryName: String, tracker: Tracker) {
-        
         let trackersCategory = TrackerCategoryCore(context: context)
         let trackers = TrackerCore(context: context)
         
@@ -48,6 +48,7 @@ final class TrackerCategoryStore: NSObject {
         return category ?? "Ошибка запроса названия категории"
     }
     
+    // MARK: - Private Methods
     private func dateArrayToStringConverter(array: [Date]) -> String {
         var dateStringArray = [String]()
         var dateString = String()

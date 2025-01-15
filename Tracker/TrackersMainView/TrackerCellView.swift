@@ -8,16 +8,12 @@
 import UIKit
 
 final class TrackerCellView: UICollectionViewCell {
-    // MARK: - Delegate
-    weak var delegate: RecordSender?
-    
     // MARK: - Singletone
     private let trackerRecordStore = TrackerRecordStore.shared
     
     // MARK: - Properties
     var id = Int64()
     var datePickerDate = Date()
-    var completedTrackers = [TrackerRecord]()
     
     private let currentDate = Date()
 
@@ -64,7 +60,6 @@ final class TrackerCellView: UICollectionViewCell {
         button.clipsToBounds = true
         button.layer.masksToBounds = true
         button.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
-//        button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .white
         button.setPreferredSymbolConfiguration(.init(scale: .small), forImageIn: .normal)
         button.addTarget(self, action: #selector(checkButtonAction), for: .touchUpInside)
@@ -86,66 +81,20 @@ final class TrackerCellView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    // MARK: - Methods
+    // MARK: - Methods
     func cellViewInit() {
-//        let calendar = Calendar.current
-//        var datePicker = DateComponents()
-//        var trackersDate = DateComponents()
-        
-        if datePickerDate > currentDate {
-            checkButton.isEnabled = false
-        } else {
-            checkButton.isEnabled = true
-        }
-        
-//        for i in completedTrackers {
-//            trackersDate.day = calendar.dateComponents([.day], from: i.date).day
-//            trackersDate.month = calendar.dateComponents([.month], from: i.date).month
-//            trackersDate.year = calendar.dateComponents([.year], from: i.date).year
-//            
-//            datePicker.day = calendar.dateComponents([.day], from: datePickerDate).day
-//            datePicker.month = calendar.dateComponents([.month], from: datePickerDate).month
-//            datePicker.year = calendar.dateComponents([.year], from: datePickerDate).year
-//            
-//            if trackersDate == datePicker && i.id == id {
-//                recordLabelTextMaker(count: countForRecordLabel(id: id))
-//                checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-//                checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
-//                break
-//            } else {
-//                recordLabelTextMaker(count: countForRecordLabel(id: id))
-//                checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-//                checkButton.backgroundColor?.withAlphaComponent(1)
-//            }
-//        }
-        
         if trackerRecordStore.recordChecker(currentDate: datePickerDate, id: id) == true {
             recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
-            print("cell true")
         } else {
             recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor?.withAlphaComponent(1)
-            print("cell false")
         }
     }
     
     // MARK: - Private Methods
-//    private func countForRecordLabel(id: Int64) -> Int {
-//        var count = Int()
-//        for i in completedTrackers {
-//            if i.id == id {
-//                count += 1
-//            }
-//        }
-//        if completedTrackers.isEmpty {
-//            count = 0
-//        }
-//        return count
-//    }
-    
     private func recordLabelTextMaker(count: Int) {
         if count == 0 || count >= 5 {
             recordLabel.text = "\(count) дней"
@@ -155,26 +104,6 @@ final class TrackerCellView: UICollectionViewCell {
             recordLabel.text = "\(count) дня"
         }
     }
-    
-//    private func recordSet(cellId: Int64, cellDate: Date) {
-//        completedTrackers.append(TrackerRecord(id: cellId, date: cellDate))
-//    }
-    
-//    private func recordDel(cellId: Int64, cellDate: Date) {
-//        completedTrackers.removeAll { trackers in
-//            let calendar = Calendar.current
-//            var currentDateComponents = DateComponents()
-//            var trackersDateComponents = DateComponents()
-//            currentDateComponents.day = calendar.dateComponents([.day], from: cellDate).day
-//            currentDateComponents.month = calendar.dateComponents([.month], from: cellDate).month
-//            currentDateComponents.year = calendar.dateComponents([.year], from: cellDate).year
-//            
-//            trackersDateComponents.day = calendar.dateComponents([.day], from: trackers.date).day
-//            trackersDateComponents.month = calendar.dateComponents([.month], from: trackers.date).month
-//            trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
-//            return trackersDateComponents == currentDateComponents && trackers.id == cellId
-//        }
-//    }
     
     private func addSubviews() {
         [
@@ -220,22 +149,16 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Objc Methods
     @objc func checkButtonAction() {
         if checkButton.imageView?.image == UIImage(systemName: "plus") {
-            delegate?.recordSet()
-            
             trackerRecordStore.recordSet(cellId: id, cellDate: datePickerDate)
             
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
-//            recordSet(cellId: id, cellDate: datePickerDate)
             recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
         } else {
-            delegate?.recordDel()
-            
             trackerRecordStore.recordDel(cellId: id, cellDate: datePickerDate)
             
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(1)
-//            recordDel(cellId: id, cellDate: datePickerDate)
             recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
         }
     }

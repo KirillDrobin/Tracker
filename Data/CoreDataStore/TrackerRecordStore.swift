@@ -9,12 +9,10 @@ import CoreData
 import UIKit
 
 final class TrackerRecordStore: NSObject {
-    
+    // MARK: - Properties
     static let shared = TrackerRecordStore()
     private override init() {}
-    
-    //    private let dateformatter = DateFormatter()
-    
+        
     private var appDelegate: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
@@ -23,12 +21,12 @@ final class TrackerRecordStore: NSObject {
         appDelegate.persistentContainer.viewContext
     }
     
+    // MARK: - Methods
     func recordSet(cellId: Int64, cellDate: Date) {
         let trackerRecord = TrackerRecordCore(context: context)
         
         trackerRecord.id = cellId
         trackerRecord.date = cellDate
-        print("рекорд записан \(trackerRecord)")
         
         appDelegate.saveContext()
     }
@@ -43,21 +41,7 @@ final class TrackerRecordStore: NSObject {
                 break
             }
         }
-        print("рекорд удален \(trackerRecord)")
         appDelegate.saveContext()
-        //        { trackers in
-        //            let calendar = Calendar.current
-        //            var currentDateComponents = DateComponents()
-        //            var trackersDateComponents = DateComponents()
-        //            currentDateComponents.day = calendar.dateComponents([.day], from: cellDate).day
-        //            currentDateComponents.month = calendar.dateComponents([.month], from: cellDate).month
-        //            currentDateComponents.year = calendar.dateComponents([.year], from: cellDate).year
-        //
-        //            trackersDateComponents.day = calendar.dateComponents([.day], from: trackers.date).day
-        //            trackersDateComponents.month = calendar.dateComponents([.month], from: trackers.date).month
-        //            trackersDateComponents.year = calendar.dateComponents([.year], from: trackers.date).year
-        //            return trackersDateComponents == currentDateComponents && trackers.id == cellId
-        //        }
     }
     
     func recordChecker(currentDate: Date, id: Int64) -> Bool {
@@ -81,11 +65,9 @@ final class TrackerRecordStore: NSObject {
             
             if trackersDate == datePicker && i.id == id {
                 returnValue = true
-                print("true")
                 break
             } else {
                 returnValue = false
-                print("false")
             }
         }
         return returnValue
@@ -102,10 +84,8 @@ final class TrackerRecordStore: NSObject {
                 if i.id == id {
                     countRecord += 1
                 }
-                
             }
         }
-        print("\(trackerRecord)")
         return countRecord
     }
 }

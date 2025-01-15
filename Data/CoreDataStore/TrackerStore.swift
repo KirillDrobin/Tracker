@@ -9,6 +9,7 @@ import UIKit
 import CoreData
 
 final class TrackerStore: NSObject {
+    // MARK: - Properties
     static let shared = TrackerStore()
     private override init() {}
     
@@ -22,18 +23,7 @@ final class TrackerStore: NSObject {
         appDelegate.persistentContainer.viewContext
     }
     
-//    func createTracker(tracker: Tracker) {
-//        guard let trackerentityDescription = NSEntityDescription.entity(forEntityName: "TrackerCore", in: context) else { return }
-//        let trackerStore = TrackerCore(entity: trackerentityDescription, insertInto: context)
-//        trackerStore.id = tracker.id
-//        trackerStore.trackerName = tracker.trackerName
-//        trackerStore.trackerColor = tracker.trackerColor
-//        trackerStore.trackerDate = dateArrayToStringConverter(array: tracker.trackerDate)
-//        trackerStore.trackerEmoji = tracker.trackerEmoji
-//        print("создан трекер \(trackerStore)")
-//        appDelegate.saveContext()
-//    }
-    
+    // MARK: - Methods
     func fetchCurrentIndexes(calendar: Calendar, sender: Date) -> [Int] {
         
         let request = NSFetchRequest<TrackerCore>(entityName: "TrackerCore")
@@ -91,6 +81,7 @@ final class TrackerStore: NSObject {
         return currentTrackerDataArray
     }
     
+    // MARK: - Private Methods
     private func dateArrayToStringConverter(array: [Date]) -> String {
         var dateStringArray = [String]()
         var dateString = String()

@@ -8,21 +8,23 @@
 import UIKit
 
 final class UnregularEventCreaterViewController: UIViewController {
+    // MARK: - Singletone
+    private let trackerStore = TrackerStore.shared
+    private let trackerCategoryStore = TrackerCategoryStore.shared
+    
     // MARK: - Delegate
     weak var delegate: TrackerSender?
     
     // MARK: - Private Properties
+    private var unregularEventCreaterViewController: NSObjectProtocol?
     private let cellId = "unregular"
     
     private var trackerNameText = String()
+    private let currentDate = Date()
     private var trackerCategoryName = String()
     private var date = [Date]()
     private var emoji = String()
-    
-    private var color = UIColor()
     private var colorInt = Int16()
-    
-    private let currentDate = Date()
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -141,13 +143,13 @@ final class UnregularEventCreaterViewController: UIViewController {
         addSubviews()
         makeConstraints()
         
-        if trackerNameText.isEmpty == false,
-           trackerCategoryName.isEmpty == false,
-           date.isEmpty == false,
-           emoji.isEmpty == false,
-           color != UIColor() {
-            createButton.isEnabled = true
-            createButton.backgroundColor = .black
+        self.unregularEventCreaterViewController = NotificationCenter.default.addObserver(
+            forName: NotificationNames.buttonIsEnabled,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.didEnabledButton()
         }
     }
     
@@ -220,7 +222,18 @@ final class UnregularEventCreaterViewController: UIViewController {
         trackerCategoryName.removeAll()
         date.removeAll()
         emoji.removeAll()
-        color = UIColor()
+        colorInt = Int16()
+    }
+    
+    private func didEnabledButton() {
+        if trackerNameText.isEmpty == false,
+           trackerCategoryName.isEmpty == false,
+           date.isEmpty == false,
+           emoji.isEmpty == false,
+           colorInt != Int16() {
+            createButton.isEnabled = true
+            createButton.backgroundColor = .black
+        }
     }
     
     // MARK: - Objc Methods
@@ -228,18 +241,12 @@ final class UnregularEventCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 10001..<20000)
         
-//        delegate?.categoryChecker(id: randomId,
-//                                  trackerCategoryName: trackerCategoryName,
-//                                  trackerNameText: trackerNameText,
-//                                  date: date,
-//                                  color: colorInt,
-//                                  emoji: emoji)
-        
-//        delegate?.trackerSender(trackerData: Tracker(id: randomId,
-//                                                     trackerName: trackerNameText,
-//                                                     trackerColor: colorInt,
-//                                                     trackerEmoji: emoji,
-//                                                     trackerDate: date))
+        trackerCategoryStore.trackerAndcategoryCreater(trackerCategoryName: trackerCategoryName,
+                                                       tracker: Tracker(id: randomId,
+                                                                        trackerName: trackerNameText,
+                                                                        trackerColor: colorInt,
+                                                                        trackerEmoji: emoji,
+                                                                        trackerDate: date))
         
         NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
 
@@ -247,15 +254,14 @@ final class UnregularEventCreaterViewController: UIViewController {
     }
     
     @objc private func dismissViewController() {
-        let trackersViewController = TrackersViewController()
-        trackersViewController.viewWillAppear(true)
+        delegate?.trackersViewControllerReloader()
         clearCellParams()
-        
         self.dismiss(animated: true)
     }
     
     @objc private func textFieldDidEndEditing() {
         trackerNameText = trackerNameTextField.text ?? ""
+        NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
     }
 }
 
@@ -387,12 +393,14 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
             cell?.contentView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
             cell?.contentView.layer.cornerRadius = 16
             emoji = cell?.emojiCell.text ?? ""
+            NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
             cell?.contentView.layer.borderWidth = 3
             cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
             cell?.contentView.layer.cornerRadius = 8
-            color = cell?.colorCell.backgroundColor ?? UIColor()
+            colorInt = Int16(indexPath.item)
+            NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         }
     }
     
@@ -401,11 +409,9 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
         if collectionView == emojiCollectionView {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellView
             cell?.contentView.backgroundColor = .clear
-            emoji = String()
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
             cell?.contentView.layer.borderWidth = .zero
-            color = UIColor()
         }
     }
 }

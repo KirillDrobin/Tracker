@@ -14,11 +14,6 @@ final class TrackersViewController: UIViewController {
     private let trackerRecordStore = TrackerRecordStore.shared
     
     // MARK: - Private Properties
-    // Storage
-    //    private var tracker = [Tracker]()
-    private var categories = [TrackerCategory]()
-    private var completedTrackers = [TrackerRecord]()
-    
     private var trackersViewControllerObserver: NSObjectProtocol?
     private var currentDate = Date()
     private var currentTrackersIndexes = [Int]()
@@ -122,35 +117,6 @@ final class TrackersViewController: UIViewController {
         currentTrackersIndexes = trackerStore.fetchCurrentIndexes(calendar: calendar, sender: currentDate)
         currentTrackerDataArray = trackerStore.fetchCurrentTrackersData(currentTrackersIndexes: currentTrackersIndexes)
         NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
-        //        for (index, item) in tracker.enumerated() {
-        //            for i in item.trackerDate {
-        //                var cellDatecomponents = DateComponents()
-        //                var senderDatecomponets = DateComponents()
-        //
-        //                senderDatecomponets.weekday = calendar.dateComponents([.weekday], from: currentDate).weekday
-        //                cellDatecomponents.weekday = calendar.dateComponents([.weekday], from: i).weekday
-        //                if cellDatecomponents == senderDatecomponets && item.id <= 10000 {
-        //                    currentTrackersIndexes.append(index)
-        //                }
-        //            }
-        //
-        //            for i in item.trackerDate {
-        //                var cellDatecomponents = DateComponents()
-        //                var senderDatecomponets = DateComponents()
-        //                cellDatecomponents.day = calendar.dateComponents([.day], from: i).day
-        //                cellDatecomponents.month = calendar.dateComponents([.month], from: i).month
-        //                cellDatecomponents.year = calendar.dateComponents([.year], from: i).year
-        //
-        //                senderDatecomponets.day = calendar.dateComponents([.day], from: currentDate).day
-        //                senderDatecomponets.month = calendar.dateComponents([.month], from: currentDate).month
-        //                senderDatecomponets.year = calendar.dateComponents([.year], from: currentDate).year
-        //
-        //                if cellDatecomponents == senderDatecomponets && item.id > 10000 {
-        //                    currentTrackersIndexes.append(index)
-        //                }
-        //            }
-        //            NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
-        //        }
     }
     
     private func addSubviewsDefault() {
@@ -240,7 +206,7 @@ final class TrackersViewController: UIViewController {
             
         ])
     }
-        
+    
     // MARK: - Objc Methods
     @objc private func switchToTrackerChoiceViewController() {
         let trackerChoiceViewController = TrackerChoiceViewController()
@@ -286,7 +252,6 @@ extension TrackersViewController: UICollectionViewDelegate,
         cell.checkButton.backgroundColor = Constants.colorsForCell[Int(currentTrackerDataArray[indexPath.row].trackerColor)]
         
         cell.id = currentTrackerDataArray[indexPath.row].id
-//        cell.completedTrackers = completedTrackers
         cell.datePickerDate = datePicker.date
         
         cell.cellViewInit()
@@ -309,10 +274,7 @@ extension TrackersViewController: UICollectionViewDelegate,
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: id,
                                                                    for: indexPath) as! TrackerHeaderView
-//        if currentTrackersIndexes.isEmpty == false {
-//            view.headerLabel.text = "Важное"
-            view.headerLabel.text = trackerCategoryStore.categoryNameFetch()
-//        }
+        view.headerLabel.text = trackerCategoryStore.categoryNameFetch()
         return view
     }
     
@@ -366,32 +328,8 @@ extension TrackersViewController: UICollectionViewDelegate,
 }
 
 extension TrackersViewController: TrackerSender {
-//    func categoryChecker(id: Int64, trackerCategoryName: String, trackerNameText: String, date: [Date], color: Int16, emoji: String) {
-//        if categories.isEmpty {
-//            categories.append(TrackerCategory(categoryName: trackerCategoryName, trackers: [Tracker(id: id, trackerName: trackerNameText, trackerColor: color, trackerEmoji: emoji, trackerDate: date)]))
-//        }
-//        
-//        for i in categories {
-//            var trackersForCategory = i.trackers
-//            guard i.categoryName == trackerCategoryName else { return }
-//            trackersForCategory.append(Tracker(id: id, trackerName: trackerNameText, trackerColor: color, trackerEmoji: emoji, trackerDate: date))
-//            categories.append(TrackerCategory(categoryName: i.categoryName, trackers: trackersForCategory))
-//        }
-//        NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
-//    }
-    
-        func trackerSender() {
-            viewWillAppear(true)
-        }
-}
-
-extension TrackersViewController: RecordSender {
-    func recordSet() {        
-        reloadMainScreen()
-    }
-    
-    func recordDel() {
-        reloadMainScreen()
+    func trackersViewControllerReloader() {
+        viewWillAppear(true)
     }
 }
 

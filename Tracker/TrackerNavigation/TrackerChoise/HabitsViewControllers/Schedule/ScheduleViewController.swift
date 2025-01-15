@@ -106,6 +106,7 @@ final class ScheduleViewController: UIViewController {
         self.delegate?.dateSender(dateSender: date)
         self.delegate?.dateShortSender(daysOfWeekShortArraySender: daysOfWeekShortArray)
         navigationController?.popViewController(animated: true)
+        NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
     }
     
     @objc func changeDayOfWeek(_ sender: UISwitch) {

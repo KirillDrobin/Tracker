@@ -25,7 +25,6 @@
 		EDA91B702D1C615700A00F86 /* DateSenderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */; };
 		EDA91B722D1C62EE00A00F86 /* CategorySenderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */; };
 		EDA91B742D1C770F00A00F86 /* TrackerSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B732D1C770F00A00F86 /* TrackerSender.swift */; };
-		EDA91BC22D1F4A1F00A00F86 /* RecordSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91BC12D1F4A1F00A00F86 /* RecordSender.swift */; };
 		EDB0ECC52D21B633006075B5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ECC42D21B633006075B5 /* Constants.swift */; };
 		EDB0ED122D240F12006075B5 /* ColorCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED112D240F12006075B5 /* ColorCellView.swift */; };
 		EDB0ED142D240F36006075B5 /* EmojiCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED132D240F36006075B5 /* EmojiCellView.swift */; };
@@ -33,7 +32,6 @@
 		EDB0ED8D2D2ED0D0006075B5 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED8C2D2ED0D0006075B5 /* TrackerStore.swift */; };
 		EDB0ED8F2D2ED0E8006075B5 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED8E2D2ED0E8006075B5 /* TrackerCategoryStore.swift */; };
 		EDB0ED912D2ED0FF006075B5 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED902D2ED0FF006075B5 /* TrackerRecordStore.swift */; };
-		EDB0ED932D2FB824006075B5 /* DaysValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED922D2FB824006075B5 /* DaysValueTransformer.swift */; };
 		EDB0ED962D31C2A3006075B5 /* TrackerData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED942D31C2A3006075B5 /* TrackerData.xcdatamodeld */; };
 		EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */; };
 		EDE6A9512CCFD3800038CBBA /* UnregularEventCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9502CCFD3800038CBBA /* UnregularEventCreaterViewController.swift */; };
@@ -83,7 +81,6 @@
 		EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSenderProtocol.swift; sourceTree = "<group>"; };
 		EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySenderProtocol.swift; sourceTree = "<group>"; };
 		EDA91B732D1C770F00A00F86 /* TrackerSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSender.swift; sourceTree = "<group>"; };
-		EDA91BC12D1F4A1F00A00F86 /* RecordSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSender.swift; sourceTree = "<group>"; };
 		EDB0ECC42D21B633006075B5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EDB0ED112D240F12006075B5 /* ColorCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCellView.swift; sourceTree = "<group>"; };
 		EDB0ED132D240F36006075B5 /* EmojiCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellView.swift; sourceTree = "<group>"; };
@@ -91,7 +88,6 @@
 		EDB0ED8C2D2ED0D0006075B5 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		EDB0ED8E2D2ED0E8006075B5 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		EDB0ED902D2ED0FF006075B5 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
-		EDB0ED922D2FB824006075B5 /* DaysValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysValueTransformer.swift; sourceTree = "<group>"; };
 		EDB0ED952D31C2A3006075B5 /* TrackerData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerData.xcdatamodel; sourceTree = "<group>"; };
 		EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreaterViewController.swift; sourceTree = "<group>"; };
 		EDE6A9502CCFD3800038CBBA /* UnregularEventCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnregularEventCreaterViewController.swift; sourceTree = "<group>"; };
@@ -154,7 +150,6 @@
 				ED121A9E2D0D91EA001EE8C5 /* CustomTextField.swift */,
 				ED121AA02D0D9C68001EE8C5 /* NotificationNames.swift */,
 				EDB0ECC42D21B633006075B5 /* Constants.swift */,
-				EDB0ED922D2FB824006075B5 /* DaysValueTransformer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -201,7 +196,6 @@
 				EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */,
 				EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */,
 				EDA91B732D1C770F00A00F86 /* TrackerSender.swift */,
-				EDA91BC12D1F4A1F00A00F86 /* RecordSender.swift */,
 			);
 			path = DelegateProtocols;
 			sourceTree = "<group>";
@@ -462,11 +456,9 @@
 				EDFE370D2CC6783400C672E1 /* ScheduleViewController.swift in Sources */,
 				EDB0ED602D289089006075B5 /* HeaderForColorEmojiCollections.swift in Sources */,
 				ED121A992D0D91B5001EE8C5 /* TrackerCategory.swift in Sources */,
-				EDA91BC22D1F4A1F00A00F86 /* RecordSender.swift in Sources */,
 				EDA91B742D1C770F00A00F86 /* TrackerSender.swift in Sources */,
 				EDB0ED912D2ED0FF006075B5 /* TrackerRecordStore.swift in Sources */,
 				EDB0ED962D31C2A3006075B5 /* TrackerData.xcdatamodeld in Sources */,
-				EDB0ED932D2FB824006075B5 /* DaysValueTransformer.swift in Sources */,
 				ED121A9A2D0D91B5001EE8C5 /* TrackerRecord.swift in Sources */,
 				EDA91B702D1C615700A00F86 /* DateSenderProtocol.swift in Sources */,
 				EDB0ED122D240F12006075B5 /* ColorCellView.swift in Sources */,
