@@ -245,7 +245,6 @@ extension TrackersViewController: UICollectionViewDelegate,
             cell.checkButton.isEnabled = true
         }
         
-        cell.delegate = self
         cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
         cell.emojiView.text = currentTrackerDataArray[indexPath.row].trackerEmoji
         cell.cardView.backgroundColor = Constants.colorsForCell[Int(currentTrackerDataArray[indexPath.row].trackerColor)]
