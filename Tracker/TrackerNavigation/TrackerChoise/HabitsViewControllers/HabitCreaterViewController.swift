@@ -24,6 +24,7 @@ final class HabitCreaterViewController: UIViewController {
     private var emoji = String()
     private var daysOfWeekShortArray: [String] = []
     private var colorInt = Int16()
+    private var colorCellStatus = 0
     
     private let cellId = "habitcell"
     
@@ -230,7 +231,7 @@ final class HabitCreaterViewController: UIViewController {
            trackerCategoryName.isEmpty == false,
            date.isEmpty == false,
            emoji.isEmpty == false,
-           colorInt != Int16() {
+           colorCellStatus != 0 {
             createButton.isEnabled = true
             createButton.backgroundColor = .black
         }
@@ -327,13 +328,13 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
     //cell setup
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == emojiCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as! EmojiCellView
-            cell.emojiSetup(emoji: Constants.emojisForCell[indexPath.item])
-            return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellView
+            cell?.emojiSetup(emoji: Constants.emojisForCell[indexPath.item])
+            return cell ?? EmojiCellView()
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as! ColorCellView
-            cell.colorSetup(color: Constants.colorsForCell[indexPath.item])
-            return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellView
+            cell?.colorSetup(color: Constants.colorsForCell[indexPath.item])
+            return cell ?? ColorCellView()
         }
     }
     
@@ -356,9 +357,9 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
             id = ""
         }
         
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: id,
-                                                                   for: indexPath) as! HeaderForColorEmojiCollections
+                                                                         for: indexPath) as? HeaderForColorEmojiCollections else { return UICollectionReusableView() }
         
         if collectionView == emojiCollectionView {
             view.headerLabel.text = "Emoji"
@@ -417,6 +418,7 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
             cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
             cell?.contentView.layer.cornerRadius = 8
             colorInt = Int16(indexPath.item)
+            colorCellStatus = 1
             NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         }
     }
@@ -429,6 +431,7 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
             cell?.contentView.layer.borderWidth = .zero
+            colorCellStatus = 0
         }
     }
 }

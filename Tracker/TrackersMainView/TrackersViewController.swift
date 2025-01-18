@@ -236,15 +236,7 @@ extension TrackersViewController: UICollectionViewDelegate,
                         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCellView else { return TrackerCellView()}
-        
-        let date = Date()
-        
-        if currentDate > date {
-            cell.checkButton.isEnabled = false
-        } else {
-            cell.checkButton.isEnabled = true
-        }
-        
+
         cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
         cell.emojiView.text = currentTrackerDataArray[indexPath.row].trackerEmoji
         cell.cardView.backgroundColor = Constants.colorsForCell[Int(currentTrackerDataArray[indexPath.row].trackerColor)]
@@ -272,9 +264,9 @@ extension TrackersViewController: UICollectionViewDelegate,
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: id,
-                                                                   for: indexPath) as! TrackerHeaderView
-        view.headerLabel.text = trackerCategoryStore.categoryNameFetch()
-        return view
+                                                                   for: indexPath) as? TrackerHeaderView
+        view?.headerLabel.text = trackerCategoryStore.categoryNameFetch()
+        return view ?? TrackerHeaderView()
     }
     
     // header sizeсфеупщкн

@@ -73,8 +73,8 @@ final class TrackerCellView: UICollectionViewCell {
         addSubviews()
         makeConstraints()
         
-        checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
+//        checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
+//        checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
     }
     
     required init?(coder: NSCoder) {
@@ -83,14 +83,24 @@ final class TrackerCellView: UICollectionViewCell {
     
     // MARK: - Methods
     func cellViewInit() {
+        let date = Date()
+        
+        if datePickerDate > date {
+            checkButton.isEnabled = false
+        } else {
+            checkButton.isEnabled = true
+        }
+        
         if trackerRecordStore.recordChecker(currentDate: datePickerDate, id: id) == true {
             recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
-        } else {
+        }
+        
+        if trackerRecordStore.recordChecker(currentDate: datePickerDate, id: id) == false {
             recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-            checkButton.backgroundColor?.withAlphaComponent(1)
+            checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(1)
         }
     }
     
@@ -150,16 +160,18 @@ final class TrackerCellView: UICollectionViewCell {
     @objc func checkButtonAction() {
         if checkButton.imageView?.image == UIImage(systemName: "plus") {
             trackerRecordStore.recordSet(cellId: id, cellDate: datePickerDate)
-            
+
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
-            recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
+//            recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
+            cellViewInit()
         } else {
             trackerRecordStore.recordDel(cellId: id, cellDate: datePickerDate)
             
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(1)
-            recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
+//            recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
+            cellViewInit()
         }
     }
 }

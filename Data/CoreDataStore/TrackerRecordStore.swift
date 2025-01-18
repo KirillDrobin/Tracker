@@ -12,7 +12,7 @@ final class TrackerRecordStore: NSObject {
     // MARK: - Properties
     static let shared = TrackerRecordStore()
     private override init() {}
-        
+    
     private var appDelegate: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
@@ -27,19 +27,25 @@ final class TrackerRecordStore: NSObject {
         
         trackerRecord.id = cellId
         trackerRecord.date = cellDate
+        print("запись добавлена \(context)")
         
         appDelegate.saveContext()
     }
     
     func recordDel(cellId: Int64, cellDate: Date) {
-        let fetchRequest = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCore")
         
-        guard let trackerRecord = try? context.fetch(fetchRequest) else { return }
+        guard let trackerRecord = try? context.fetch(fetchRequest) as? [TrackerRecordCore] else { return }
         for i in trackerRecord {
             if i.id == cellId && i.date == cellDate {
                 context.delete(i)
-                break
+                print("запись удалена \(context)")
             }
+//            do {
+//                try context.save()
+//            }
+//            catch {
+//            }
         }
         appDelegate.saveContext()
     }
@@ -52,7 +58,7 @@ final class TrackerRecordStore: NSObject {
         
         let request = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
         
-        let trackersRecord = try? context.fetch(request)
+       /* guard */let trackersRecord = try? context.fetch(request) /*else { return false }*/
         
         for i in trackersRecord! {
             trackersDate.day = calendar.dateComponents([.day], from: i.date ?? Date()).day
@@ -63,6 +69,8 @@ final class TrackerRecordStore: NSObject {
             datePicker.month = calendar.dateComponents([.month], from: currentDate).month
             datePicker.year = calendar.dateComponents([.year], from: currentDate).year
             
+            print("id: \(i.id)\n current date: \(currentDate)\n cell date: \(i.date)")
+            
             if trackersDate == datePicker && i.id == id {
                 returnValue = true
                 break
@@ -70,6 +78,7 @@ final class TrackerRecordStore: NSObject {
                 returnValue = false
             }
         }
+        print("\(returnValue)")
         return returnValue
     }
     
@@ -77,15 +86,18 @@ final class TrackerRecordStore: NSObject {
         var countRecord = Int()
         let fetchRequest = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
         let trackerRecord = try? context.fetch(fetchRequest)
-        if trackerRecord == nil {
-            countRecord = 0
-        } else {
-            for i in trackerRecord! {
-                if i.id == id {
-                    countRecord += 1
-                }
+        
+        for i in trackerRecord! {
+            if i.id == id {
+                countRecord += 1
+            }
+            if trackerRecord!.isEmpty {
+                countRecord = 0
             }
         }
+        print("\(countRecord)")
         return countRecord
     }
+    
 }
+

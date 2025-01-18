@@ -25,6 +25,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     private var date = [Date]()
     private var emoji = String()
     private var colorInt = Int16()
+    private var colorCellStatus = 0
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -230,7 +231,7 @@ final class UnregularEventCreaterViewController: UIViewController {
            trackerCategoryName.isEmpty == false,
            date.isEmpty == false,
            emoji.isEmpty == false,
-           colorInt != Int16() {
+           colorCellStatus != 0 {
             createButton.isEnabled = true
             createButton.backgroundColor = .black
         }
@@ -400,6 +401,7 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
             cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
             cell?.contentView.layer.cornerRadius = 8
             colorInt = Int16(indexPath.item)
+            colorCellStatus = 1
             NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         }
     }
@@ -412,6 +414,7 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
             cell?.contentView.layer.borderWidth = .zero
+            colorCellStatus = 0
         }
     }
 }
