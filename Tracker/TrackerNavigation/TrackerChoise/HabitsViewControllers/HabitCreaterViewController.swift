@@ -242,14 +242,14 @@ final class HabitCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 0..<10000)
         
-        trackerCategoryStore.trackerAndcategoryCreater(trackerCategoryName: trackerCategoryName,
+        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
                                                        tracker: Tracker(id: randomId,
                                                                         trackerName: trackerNameText,
                                                                         trackerColor: colorInt,
                                                                         trackerEmoji: emoji,
                                                                         trackerDate: date))
         
-        NotificationCenter.default.post(name: NotificationNames.valueChange,
+        NotificationCenter.default.post(name: NotificationNames.coreDataChange,
                                         object: nil)
         
         dismissViewController()

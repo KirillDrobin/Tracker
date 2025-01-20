@@ -8,15 +8,20 @@
 import CoreData
 import UIKit
 
-final class TrackerCategoryStore: NSObject {
+final class TrackerCategoryStore {
     // MARK: - Properties
     static let shared = TrackerCategoryStore()
-    private override init() {}
     
-    private let dateformatter = DateFormatter()
+    private init() {}
+    
+    private let dateformatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss +Z"
+        return formatter
+    }()
     
     private var appDelegate: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
+        UIApplication.shared.delegate as? AppDelegate ?? AppDelegate()
     }
     
     private var context: NSManagedObjectContext {
@@ -24,7 +29,7 @@ final class TrackerCategoryStore: NSObject {
     }
     
     // MARK: - Methods
-    func trackerAndcategoryCreater(trackerCategoryName: String, tracker: Tracker) {
+    func trackerAndCategoryCreater(trackerCategoryName: String, tracker: Tracker) {
         let trackersCategory = TrackerCategoryCore(context: context)
         let trackers = TrackerCore(context: context)
         
@@ -36,7 +41,7 @@ final class TrackerCategoryStore: NSObject {
         
         trackersCategory.categoryName = trackerCategoryName
         trackersCategory.addToTrackers(trackers)
- 
+                
         appDelegate.saveContext()
     }
     
@@ -51,13 +56,9 @@ final class TrackerCategoryStore: NSObject {
     // MARK: - Private Methods
     private func dateArrayToStringConverter(array: [Date]) -> String {
         var dateStringArray = [String]()
-        var dateString = String()
-        dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss +Z"
         for i in array {
             dateStringArray.append(dateformatter.string(from: i))
         }
-        
-        dateString = dateStringArray.joined(separator: ",")
-        return dateString
+        return dateStringArray.joined(separator: ",")
     }
 }

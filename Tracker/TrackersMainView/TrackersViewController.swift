@@ -82,14 +82,16 @@ final class TrackersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
         self.trackersViewControllerObserver = NotificationCenter.default.addObserver(
-            forName: NotificationNames.valueChange,
+            forName: NotificationNames.coreDataChange,
             object: nil,
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
             self.reloadMainScreen()
         }
+
         dateChecker(datePicker)
     }
     
@@ -115,8 +117,10 @@ final class TrackersViewController: UIViewController {
         let calendar = Calendar.current
         
         currentTrackersIndexes = trackerStore.fetchCurrentIndexes(calendar: calendar, sender: currentDate)
+        
         currentTrackerDataArray = trackerStore.fetchCurrentTrackersData(currentTrackersIndexes: currentTrackersIndexes)
-        NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
+        
+        NotificationCenter.default.post(name: NotificationNames.coreDataChange, object: nil)
     }
     
     private func addSubviewsDefault() {
@@ -269,7 +273,7 @@ extension TrackersViewController: UICollectionViewDelegate,
         return view ?? TrackerHeaderView()
     }
     
-    // header sizeсфеупщкн
+    // header size category
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int

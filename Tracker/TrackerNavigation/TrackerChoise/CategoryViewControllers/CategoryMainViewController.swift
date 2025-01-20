@@ -112,6 +112,9 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             delegate?.categoryNameSender(categoryName: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? "")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
     }
 }

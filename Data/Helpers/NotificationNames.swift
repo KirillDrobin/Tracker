@@ -8,6 +8,6 @@
 import Foundation
 
 enum NotificationNames {
-    static let valueChange = Notification.Name("valueChange")
     static let buttonIsEnabled = Notification.Name("buttonIsEnabled")
+    static let coreDataChange = Notification.Name("coreDataChange")
 }

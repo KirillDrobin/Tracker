@@ -163,14 +163,12 @@ final class TrackerCellView: UICollectionViewCell {
 
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(0.5)
-//            recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
             cellViewInit()
         } else {
             trackerRecordStore.recordDel(cellId: id, cellDate: datePickerDate)
             
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(1)
-//            recordLabelTextMaker(count: trackerRecordStore.countRecord(id: id))
             cellViewInit()
         }
     }

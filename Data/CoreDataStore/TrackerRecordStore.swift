@@ -8,13 +8,13 @@
 import CoreData
 import UIKit
 
-final class TrackerRecordStore: NSObject {
+final class TrackerRecordStore {
     // MARK: - Properties
     static let shared = TrackerRecordStore()
-    private override init() {}
+    private init() {}
     
     private var appDelegate: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
+        UIApplication.shared.delegate as? AppDelegate ?? AppDelegate()
     }
     
     private var context: NSManagedObjectContext {
@@ -27,25 +27,31 @@ final class TrackerRecordStore: NSObject {
         
         trackerRecord.id = cellId
         trackerRecord.date = cellDate
-        print("запись добавлена \(context)")
         
         appDelegate.saveContext()
     }
     
     func recordDel(cellId: Int64, cellDate: Date) {
+        let calendar = Calendar.current
+        var datePicker = DateComponents()
+        var trackersDate = DateComponents()
+        
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCore")
         
         guard let trackerRecord = try? context.fetch(fetchRequest) as? [TrackerRecordCore] else { return }
         for i in trackerRecord {
-            if i.id == cellId && i.date == cellDate {
+            
+            trackersDate.day = calendar.dateComponents([.day], from: i.date ?? Date()).day
+            trackersDate.month = calendar.dateComponents([.month], from: i.date ?? Date()).month
+            trackersDate.year = calendar.dateComponents([.year], from: i.date ?? Date()).year
+            
+            datePicker.day = calendar.dateComponents([.day], from: cellDate).day
+            datePicker.month = calendar.dateComponents([.month], from: cellDate).month
+            datePicker.year = calendar.dateComponents([.year], from: cellDate).year
+            
+            if i.id == cellId && trackersDate == datePicker {
                 context.delete(i)
-                print("запись удалена \(context)")
             }
-//            do {
-//                try context.save()
-//            }
-//            catch {
-//            }
         }
         appDelegate.saveContext()
     }
@@ -58,9 +64,9 @@ final class TrackerRecordStore: NSObject {
         
         let request = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
         
-       /* guard */let trackersRecord = try? context.fetch(request) /*else { return false }*/
+       guard let trackersRecord = try? context.fetch(request) else { return false }
         
-        for i in trackersRecord! {
+        for i in trackersRecord {
             trackersDate.day = calendar.dateComponents([.day], from: i.date ?? Date()).day
             trackersDate.month = calendar.dateComponents([.month], from: i.date ?? Date()).month
             trackersDate.year = calendar.dateComponents([.year], from: i.date ?? Date()).year
@@ -68,9 +74,7 @@ final class TrackerRecordStore: NSObject {
             datePicker.day = calendar.dateComponents([.day], from: currentDate).day
             datePicker.month = calendar.dateComponents([.month], from: currentDate).month
             datePicker.year = calendar.dateComponents([.year], from: currentDate).year
-            
-            print("id: \(i.id)\n current date: \(currentDate)\n cell date: \(i.date)")
-            
+                        
             if trackersDate == datePicker && i.id == id {
                 returnValue = true
                 break
@@ -78,26 +82,17 @@ final class TrackerRecordStore: NSObject {
                 returnValue = false
             }
         }
-        print("\(returnValue)")
         return returnValue
     }
     
     func countRecord(id: Int64) -> Int {
-        var countRecord = Int()
         let fetchRequest = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
         let trackerRecord = try? context.fetch(fetchRequest)
-        
-        for i in trackerRecord! {
-            if i.id == id {
-                countRecord += 1
-            }
-            if trackerRecord!.isEmpty {
-                countRecord = 0
-            }
+        guard let trackerRecord else { return .zero }
+        var countRecord = Int()
+        for i in trackerRecord {
+            if i.id == id { countRecord += 1 }
         }
-        print("\(countRecord)")
         return countRecord
     }
-    
 }
-

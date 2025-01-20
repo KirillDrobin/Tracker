@@ -242,14 +242,14 @@ final class UnregularEventCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 10001..<20000)
         
-        trackerCategoryStore.trackerAndcategoryCreater(trackerCategoryName: trackerCategoryName,
+        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
                                                        tracker: Tracker(id: randomId,
                                                                         trackerName: trackerNameText,
                                                                         trackerColor: colorInt,
                                                                         trackerEmoji: emoji,
                                                                         trackerDate: date))
         
-        NotificationCenter.default.post(name: NotificationNames.valueChange, object: nil)
+        NotificationCenter.default.post(name: NotificationNames.coreDataChange, object: nil)
 
         dismissViewController()
     }
@@ -311,13 +311,13 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
     //cell setup
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == emojiCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as! EmojiCellView
-            cell.emojiSetup(emoji: Constants.emojisForCell[indexPath.item])
-            return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellView
+            cell?.emojiSetup(emoji: Constants.emojisForCell[indexPath.item])
+            return cell ?? UICollectionViewCell()
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as! ColorCellView
-            cell.colorSetup(color: Constants.colorsForCell[indexPath.item])
-            return cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellView
+            cell?.colorSetup(color: Constants.colorsForCell[indexPath.item])
+            return cell ?? UICollectionViewCell()
         }
     }
     
@@ -342,14 +342,14 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: id,
-                                                                   for: indexPath) as! HeaderForColorEmojiCollections
+                                                                   for: indexPath) as? HeaderForColorEmojiCollections
         
         if collectionView == emojiCollectionView {
-            view.headerLabel.text = "Emoji"
-            return view
+            view?.headerLabel.text = "Emoji"
+            return view ?? HeaderForColorEmojiCollections()
         } else {
-            view.headerLabel.text = "Цвет"
-            return view
+            view?.headerLabel.text = "Цвет"
+            return view ?? HeaderForColorEmojiCollections()
         }
     }
     
