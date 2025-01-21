@@ -153,6 +153,10 @@ final class HabitCreaterViewController: UIViewController {
         }
     }
     
+    deinit {
+        habitCreaterViewControllerObserver = nil
+    }
+    
     // MARK: - Private Methods
     private func addSubviews() {
         view.addSubview(scrollView)
@@ -249,8 +253,7 @@ final class HabitCreaterViewController: UIViewController {
                                                                         trackerEmoji: emoji,
                                                                         trackerDate: date))
         
-        NotificationCenter.default.post(name: NotificationNames.coreDataChange,
-                                        object: nil)
+        NotificationCenter.default.post(name: NotificationNames.coreDataChange, object: nil)
         
         dismissViewController()
     }

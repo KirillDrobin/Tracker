@@ -16,7 +16,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     weak var delegate: TrackerSender?
     
     // MARK: - Private Properties
-    private var unregularEventCreaterViewController: NSObjectProtocol?
+    private var unregularEventCreaterViewControllerObserver: NSObjectProtocol?
     private let cellId = "unregular"
     
     private var trackerNameText = String()
@@ -144,7 +144,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         addSubviews()
         makeConstraints()
         
-        self.unregularEventCreaterViewController = NotificationCenter.default.addObserver(
+        self.unregularEventCreaterViewControllerObserver = NotificationCenter.default.addObserver(
             forName: NotificationNames.buttonIsEnabled,
             object: nil,
             queue: .main
@@ -152,6 +152,10 @@ final class UnregularEventCreaterViewController: UIViewController {
             guard let self = self else { return }
             self.didEnabledButton()
         }
+    }
+    
+    deinit {
+        unregularEventCreaterViewControllerObserver = nil
     }
     
     // MARK: - Private Methods

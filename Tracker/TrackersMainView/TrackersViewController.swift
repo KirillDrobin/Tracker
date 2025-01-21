@@ -95,6 +95,10 @@ final class TrackersViewController: UIViewController {
         dateChecker(datePicker)
     }
     
+    deinit {
+        trackersViewControllerObserver = nil
+    }
+    
     // MARK: - Private Methods
     private func reloadMainScreen() {
         if currentTrackersIndexes.isEmpty == false {
