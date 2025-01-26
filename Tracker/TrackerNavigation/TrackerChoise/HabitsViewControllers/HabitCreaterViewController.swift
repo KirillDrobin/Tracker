@@ -311,7 +311,6 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == .zero {
             let categoryMainViewController = CategoryMainViewController()
-            categoryMainViewController.delegate = self
             navigationController?.pushViewController(categoryMainViewController, animated: true)
         } else {
             let scheduleViewController = ScheduleViewController()
