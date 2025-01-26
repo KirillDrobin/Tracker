@@ -27,9 +27,6 @@ final class CategoryMainViewModel {
     
     private init() {
         currentCategoryNameMethod()
-        print("ViewModelInit")
-        print("массив имен категорий \(trackerCategoryNameArray)")
-        
     }
     
     // MARK: Public Methods
@@ -51,7 +48,6 @@ final class CategoryMainViewModel {
         } else {
             return false
         }
-        print("status \(vcInitStatus())")
     }
     
     func categoryTableViewHeightUpdate() -> Bool {
@@ -77,7 +73,6 @@ final class CategoryMainViewModel {
             stringArray.append(i.categoryName)
         }
         storage.trackerCategoryNameArray = stringArray
-        print("массив имен категорий \(trackerCategoryNameArray)")
     }
 }
 

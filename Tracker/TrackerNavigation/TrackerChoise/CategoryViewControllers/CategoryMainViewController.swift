@@ -80,11 +80,7 @@ final class CategoryMainViewController: UIViewController {
         super.viewWillAppear(true)
         vcInit()
         bind()
-        print("willAppear")
-    }
-    
-    deinit {
-        print("deinit")
+
     }
     
     // MARK: - Private Methods
@@ -150,7 +146,6 @@ final class CategoryMainViewController: UIViewController {
             addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 662),
             addButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-        print("consts upd: \(categoryTableViewHeightUpdate())")
     }
     
     private func vcInit() {
@@ -175,7 +170,7 @@ final class CategoryMainViewController: UIViewController {
     }
     
     private func categoryTableViewHeightUpdate() -> CGFloat {
-        print("category TableView Height Update")
+
         if categoryMainViewModel.categoryTableViewHeightUpdate() == true {
             return CGFloat(524)
         } else {

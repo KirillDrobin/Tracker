@@ -101,7 +101,6 @@ final class CategoryCreaterViewController: UIViewController {
         storage.trackerCategoryNameArray.append(categoryNameTextField.text ?? "")
         categoryMainViewModel.cellCount = storage.trackerCategoryNameArray.count
         categoryMainViewModel.trackerCategoryNameArraySet(sender: categoryNameTextField.text ?? "")
-        print("массив имен категорий после создания категории \(categoryMainViewModel.trackerCategoryNameArray)")
         navigationController?.popViewController(animated: true)
     }
     

@@ -43,18 +43,7 @@ final class TrackerCategoryStore {
         trackersCategory.addToTrackers(trackers)
                 
         appDelegate.saveContext()
-        print("трекеры \(trackers) \n категория \(trackersCategory)")
     }
-    
-//    func categoryCreater(trackerCategoryName: String) {
-//        let trackersCategory = TrackerCategoryCore(context: context)
-//
-//        trackersCategory.categoryName = trackerCategoryName
-//        trackersCategory.addToTrackers([])
-//                
-//        appDelegate.saveContext()
-//        print("\(trackersCategory)")
-//    }
     
     func fetchCategories() -> [TrackerCategory] {
         let fetchRequest: NSFetchRequest<TrackerCategoryCore> = TrackerCategoryCore.fetchRequest()
