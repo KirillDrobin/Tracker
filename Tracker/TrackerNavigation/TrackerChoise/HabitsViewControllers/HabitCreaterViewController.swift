@@ -11,6 +11,7 @@ final class HabitCreaterViewController: UIViewController {
     // MARK: - Singletone
     private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private var categoryMainViewModel = CategoryMainViewModel.shared
     
     // MARK: - Delegate
     weak var delegate: TrackerSender?
@@ -151,8 +152,9 @@ final class HabitCreaterViewController: UIViewController {
             guard let self = self else { return }
             self.didEnabledButton()
         }
+        trackerCategoryNameUpdate()
     }
-    
+
     deinit {
         habitCreaterViewControllerObserver = nil
     }
@@ -241,6 +243,10 @@ final class HabitCreaterViewController: UIViewController {
         }
     }
     
+    private func trackerCategoryNameUpdate() {
+        trackerCategoryName = categoryMainViewModel.currentCategoryName
+    }
+    
     // MARK: - Objc Methods
     @objc private func createTracker() {
         
@@ -285,7 +291,6 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
-        
         
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Категория"

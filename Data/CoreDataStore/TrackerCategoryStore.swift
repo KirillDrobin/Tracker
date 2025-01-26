@@ -32,25 +32,45 @@ final class TrackerCategoryStore {
     func trackerAndCategoryCreater(trackerCategoryName: String, tracker: Tracker) {
         let trackersCategory = TrackerCategoryCore(context: context)
         let trackers = TrackerCore(context: context)
-        
+       
         trackers.id = tracker.id
         trackers.trackerName = tracker.trackerName
         trackers.trackerColor = tracker.trackerColor
         trackers.trackerDate = dateArrayToStringConverter(array: tracker.trackerDate)
         trackers.trackerEmoji = tracker.trackerEmoji
-        
+
         trackersCategory.categoryName = trackerCategoryName
         trackersCategory.addToTrackers(trackers)
                 
         appDelegate.saveContext()
+        print("трекеры \(trackers) \n категория \(trackersCategory)")
     }
     
-    func categoryNameFetch() -> String {
-        let request = NSFetchRequest<TrackerCategoryCore>(entityName: "TrackerCategoryCore")
-        let trackersCategoryFetch = try? context.fetch(request)
-        let category = trackersCategoryFetch?.first?.categoryName
-        
-        return category ?? "Ошибка запроса названия категории"
+//    func categoryCreater(trackerCategoryName: String) {
+//        let trackersCategory = TrackerCategoryCore(context: context)
+//
+//        trackersCategory.categoryName = trackerCategoryName
+//        trackersCategory.addToTrackers([])
+//                
+//        appDelegate.saveContext()
+//        print("\(trackersCategory)")
+//    }
+    
+    func fetchCategories() -> [TrackerCategory] {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCore> = TrackerCategoryCore.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "categoryName", ascending: true)]
+        do {
+            let categoryCoreDataArray = try context.fetch(fetchRequest)
+            return categoryCoreDataArray.map {
+                TrackerCategory(
+                    categoryName: $0.categoryName ?? "",
+                    trackers: []
+                )
+            }
+        } catch {
+            print("Error fetching categories: \(error)")
+            return []
+        }
     }
     
     // MARK: - Private Methods

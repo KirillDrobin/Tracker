@@ -12,6 +12,7 @@ final class TrackersViewController: UIViewController {
     private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
+    private let storage = Storage.shared
     
     // MARK: - Private Properties
     private var trackersViewControllerObserver: NSObjectProtocol?
@@ -74,6 +75,9 @@ final class TrackersViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        let onboardingViewController = OnboardingViewController()
+        onboardingViewController.dismiss(animated: true)
+        
         searchField.delegate = self
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -82,7 +86,7 @@ final class TrackersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
+
         self.trackersViewControllerObserver = NotificationCenter.default.addObserver(
             forName: NotificationNames.coreDataChange,
             object: nil,
@@ -273,7 +277,7 @@ extension TrackersViewController: UICollectionViewDelegate,
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: id,
                                                                    for: indexPath) as? TrackerHeaderView
-        view?.headerLabel.text = trackerCategoryStore.categoryNameFetch()
+        view?.headerLabel.text = "Важное" // ToDo: разные хэдеры для разного набора ячеек
         return view ?? TrackerHeaderView()
     }
     
