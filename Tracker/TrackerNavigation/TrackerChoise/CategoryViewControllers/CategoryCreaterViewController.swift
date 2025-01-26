@@ -8,7 +8,7 @@
 import UIKit
 
 final class CategoryCreaterViewController: UIViewController {
-    
+    // MARK: - Singletone
     private let categoryMainViewModel = CategoryMainViewModel.shared
     private let storage = Storage.shared
         

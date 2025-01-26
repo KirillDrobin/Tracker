@@ -10,21 +10,21 @@ import Foundation
 final class CategoryMainViewModel {
     // MARK: - Singletone
     static var shared = CategoryMainViewModel()
-    
+    // MARK: - Properties
     var categoriesChange: Binding<[String]>?
     var currentCategoryName = String()
     var cellCount = Int()
     
+    // MARK: - Private Properties
     private let storage = Storage.shared
-    
     private var trackerCategoryStore = TrackerCategoryStore.shared
-    
     private(set) var trackerCategoryNameArray: [String] = [] {
         didSet {
             categoriesChange?(trackerCategoryNameArray)
         }
     }
     
+    // MARK: - Init
     private init() {
         currentCategoryNameMethod()
     }
@@ -67,6 +67,7 @@ final class CategoryMainViewModel {
         NotificationCenter.default.post(name: NotificationNames.coreDataChange, object: nil)
     }
     
+    // MARK: Private Methods
     private func currentCategoryNameMethod() {
         var stringArray = [String]()
         for i in trackerCategoryStore.fetchCategories() {

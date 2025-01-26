@@ -211,6 +211,5 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.navigationController?.popViewController(animated: true)
         }
-//        NotificationCenter.default.post(name: NotificationNames.coreDataChange, object: nil)
     }
 }
