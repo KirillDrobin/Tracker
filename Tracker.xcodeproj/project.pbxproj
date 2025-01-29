@@ -35,7 +35,7 @@
 		EDB0ED962D31C2A3006075B5 /* TrackerData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EDB0ED942D31C2A3006075B5 /* TrackerData.xcdatamodeld */; };
 		EDB0EFC12D4156D7006075B5 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0EFC02D4156D7006075B5 /* OnboardingViewController.swift */; };
 		EDB0EFC32D4158E8006075B5 /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0EFC22D4158E8006075B5 /* OnboardingPageViewController.swift */; };
-		EDB0EFC72D4176C9006075B5 /* RootViewControllerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0EFC62D4176C9006075B5 /* RootViewControllerStatus.swift */; };
+		EDB0EFC72D4176C9006075B5 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0EFC62D4176C9006075B5 /* Storage.swift */; };
 		EDB0F04B2D42B572006075B5 /* CategoryMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0F04A2D42B572006075B5 /* CategoryMainViewModel.swift */; };
 		EDB0F04D2D452CF8006075B5 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0F04C2D452CF8006075B5 /* Binding.swift */; };
 		EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */; };
@@ -96,7 +96,7 @@
 		EDB0ED952D31C2A3006075B5 /* TrackerData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerData.xcdatamodel; sourceTree = "<group>"; };
 		EDB0EFC02D4156D7006075B5 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		EDB0EFC22D4158E8006075B5 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
-		EDB0EFC62D4176C9006075B5 /* RootViewControllerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerStatus.swift; sourceTree = "<group>"; };
+		EDB0EFC62D4176C9006075B5 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		EDB0F04A2D42B572006075B5 /* CategoryMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryMainViewModel.swift; sourceTree = "<group>"; };
 		EDB0F04C2D452CF8006075B5 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		EDE6A9462CC6B5F90038CBBA /* CategoryCreaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreaterViewController.swift; sourceTree = "<group>"; };
@@ -146,7 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				EDB0ED942D31C2A3006075B5 /* TrackerData.xcdatamodeld */,
-				EDB0EFC62D4176C9006075B5 /* RootViewControllerStatus.swift */,
+				EDB0EFC62D4176C9006075B5 /* Storage.swift */,
 				ED121A922D0D91B5001EE8C5 /* Models */,
 				EDB0ED8B2D2ED0BA006075B5 /* CoreDataStore */,
 				ED121A972D0D91B5001EE8C5 /* Helpers */,
@@ -466,7 +466,7 @@
 				EDFE37072CC031A800C672E1 /* TrackerChoiceViewController.swift in Sources */,
 				EDB0ED8D2D2ED0D0006075B5 /* TrackerStore.swift in Sources */,
 				ED7890BE2CAEF50C00721730 /* TabBarController.swift in Sources */,
-				EDB0EFC72D4176C9006075B5 /* RootViewControllerStatus.swift in Sources */,
+				EDB0EFC72D4176C9006075B5 /* Storage.swift in Sources */,
 				EDFE370F2CC6AF0B00C672E1 /* CategoryMainViewController.swift in Sources */,
 				ED121A9F2D0D91EA001EE8C5 /* CustomTextField.swift in Sources */,
 				ED7890CC2CB29F6A00721730 /* TrackersViewController.swift in Sources */,

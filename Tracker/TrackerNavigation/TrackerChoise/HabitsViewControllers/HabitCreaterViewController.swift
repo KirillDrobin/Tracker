@@ -244,7 +244,7 @@ final class HabitCreaterViewController: UIViewController {
     }
     
     private func trackerCategoryNameUpdate() {
-        trackerCategoryName = categoryMainViewModel.currentCategoryName
+        trackerCategoryName = categoryMainViewModel.selectedCategoryName
     }
     
     // MARK: - Objc Methods

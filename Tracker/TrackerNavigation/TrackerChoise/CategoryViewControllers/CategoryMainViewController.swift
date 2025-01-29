@@ -12,6 +12,8 @@ final class CategoryMainViewController: UIViewController {
     private var categoryMainViewModel = CategoryMainViewModel.shared
     
     // MARK: - Private Properties
+    private var sectionCount = Int()
+    
     private let label: UILabel = {
         let label = UILabel()
         label.text = "Категория"
@@ -55,32 +57,24 @@ final class CategoryMainViewController: UIViewController {
         return button
     }()
     
-    init () {
-        super.init(nibName: nil, bundle: nil)
-        viewDidLoad()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        DispatchQueue.main.async { [weak self] in
+            self?.bind()
+        }
+        
         navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
         categoryTableView.dataSource = self
         categoryTableView.delegate = self
-        
-        vcInit()
-        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        vcInit()
-        bind()
-
+        DispatchQueue.main.async { [weak self] in
+            self?.bind()
+        }
     }
     
     // MARK: - Private Methods
@@ -135,7 +129,7 @@ final class CategoryMainViewController: UIViewController {
             label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 114),
             label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -112),
             
-            categoryTableView.heightAnchor.constraint(equalToConstant: categoryTableViewHeightUpdate()),
+            categoryTableView.heightAnchor.constraint(equalToConstant: 524),
             categoryTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             categoryTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             categoryTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
@@ -148,33 +142,25 @@ final class CategoryMainViewController: UIViewController {
         ])
     }
     
-    private func vcInit() {
-        categoryMainViewModel.vcInitStatus()
-        if categoryMainViewModel.vcInitStatus() == false {
+    private func bind() {
+        categoryMainViewModel.currentCategoriesFetch()
+        categoryMainViewModel.categoriesChange = { [weak self] bool in
+            self?.vcInit(bool: bool)
+        }
+    }
+    
+    private func vcInit(bool: Bool) {
+        if bool == false {
             categoryTableView.dataSource = self
             categoryTableView.delegate = self
-            addSubviewsWithTableView()
-            makeConstraintsWithTableView()
             defaultViewImage.isHidden = true
             defaultViewImageLabel.isHidden = true
+            addSubviewsWithTableView()
+            makeConstraintsWithTableView()
+            categoryTableView.reloadData()
         } else {
             addSubviewsDefault()
             makeConstraintsDefault()
-        }
-    }
-    
-    private func bind() {
-        categoryMainViewModel.categoriesChange = { [weak self] trackerCategoryNameArray in
-            self?.categoryTableView.reloadData()
-        }
-    }
-    
-    private func categoryTableViewHeightUpdate() -> CGFloat {
-
-        if categoryMainViewModel.categoryTableViewHeightUpdate() == true {
-            return CGFloat(524)
-        } else {
-            return CGFloat(74 * categoryMainViewModel.cellCount)
         }
     }
     
@@ -188,26 +174,38 @@ final class CategoryMainViewController: UIViewController {
 // MARK: - extension CategoryMainViewController
 extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryMainViewModel.trackerCategoryNameArray.count
+        
+        categoryMainViewModel.count = { [weak self] count in
+            self?.sectionCount = count
+        }
+        return sectionCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var array = [String]()
+        
+        categoryMainViewModel.currentCategories = { categoriesAarray in
+            array = categoriesAarray
+        }
+        
         //cell
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = categoryMainViewModel.trackerCategoryNameArray[indexPath.row]
+        cell.textLabel?.text = array[indexPath.row]
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         cell.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         
-        if indexPath.row + 1 == categoryMainViewModel.trackerCategoryNameArray.count {
+        if indexPath.row + 1 == sectionCount {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         }
-
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         categoryMainViewModel.categoryNameSender(name: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? "")
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.navigationController?.popViewController(animated: true)
         }

@@ -98,9 +98,10 @@ final class CategoryCreaterViewController: UIViewController {
     
     // MARK: - Objc Methods
     @objc private func createCategoryButtonAction() {
-        storage.trackerCategoryNameArray.append(categoryNameTextField.text ?? "")
-        categoryMainViewModel.cellCount = storage.trackerCategoryNameArray.count
-        categoryMainViewModel.trackerCategoryNameArraySet(sender: categoryNameTextField.text ?? "")
+//        storage.trackerCategoryNameArray.append(categoryNameTextField.text ?? "")
+//        categoryMainViewModel.cellCount = storage.trackerCategoryNameArray.count
+//        categoryMainViewModel.trackerCategoryNameArraySet(sender: categoryNameTextField.text ?? "")
+        categoryMainViewModel.saveCategory(trackerCategoryName: categoryNameTextField.text ?? "nil value, error")
         navigationController?.popViewController(animated: true)
     }
     

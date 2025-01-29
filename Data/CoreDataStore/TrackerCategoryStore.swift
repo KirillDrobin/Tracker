@@ -45,12 +45,19 @@ final class TrackerCategoryStore {
         appDelegate.saveContext()
     }
     
+    func categoryCreater(trackerCategoryName: String) {
+        let trackersCategory = TrackerCategoryCore(context: context)
+        trackersCategory.categoryName = trackerCategoryName
+                
+        appDelegate.saveContext()
+    }
+    
     func fetchCategories() -> [TrackerCategory] {
         let fetchRequest: NSFetchRequest<TrackerCategoryCore> = TrackerCategoryCore.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "categoryName", ascending: true)]
         do {
             let categoryCoreDataArray = try context.fetch(fetchRequest)
-            return categoryCoreDataArray.map {
+            return categoryCoreDataArray.compactMap {
                 TrackerCategory(
                     categoryName: $0.categoryName ?? "",
                     trackers: []
