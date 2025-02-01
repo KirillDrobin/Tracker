@@ -295,7 +295,6 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let categoryMainViewController = CategoryMainViewController()
-        categoryMainViewController.delegate = self
         navigationController?.pushViewController(categoryMainViewController, animated: true)
     }
     

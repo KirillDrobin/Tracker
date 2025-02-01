@@ -8,7 +8,10 @@
 import UIKit
 
 final class CategoryCreaterViewController: UIViewController {
-    
+    // MARK: - Singletone
+    private let categoryMainViewModel = CategoryMainViewModel.shared
+    private let storage = Storage.shared
+        
     // MARK: - Private Properties
     private let label: UILabel = {
         let label = UILabel()
@@ -95,6 +98,10 @@ final class CategoryCreaterViewController: UIViewController {
     
     // MARK: - Objc Methods
     @objc private func createCategoryButtonAction() {
+//        storage.trackerCategoryNameArray.append(categoryNameTextField.text ?? "")
+//        categoryMainViewModel.cellCount = storage.trackerCategoryNameArray.count
+//        categoryMainViewModel.trackerCategoryNameArraySet(sender: categoryNameTextField.text ?? "")
+        categoryMainViewModel.saveCategory(trackerCategoryName: categoryNameTextField.text ?? "nil value, error")
         navigationController?.popViewController(animated: true)
     }
     
@@ -102,6 +109,6 @@ final class CategoryCreaterViewController: UIViewController {
         let isNotEmptyText = categoryNameTextField.text?.isEmpty == false
         createCategoryButton.isEnabled = isNotEmptyText
         createCategoryButton.backgroundColor = isNotEmptyText ? .black : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
-        if categoryNameTextField.text?.count == 38 { /*toDo ограничение названия категории в 28 символа*/ }
+        if categoryNameTextField.text?.count == 38 { /*toDo ограничение названия категории в 38 символов*/ }
     }
 }
