@@ -8,9 +8,23 @@
 import UIKit
 
 enum Constants {
-    static let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    static let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+    static let daysOfWeek = [NSLocalizedString("Понедельник", comment: ""),
+                             NSLocalizedString("Вторник", comment: ""),
+                             NSLocalizedString("Среда", comment: ""),
+                             NSLocalizedString("Четверг", comment: ""),
+                             NSLocalizedString("Пятница", comment: ""),
+                             NSLocalizedString("Суббота", comment: ""),
+                             NSLocalizedString("Воскресенье", comment: "")]
+    static let daysOfWeekShort = [NSLocalizedString("Пн", comment: ""),
+                                  NSLocalizedString("Вт", comment: ""),
+                                  NSLocalizedString("Ср", comment: ""),
+                                  NSLocalizedString("Чт", comment: ""),
+                                  NSLocalizedString("Пт", comment: ""),
+                                  NSLocalizedString("Сб", comment: ""),
+                                  NSLocalizedString("Вс", comment: "")]
+    
     static let emojisForCell = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
+    
     static let colorsForCell = [UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1),
                                            UIColor(red: 255/255, green: 136/255, blue: 30/255, alpha: 1),
                                            UIColor(red: 0/255, green: 123/255, blue: 250/255, alpha: 1),

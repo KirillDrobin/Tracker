@@ -14,7 +14,7 @@ final class TrackerChoiceViewController: UIViewController {
     // MARK: - Private Properties
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = NSLocalizedString("Создание трекера", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
@@ -22,9 +22,10 @@ final class TrackerChoiceViewController: UIViewController {
     
     private let addHabitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("Привычка", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .ypBlack
+        button.titleLabel?.textColor = UIColor(named: "White")
+        button.backgroundColor = UIColor(named: "Black")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(switchToHabitViewController), for: .touchUpInside)
@@ -33,9 +34,10 @@ final class TrackerChoiceViewController: UIViewController {
     
     private let addEventButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(NSLocalizedString("Нерегулярное событие", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .ypBlack
+        button.titleLabel?.textColor = UIColor(named: "White")
+        button.backgroundColor = UIColor(named: "Black")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(switchToUnregularEventCreaterViewController), for: .touchUpInside)
@@ -45,7 +47,7 @@ final class TrackerChoiceViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundSet")
         self.navigationController?.navigationBar.isHidden = true
         addSubviews()
         makeConstraints()

@@ -15,7 +15,7 @@ final class CategoryCreaterViewController: UIViewController {
     // MARK: - Private Properties
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("Категория", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
@@ -23,10 +23,10 @@ final class CategoryCreaterViewController: UIViewController {
     
     private let categoryNameTextField: CustomTextField = {
         let textField = CustomTextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("Введите название категории", comment: "")
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.clearButtonMode = .whileEditing
-        textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        textField.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         textField.layer.cornerRadius = 16
         textField.addTarget(self, action: #selector(unlockCategoryButton), for: .editingChanged)
         return textField
@@ -45,7 +45,7 @@ final class CategoryCreaterViewController: UIViewController {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("Готово", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.isEnabled = false
         button.addTarget(self, action: #selector(createCategoryButtonAction), for: .touchUpInside)
@@ -56,7 +56,7 @@ final class CategoryCreaterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         categoryNameTextField.delegate = self
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundSet")
         navigationController?.navigationBar.isHidden = true
         addSubviews()
         makeConstraints()
@@ -98,9 +98,6 @@ final class CategoryCreaterViewController: UIViewController {
     
     // MARK: - Objc Methods
     @objc private func createCategoryButtonAction() {
-//        storage.trackerCategoryNameArray.append(categoryNameTextField.text ?? "")
-//        categoryMainViewModel.cellCount = storage.trackerCategoryNameArray.count
-//        categoryMainViewModel.trackerCategoryNameArraySet(sender: categoryNameTextField.text ?? "")
         categoryMainViewModel.saveCategory(trackerCategoryName: categoryNameTextField.text ?? "nil value, error")
         navigationController?.popViewController(animated: true)
     }
@@ -108,7 +105,7 @@ final class CategoryCreaterViewController: UIViewController {
     @objc private func unlockCategoryButton() {
         let isNotEmptyText = categoryNameTextField.text?.isEmpty == false
         createCategoryButton.isEnabled = isNotEmptyText
-        createCategoryButton.backgroundColor = isNotEmptyText ? .black : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
+        createCategoryButton.backgroundColor = isNotEmptyText ? UIColor(named: "Black") : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
         if categoryNameTextField.text?.count == 38 { /*toDo ограничение названия категории в 38 символов*/ }
     }
 }

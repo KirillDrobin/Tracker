@@ -16,7 +16,7 @@ final class CategoryMainViewController: UIViewController {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("Категория", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
@@ -30,7 +30,7 @@ final class CategoryMainViewController: UIViewController {
     
     private let defaultViewImageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Привычки и события можно \nобъединить по смыслу"
+        label.text = NSLocalizedString("Привычки и события можно \nобъединить по смыслу", comment: "")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.numberOfLines = 2
         label.textAlignment = .center
@@ -50,8 +50,8 @@ final class CategoryMainViewController: UIViewController {
     private let addButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
-        button.backgroundColor = .black
-        button.setTitle("Добавить категорию", for: .normal)
+        button.backgroundColor = UIColor(named: "Black")
+        button.setTitle(NSLocalizedString("Добавить категорию", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(switchToCategoryCreaterViewController), for: .touchUpInside)
         return button
@@ -65,7 +65,7 @@ final class CategoryMainViewController: UIViewController {
         }
         
         navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundSet")
         categoryTableView.dataSource = self
         categoryTableView.delegate = self
     }

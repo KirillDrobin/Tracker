@@ -39,7 +39,7 @@ final class HabitCreaterViewController: UIViewController {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = NSLocalizedString("Новая привычка", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
@@ -47,10 +47,10 @@ final class HabitCreaterViewController: UIViewController {
     
     private let trackerNameTextField: CustomTextField = {
         let textField = CustomTextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("Введите название трекера", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        textField.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         textField.layer.cornerRadius = 16
         textField.keyboardType = .default
         textField.addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingChanged)
@@ -61,6 +61,8 @@ final class HabitCreaterViewController: UIViewController {
         let table = UITableView()
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
+        table.backgroundColor = UIColor(named: "TextFieldTableViewSet")
+        table.separatorColor = UIColor(named: "SeparatorSet")
         return table
     }()
     
@@ -89,7 +91,7 @@ final class HabitCreaterViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.layer.borderColor = CGColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1)
         button.layer.borderWidth = 1.0
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("Отменить", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(UIColor(named: "YP Red"), for: .normal)
         button.layer.masksToBounds = false
@@ -101,8 +103,9 @@ final class HabitCreaterViewController: UIViewController {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("Создать", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.titleLabel?.textColor = UIColor(named: "White")
         button.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
         button.isEnabled = false
         return button
@@ -111,7 +114,7 @@ final class HabitCreaterViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundSet")
         navigationController?.navigationBar.isHidden = true
         
         habitSetupsTableView.dataSource = self
@@ -286,21 +289,21 @@ extension HabitCreaterViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
         
         if (indexPath.row == 0) {
-            cell.textLabel?.text = "Категория"
+            cell.textLabel?.text = NSLocalizedString("Категория", comment: "")
             cell.detailTextLabel?.text = trackerCategoryName
             cell.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         } else {
-            cell.textLabel?.text = "Расписание"
+            cell.textLabel?.text = NSLocalizedString("Расписание", comment: "")
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             if daysOfWeekShortArray.count == 7 {
-                cell.detailTextLabel?.text = "Каждый день"
+                cell.detailTextLabel?.text = NSLocalizedString("Каждый день", comment: "")
             } else {
                 cell.detailTextLabel?.text = daysOfWeekShortArray.joined(separator: ", ")
             }
@@ -372,7 +375,7 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
             view.headerLabel.text = "Emoji"
             return view
         } else {
-            view.headerLabel.text = "Цвет"
+            view.headerLabel.text = NSLocalizedString("Цвет", comment: "")
             return view
         }
     }
