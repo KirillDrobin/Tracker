@@ -19,45 +19,52 @@ final class TrackersViewController: UIViewController {
     private var currentDate = Date()
     private var currentTrackersIndexes = [Int]()
     private var currentTrackerDataArray = [Tracker]()
+    private var filteredTrackerDataArray = [Tracker]()
+    private var analyticsService = AnalyticsService()
     
     private let addTrackerButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Figma plus"), for: .normal)
+        let sc = UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold, scale: .large)
+        let im = UIImage(systemName: "plus", withConfiguration: sc)
+        button.setImage(im?.withTintColor(UIColor(named: "Black") ?? UIColor(), renderingMode: .alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(switchToTrackerChoiceViewController), for: .touchUpInside)
         return button
     }()
     
     private let datePicker: UIDatePicker = {
         let date = UIDatePicker()
+        date.layer.cornerRadius = 8
+        date.layer.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1).cgColor
         date.datePickerMode = .date
         date.preferredDatePickerStyle = .compact
-        date.locale = Locale(identifier: "ru_RU")
+        date.locale = Locale(identifier: NSLocalizedString("ru_RU", comment: ""))
         date.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         return date
     }()
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = NSLocalizedString("Трекеры", comment: "")
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     
     private let searchField: UISearchTextField = {
         let search = UISearchTextField()
-        search.placeholder = "Поиск"
+        search.placeholder = NSLocalizedString("Поиск", comment: "")
         search.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        search.textColor = .gray
-        search.backgroundColor = UIColor(red: 255/118, green: 255/118, blue: 225/128, alpha: 0.12)
+        search.backgroundColor = UIColor(named: "SearchFieldSet")
+        search.addTarget(self, action: #selector(searchTextDidChange), for: .editingChanged)
         return search
     }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.backgroundColor = UIColor(named: "BackgroundSet")
         return collection
     }()
-    
+
     private let mainTrackersViewImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "TrackersDefaultLogo")
@@ -66,7 +73,7 @@ final class TrackersViewController: UIViewController {
     
     private let mainTrackersViewImageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("Что будем отслеживать?", comment: "")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
         return label
@@ -75,6 +82,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        filteredTrackerDataArray = currentTrackerDataArray // доделать
+        
         let onboardingViewController = OnboardingViewController()
         onboardingViewController.dismiss(animated: true)
         
@@ -86,6 +95,7 @@ final class TrackersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        analyticsService.report(event: Events.open, screen: "Main", item: Items.noItem)
 
         self.trackersViewControllerObserver = NotificationCenter.default.addObserver(
             forName: NotificationNames.coreDataChange,
@@ -95,12 +105,12 @@ final class TrackersViewController: UIViewController {
             guard let self = self else { return }
             self.reloadMainScreen()
         }
-
         dateChecker(datePicker)
     }
-    
+
     deinit {
         trackersViewControllerObserver = nil
+        analyticsService.report(event: Events.close, screen: "Main", item: Items.noItem)
     }
     
     // MARK: - Private Methods
@@ -167,7 +177,7 @@ final class TrackersViewController: UIViewController {
             
             datePicker.centerYAnchor.constraint(equalTo: addTrackerButton.centerYAnchor, constant: 0),
             datePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            datePicker.widthAnchor.constraint(equalToConstant: 100),
+//            datePicker.widthAnchor.constraint(equalToConstant: 77),
             
             label.widthAnchor.constraint(equalToConstant: 254),
             label.heightAnchor.constraint(equalToConstant: 41),
@@ -221,6 +231,7 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Objc Methods
     @objc private func switchToTrackerChoiceViewController() {
+        analyticsService.report(event: Events.click, screen: "Main", item: Items.addTrack)
         let trackerChoiceViewController = TrackerChoiceViewController()
         trackerChoiceViewController.delegate = self
         let trackerNavigationController = UINavigationController(rootViewController: trackerChoiceViewController)
@@ -229,6 +240,17 @@ final class TrackersViewController: UIViewController {
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         dateChecker(sender)
+    }
+    
+    @objc private func searchTextDidChange(_ searchField: UISearchTextField) {
+        if let searchText = searchField.text, !searchText.isEmpty {
+            filteredTrackerDataArray = currentTrackerDataArray.filter {
+                $0.trackerName.lowercased().contains(searchText.lowercased())
+            }
+        } else {
+            filteredTrackerDataArray = currentTrackerDataArray
+        }
+        collectionView.reloadData()
     }
 }
 
@@ -249,12 +271,12 @@ extension TrackersViewController: UICollectionViewDelegate,
     ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCellView else { return TrackerCellView()}
 
-        cell.titleLabel.text = currentTrackerDataArray[indexPath.row].trackerName
-        cell.emojiView.text = currentTrackerDataArray[indexPath.row].trackerEmoji
-        cell.cardView.backgroundColor = Constants.colorsForCell[Int(currentTrackerDataArray[indexPath.row].trackerColor)]
-        cell.checkButton.backgroundColor = Constants.colorsForCell[Int(currentTrackerDataArray[indexPath.row].trackerColor)]
+        cell.titleLabel.text = filteredTrackerDataArray[indexPath.row].trackerName
+        cell.emojiView.text = filteredTrackerDataArray[indexPath.row].trackerEmoji
+        cell.cardView.backgroundColor = Constants.colorsForCell[Int(filteredTrackerDataArray[indexPath.row].trackerColor)]
+        cell.checkButton.backgroundColor = Constants.colorsForCell[Int(filteredTrackerDataArray[indexPath.row].trackerColor)]
         
-        cell.id = currentTrackerDataArray[indexPath.row].id
+        cell.id = filteredTrackerDataArray[indexPath.row].id
         cell.datePickerDate = datePicker.date
         
         cell.cellViewInit()

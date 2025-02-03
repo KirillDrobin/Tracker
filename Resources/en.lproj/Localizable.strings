@@ -1,0 +1,53 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Кирилл Дробин on 26.01.2025.
+  
+*/
+
+"Отслеживайте только \nто, что хотите" = "Keep track of only \nwhat you want";
+"Даже если это \nне литры воды и йога" = "Even if it's not \nliters of water and yoga";
+"Вот это технологии!" = "Now that's technology!";
+"Трекеры" = "Trackers";
+"Статистика" = "Statistics";
+"Поиск" = "Search";
+"Что будем отслеживать?" = "What are we going to track?";
+"Создание трекера" = "Creating a tracker";
+"Привычка" = "Habit";
+"Нерегулярное событие" = "Irregular Event";
+"Новая привычка" = "New Habit";
+"Введите название трекера" = "Enter tracker name";
+"Отменить" = "Cansel";
+"Создать" = "Create";
+"Категория" = "Category";
+"Расписание" = "Schedule";
+"Каждый день" = "Every day";
+"Цвет" = "Color";
+"Готово" = "Done";
+"Новое нерегулярное событие" = "New irregular event";
+"Привычки и события можно \nобъединить по смыслу" = "Habits and events can be combined for meaning";
+"Добавить категорию" = "Add category";
+"Введите название категории" = "Enter category name";
+"ru_RU" = "en_EN";
+
+"Понедельник" = "Monday";
+"Вторник" = "Tuesday";
+"Среда" = "Wednesday";
+"Четверг" = "Thursday";
+"Пятница" = "Friday";
+"Суббота" = "Saturday";
+"Воскресенье" = "Sunday";
+
+"Пн" = "Mo";
+"Вт" = "Tu";
+"Ср" = "We";
+"Чт" = "Th";
+"Пт" = "Fr";
+"Сб" = "Sa";
+"Вс" = "Su";
+
+" дней" = " days";
+" день" = " day";
+" дня" = " days";
+

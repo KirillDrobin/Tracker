@@ -15,18 +15,12 @@ class OnboardingViewController: UIPageViewController {
     private lazy var pages: [UIViewController] = {
         let firstPage = OnboardingPageViewController(
             onboardingImage: "OnboardingImage1",
-            onboardingTitle: """
-                Отслеживайте только 
-                то, что хотите
-                """
+            onboardingTitle: NSLocalizedString("Отслеживайте только \nто, что хотите", comment: "")
         )
         
         let secondPage = OnboardingPageViewController(
             onboardingImage: "OnboardingImage2",
-            onboardingTitle: """
-                Даже если это
-                не литры воды и йога
-                """
+            onboardingTitle: NSLocalizedString("Даже если это \nне литры воды и йога", comment: "")
         )
         
         return [firstPage, secondPage]
@@ -45,7 +39,7 @@ class OnboardingViewController: UIPageViewController {
     
     private lazy var onboardingButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("Вот это технологии!", comment: ""), for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16

@@ -27,7 +27,7 @@ final class TrackerCellView: UICollectionViewCell {
     
     let recordLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 дней"
+//        label.text = "0 дней"
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .natural
         label.sizeToFit()
@@ -107,11 +107,11 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Private Methods
     private func recordLabelTextMaker(count: Int) {
         if count == 0 || count >= 5 {
-            recordLabel.text = "\(count) дней"
+            recordLabel.text = "\(count)" + NSLocalizedString(" дней", comment: "")
         } else if count == 1 {
-            recordLabel.text = "\(count) день"
+            recordLabel.text = "\(count)" + NSLocalizedString(" день", comment: "")
         } else {
-            recordLabel.text = "\(count) дня"
+            recordLabel.text = "\(count)" + NSLocalizedString(" дня", comment: "")
         }
     }
     
