@@ -47,6 +47,7 @@ final class CategoryCreaterViewController: UIViewController {
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
         button.setTitle(NSLocalizedString("Готово", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.white, for: .normal)
         button.isEnabled = false
         button.addTarget(self, action: #selector(createCategoryButtonAction), for: .touchUpInside)
         return button
@@ -106,6 +107,7 @@ final class CategoryCreaterViewController: UIViewController {
         let isNotEmptyText = categoryNameTextField.text?.isEmpty == false
         createCategoryButton.isEnabled = isNotEmptyText
         createCategoryButton.backgroundColor = isNotEmptyText ? UIColor(named: "Black") : UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1.0)
+        createCategoryButton.setTitleColor(UIColor(named: "White"), for: .normal)
         if categoryNameTextField.text?.count == 38 { /*toDo ограничение названия категории в 38 символов*/ }
     }
 }

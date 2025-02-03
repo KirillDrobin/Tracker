@@ -44,6 +44,7 @@ final class CategoryMainViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.layer.masksToBounds = true
         table.isScrollEnabled = true
+        table.separatorColor = UIColor(named: "SeparatorSet")
         return table
     }()
     
@@ -53,6 +54,7 @@ final class CategoryMainViewController: UIViewController {
         button.backgroundColor = UIColor(named: "Black")
         button.setTitle(NSLocalizedString("Добавить категорию", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.addTarget(self, action: #selector(switchToCategoryCreaterViewController), for: .touchUpInside)
         return button
     }()
@@ -191,7 +193,7 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
         //cell
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.text = array[indexPath.row]
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         cell.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
         
         if indexPath.row + 1 == sectionCount {

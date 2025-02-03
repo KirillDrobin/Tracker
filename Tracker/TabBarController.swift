@@ -11,7 +11,7 @@ final class TabBarController: UITabBarController {
     
     override func viewDidLoad () {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "White")
+        view.backgroundColor = UIColor(named: "BackgroundSet")
 //        tabBar.layer.borderColor = CGColor(gray: 0.5, alpha: 0.5)
 //        tabBar.layer.borderWidth = 1
 //        tabBar.layer.masksToBounds = true

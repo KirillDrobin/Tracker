@@ -284,7 +284,7 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         cell.accessoryType = .disclosureIndicator
         cell.detailTextLabel?.font = .systemFont(ofSize: 17)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)

@@ -19,5 +19,4 @@ final class TrackerTests: XCTestCase {
         assertSnapshot(of: vc, as: .image(on: .iPhoneSe))
         assertSnapshot(of: vc, as: .recursiveDescription)
     }
-
 }

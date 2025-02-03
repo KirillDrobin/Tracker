@@ -20,11 +20,11 @@ final class TrackerChoiceViewController: UIViewController {
         return label
     }()
     
-    private let addHabitButton: UIButton = {
+    private lazy var addHabitButton: UIButton = {
         let button = UIButton()
         button.setTitle(NSLocalizedString("Привычка", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.titleLabel?.textColor = UIColor(named: "White")
+        button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.backgroundColor = UIColor(named: "Black")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -36,7 +36,7 @@ final class TrackerChoiceViewController: UIViewController {
         let button = UIButton()
         button.setTitle(NSLocalizedString("Нерегулярное событие", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.titleLabel?.textColor = UIColor(named: "White")
+        button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.backgroundColor = UIColor(named: "Black")
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true

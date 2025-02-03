@@ -29,7 +29,7 @@ final class ScheduleViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.layer.masksToBounds = true
         table.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
-        table.backgroundColor = UIColor(named: "TextFieldTableViewSet")
+//        table.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         table.separatorColor = UIColor(named: "SeparatorSet")
         return table
     }()
@@ -39,6 +39,7 @@ final class ScheduleViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(named: "Black")
         button.setTitle(NSLocalizedString("Готово", comment: ""), for: .normal)
+        button.setTitleColor(UIColor(named: "White"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.titleLabel?.textColor = UIColor(named: "White")
         button.addTarget(self, action: #selector(popViewController), for: .touchUpInside)
@@ -135,6 +136,9 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         let uiSwitch = UISwitch(frame: .zero)
         uiSwitch.setOn(false, animated: true)
         uiSwitch.onTintColor = UIColor(red: 55/255, green: 114/255, blue: 231/255, alpha: 1)
+        uiSwitch.layer.cornerRadius = uiSwitch.frame.height / 2.0
+        uiSwitch.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+        uiSwitch.clipsToBounds = true
         uiSwitch.tag = indexPath.row + 1
         uiSwitch.addTarget(self, action: #selector(changeDayOfWeek), for: .touchUpInside)
         
@@ -148,7 +152,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         cell.imageView?.image = UIImage(named: "chevron.right")
         cell.textLabel?.text = Constants.daysOfWeek[indexPath.row]
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.backgroundColor = UIColor(named: "TextFieldTableViewSet")
 
         cell.accessoryView = uiSwitch
         cell.selectionStyle = .none
