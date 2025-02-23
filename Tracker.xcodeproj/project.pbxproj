@@ -22,7 +22,9 @@
 		ED7890BE2CAEF50C00721730 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890BD2CAEF50C00721730 /* TabBarController.swift */; };
 		ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890C92CB29F5E00721730 /* StatsViewController.swift */; };
 		ED7890CC2CB29F6A00721730 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */; };
+		ED91C3932D593BE000AD44E1 /* FilterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED91C3922D593BE000AD44E1 /* FilterProtocol.swift */; };
 		ED941E052D4FE23F0094B613 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED941E042D4FE23F0094B613 /* AnalyticsService.swift */; };
+		ED941E852D5150FD0094B613 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED941E842D5150FD0094B613 /* FilterViewController.swift */; };
 		EDA91B212D1AF55100A00F86 /* HideKeyboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */; };
 		EDA91B702D1C615700A00F86 /* DateSenderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */; };
 		EDA91B722D1C62EE00A00F86 /* CategorySenderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */; };
@@ -86,9 +88,11 @@
 		ED7890BD2CAEF50C00721730 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		ED7890C92CB29F5E00721730 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
+		ED91C3922D593BE000AD44E1 /* FilterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterProtocol.swift; sourceTree = "<group>"; };
 		ED941E002D4FDD3D0094B613 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED941E012D4FDD3D0094B613 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED941E042D4FE23F0094B613 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		ED941E842D5150FD0094B613 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		EDA91B202D1AF55000A00F86 /* HideKeyboardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKeyboardExtension.swift; sourceTree = "<group>"; };
 		EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSenderProtocol.swift; sourceTree = "<group>"; };
 		EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySenderProtocol.swift; sourceTree = "<group>"; };
@@ -240,6 +244,7 @@
 				EDA91B6F2D1C615700A00F86 /* DateSenderProtocol.swift */,
 				EDA91B712D1C62EE00A00F86 /* CategorySenderProtocol.swift */,
 				EDA91B732D1C770F00A00F86 /* TrackerSender.swift */,
+				ED91C3922D593BE000AD44E1 /* FilterProtocol.swift */,
 			);
 			path = DelegateProtocols;
 			sourceTree = "<group>";
@@ -329,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				ED7890CB2CB29F6A00721730 /* TrackersViewController.swift */,
+				ED941E842D5150FD0094B613 /* FilterViewController.swift */,
 				ED67B1F82CDD333400347C20 /* TrackerCellView.swift */,
 				ED67B1FA2CDE904700347C20 /* TrackerCellHeaderView.swift */,
 			);
@@ -554,6 +560,7 @@
 				ED7890CA2CB29F5E00721730 /* StatsViewController.swift in Sources */,
 				EDB0EFC32D4158E8006075B5 /* OnboardingPageViewController.swift in Sources */,
 				EDB0ED142D240F36006075B5 /* EmojiCellView.swift in Sources */,
+				ED941E852D5150FD0094B613 /* FilterViewController.swift in Sources */,
 				EDE6A9512CCFD3800038CBBA /* UnregularEventCreaterViewController.swift in Sources */,
 				EDE6A9472CC6B5FA0038CBBA /* CategoryCreaterViewController.swift in Sources */,
 				EDA91B212D1AF55100A00F86 /* HideKeyboardExtension.swift in Sources */,
@@ -568,6 +575,7 @@
 				EDB0F04B2D42B572006075B5 /* CategoryMainViewModel.swift in Sources */,
 				EDB0EFC12D4156D7006075B5 /* OnboardingViewController.swift in Sources */,
 				EDA91B702D1C615700A00F86 /* DateSenderProtocol.swift in Sources */,
+				ED91C3932D593BE000AD44E1 /* FilterProtocol.swift in Sources */,
 				EDB0ED122D240F12006075B5 /* ColorCellView.swift in Sources */,
 				ED121AA12D0D9C68001EE8C5 /* NotificationNames.swift in Sources */,
 				EDB0ED8F2D2ED0E8006075B5 /* TrackerCategoryStore.swift in Sources */,

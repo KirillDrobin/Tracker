@@ -30,6 +30,12 @@
 "Добавить категорию" = "Add category";
 "Введите название категории" = "Enter category name";
 "ru_RU" = "en_EN";
+"Лучший период" = "Best period";
+"Идеальные дни" = "Perfect days";
+"Трекеров завершено" = "Trackers completed";
+"Среднее значение" = "Average value";
+"Анализировать пока нечего" = "There is nothing to analyze yet";
+"Фильтры" = "Filters";
 
 "Понедельник" = "Monday";
 "Вторник" = "Tuesday";
