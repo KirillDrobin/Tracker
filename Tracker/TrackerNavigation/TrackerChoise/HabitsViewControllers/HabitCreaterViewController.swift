@@ -21,15 +21,15 @@ final class HabitCreaterViewController: UIViewController {
     
     private var trackerNameText = String()
     private var date = [Date]()
-    private var trackerCategoryName = String()
+    lazy var trackerCategoryName = String()
     private var emoji = String()
-    private var daysOfWeekShortArray: [String] = []
+    var daysOfWeekShortArray: [String] = []
     private var colorInt = Int16()
     private var colorCellStatus = 0
-    
+    var trackerId = Int64()
     private let cellId = "habitcell"
     
-    private let scrollView: UIScrollView = {
+    lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .clear
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +37,7 @@ final class HabitCreaterViewController: UIViewController {
         return scrollView
     }()
     
-    private let label: UILabel = {
+    lazy var label: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("Новая привычка", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -45,7 +45,7 @@ final class HabitCreaterViewController: UIViewController {
         return label
     }()
     
-    private let trackerNameTextField: CustomTextField = {
+    lazy var trackerNameTextField: CustomTextField = {
         let textField = CustomTextField()
         textField.placeholder = NSLocalizedString("Введите название трекера", comment: "")
         textField.clearButtonMode = .whileEditing
@@ -57,7 +57,7 @@ final class HabitCreaterViewController: UIViewController {
         return textField
     }()
     
-    private let habitSetupsTableView: UITableView = {
+    lazy var habitSetupsTableView: UITableView = {
         let table = UITableView()
         table.layer.cornerRadius = 16
         table.alwaysBounceVertical = false
@@ -66,7 +66,7 @@ final class HabitCreaterViewController: UIViewController {
         return table
     }()
     
-    private let emojiCollectionView: UICollectionView = {
+    lazy var emojiCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -76,7 +76,7 @@ final class HabitCreaterViewController: UIViewController {
         return collectionView
     }()
     
-    private let colorCollectionView: UICollectionView = {
+    lazy var colorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -86,7 +86,7 @@ final class HabitCreaterViewController: UIViewController {
         return collectionView
     }()
     
-    private let canselButton: UIButton = {
+    lazy var canselButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.layer.borderColor = CGColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1)
@@ -99,7 +99,7 @@ final class HabitCreaterViewController: UIViewController {
         return button
     }()
     
-    private let createButton: UIButton = {
+    lazy var createButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
@@ -146,6 +146,7 @@ final class HabitCreaterViewController: UIViewController {
         habitSetupsTableView.reloadData()
         addSubviews()
         makeConstraints()
+        trackerCategoryNameUpdate()
         
         self.habitCreaterViewControllerObserver = NotificationCenter.default.addObserver(
             forName: NotificationNames.buttonIsEnabled,
@@ -155,9 +156,12 @@ final class HabitCreaterViewController: UIViewController {
             guard let self = self else { return }
             self.didEnabledButton()
         }
-        trackerCategoryNameUpdate()
-    }
+        if label.text != "Редактирование привычки" {
+            trackerCategoryNameUpdate()
+        }
 
+    }
+    
     deinit {
         habitCreaterViewControllerObserver = nil
     }
@@ -250,18 +254,83 @@ final class HabitCreaterViewController: UIViewController {
         trackerCategoryName = categoryMainViewModel.selectedCategoryName
     }
     
+    private func setupEditViewController() /*-> [TrackerCategory]*/ {
+//        var cellData = [TrackerCategory]()
+//        
+//        cellData = trackerStore.fetchSelectedTracker(trackerId: trackerId)
+//        
+//        trackerCategoryName = cellData[0].categoryName
+//        print("\(cellData[0].categoryName)")
+//        trackerNameTextField.text = cellData[0].trackers[0].trackerName
+//        daysOfWeekShortArray = dateToDaysOfWeekShortConverter(dates: cellData[0].trackers[0].trackerDate)
+//        createButton.setTitle(NSLocalizedString("Сохранить", comment: ""), for: .normal)
+//        return cellData
+    }
+    
+    func dateToDaysOfWeekShortConverter(dates: [Date]) -> [String] {
+        let calendar = Calendar(identifier: .gregorian)
+        var shortWeekDaysString = [String]()
+        var dayOfWeek = Int()
+        
+        for i in dates {
+            dayOfWeek = calendar.dateComponents([.weekday], from: i).weekday ?? 1
+            
+            if dayOfWeek == 1 {
+                dayOfWeek = 7
+            } else {
+                dayOfWeek = dayOfWeek - 1
+            }
+            
+            shortWeekDaysString.append(Constants.daysOfWeekShort[dayOfWeek - 1])
+            
+        }
+        
+        return shortWeekDaysString
+    }
+    
+    private func cellForEditing(trackerId: Int64, trackerCategoryName: String, tracker: Tracker) {
+//        var trackerForEditing = [TrackerCategory]()
+//        trackerForEditing = trackerStore.fetchSelectedTracker(trackerId: id)
+        trackerStore.deleteSelectedTracker(trackerId: trackerId)
+        
+        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
+                                                       tracker: tracker)
+
+//        dateChecker(date: datePicker.date)
+//        collectionView.reloadData()
+    }
+       
     // MARK: - Objc Methods
     @objc private func createTracker() {
         
         let randomId = Int64.random(in: 0..<10000)
         
-        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
-                                                       tracker: Tracker(id: randomId,
-                                                                        trackerName: trackerNameText,
-                                                                        trackerColor: colorInt,
-                                                                        trackerEmoji: emoji,
-                                                                        trackerDate: date))
-        
+        if label.text == "Редактирование привычки" {
+//            trackerStore.updateSelectedTracker(trackerId: trackerId,
+//                                               trackerCategoryName: trackerCategoryName,
+//                                               tracker: Tracker(id: trackerId,
+//                                                                trackerName: trackerNameText,
+//                                                                trackerColor: colorInt,
+//                                                                trackerEmoji: emoji,
+//                                                                trackerDate: date))
+            
+            cellForEditing(trackerId: trackerId,
+                           trackerCategoryName: trackerCategoryName,
+                           tracker: Tracker(id: trackerId,
+                                            trackerName: trackerNameText,
+                                            trackerColor: colorInt,
+                                            trackerEmoji: emoji,
+                                            trackerDate: date))
+        } else {
+            trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
+                                                           tracker: Tracker(id: randomId,
+                                                                            trackerName: trackerNameText,
+                                                                            trackerColor: colorInt,
+                                                                            trackerEmoji: emoji,
+                                                                            trackerDate: date))
+
+        }
+
         NotificationCenter.default.post(name: NotificationNames.coreDataChange, object: nil)
         
         dismissViewController()
@@ -340,10 +409,25 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
         if collectionView == emojiCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellView
             cell?.emojiSetup(emoji: Constants.emojisForCell[indexPath.item])
+            
+            if label.text == "Редактирование привычки" {
+                collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
+                collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.layer.cornerRadius = 16
+            }
+            
             return cell ?? EmojiCellView()
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellView
             cell?.colorSetup(color: Constants.colorsForCell[indexPath.item])
+            
+            if label.text == "Редактирование привычки" {
+                let cell = collectionView.cellForItem(at: IndexPath(item: 1, section: 0)) as? ColorCellView
+
+                collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.layer.borderWidth = 3
+                collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
+                collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.layer.cornerRadius = 8
+            }
+            
             return cell ?? ColorCellView()
         }
     }
@@ -368,7 +452,7 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
         }
         
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                   withReuseIdentifier: id,
+                                                                         withReuseIdentifier: id,
                                                                          for: indexPath) as? HeaderForColorEmojiCollections else { return UICollectionReusableView() }
         
         if collectionView == emojiCollectionView {
@@ -418,12 +502,14 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellView
+            collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.backgroundColor = .clear
             cell?.contentView.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 1)
             cell?.contentView.layer.cornerRadius = 16
             emoji = cell?.emojiCell.text ?? ""
             NotificationCenter.default.post(name: NotificationNames.buttonIsEnabled, object: nil)
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellView
+            collectionView.cellForItem(at: IndexPath(item: 1, section: 0))?.contentView.layer.borderWidth = .zero
             cell?.contentView.layer.borderWidth = 3
             cell?.contentView.layer.borderColor = cell?.colorCell.backgroundColor?.withAlphaComponent(0.3).cgColor
             cell?.contentView.layer.cornerRadius = 8

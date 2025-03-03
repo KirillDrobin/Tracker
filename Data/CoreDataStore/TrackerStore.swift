@@ -117,7 +117,6 @@ final class TrackerStore: NSObject {
                                 }
                             }
             }
-        print("текущие id\(currentTrackersId)")
             return currentTrackersId
         }
     
@@ -140,7 +139,48 @@ final class TrackerStore: NSObject {
             }
             return currentTrackerDataArray
         }
+    
+    func fetchSelectedTracker(trackerId: Int64) -> [TrackerCategory] {
+        var selectedTracker = [TrackerCategory]()
+        let fetchRequest = NSFetchRequest<TrackerCore>(entityName: "TrackerCore")
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.predicate = NSPredicate(format: "id == \(trackerId)")
+        guard let tracker = try? context.fetch(fetchRequest) else { return [] }
         
+        selectedTracker.append(TrackerCategory(categoryName: tracker[0].category?.categoryName ?? "",
+                                               trackers: [Tracker(id: tracker[0].id,
+                                                                  trackerName: tracker[0].trackerName ?? "",
+                                                                  trackerColor: tracker[0].trackerColor,
+                                                                  trackerEmoji: tracker[0].trackerEmoji ?? "",
+                                                                  trackerDate: stringToDateArrayConverter(string: tracker[0].trackerDate ?? ""))]))
+        return selectedTracker
+    }
+    
+    func deleteSelectedTracker(trackerId: Int64) {
+        let fetchRequest = NSFetchRequest<TrackerCore>(entityName: "TrackerCore")
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.predicate = NSPredicate(format: "id == \(trackerId)")
+        let tracker = try? context.fetch(fetchRequest)
+        guard let deleteTracker = tracker?.first(where: {$0.id == trackerId}) else { return }
+        context.delete(deleteTracker)
+        appDelegate.saveContext()
+    }
+    
+    func updateSelectedTracker(trackerId: Int64, trackerCategoryName: String, tracker: Tracker) {
+        let fetchRequest = NSFetchRequest<TrackerCore>(entityName: "TrackerCore")
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.predicate = NSPredicate(format: "id == \(trackerId)")
+        let trackers = try? context.fetch(fetchRequest)
+        guard let tracker = trackers?.first(where: {$0.id == trackerId}) else { return }
+        
+        tracker.category?.categoryName = trackerCategoryName
+        tracker.trackerColor = tracker.trackerColor
+        tracker.trackerName = tracker.trackerName
+        tracker.trackerEmoji = tracker.trackerEmoji
+        
+        appDelegate.saveContext()
+    }
+
         // MARK: - Private Methods
         private func dateArrayToStringConverter(array: [Date]) -> String {
             var dateStringArray = [String]()

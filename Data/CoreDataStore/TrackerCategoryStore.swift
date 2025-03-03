@@ -48,7 +48,6 @@ final class TrackerCategoryStore: NSObject {
     
     // MARK: - Methods
     func trackerAndCategoryCreater(trackerCategoryName: String, tracker: Tracker) {
-        //        let trackersCategory = TrackerCategoryCore(context: context)
         let trackerCategory = fetchOrCreateNewCategory(categoryName: trackerCategoryName)
         let trackers = TrackerCore(context: context)
         
@@ -58,11 +57,6 @@ final class TrackerCategoryStore: NSObject {
         trackers.trackerDate = dateArrayToStringConverter(array: tracker.trackerDate)
         trackers.trackerEmoji = tracker.trackerEmoji
         trackers.category = trackerCategory
-        
-        //        trackersCategory.categoryName = trackerCategoryName
-        //        trackersCategory.addToTrackers(trackers)
-        
-        print("категории с трекерами: \(trackers)")
         
         appDelegate.saveContext()
     }
@@ -93,7 +87,7 @@ final class TrackerCategoryStore: NSObject {
     
     func fetchCurrentTrackerCategoryData(calendar: Calendar, sender: Date) -> [TrackerCategory] {
         let request = NSFetchRequest<TrackerCategoryCore>(entityName: "TrackerCategoryCore")
-        
+                
         guard let trackers = try? context.fetch(request) else { return [] }
         
         var data = [TrackerCategory]()
@@ -101,7 +95,6 @@ final class TrackerCategoryStore: NSObject {
             guard let arr = i.trackers?.allObjects as? [TrackerCore] else { return [] }
             var trackersArr = [Tracker]()
             for item in arr {
-                //                if item.id == trackerStore.fetchCurrentId(calendar: calendar, sender: sender)
                 for id in trackerStore.fetchCurrentId(calendar: calendar, sender: sender) {
                     if id == item.id {
                         trackersArr.append(Tracker(id: item.id,
@@ -119,35 +112,19 @@ final class TrackerCategoryStore: NSObject {
                 data.append(TrackerCategory(categoryName: i.categoryName ?? "", trackers: trackersArr))
             }
         }
-        print("запрос trackerCategory: \(data)")
         
         return data
     }
     
-    //    func fetchCurrentTrackerCategoryData(calendar: Calendar, sender: Date) -> [TrackerCategory] {
-    //        var data = [TrackerCategory]()
-    //        let request = NSFetchRequest<TrackerCategoryCore>(entityName: "TrackerCategoryCore")
-    //        guard let trackerCategoryFetch = try? context.fetch(request) else { return [] }
-    //
-    ////        guard let trackerCategory: [TrackerCategory] = trackerCategoryFetch as? [TrackerCategory] else { return [] }
-    //        for i in trackerCategoryFetch {
-    //            guard let arr = i.trackers?.allObjects as? [Tracker] else { return [] }
-    //            var trackers = [Tracker]()
-    //            for item in arr {
-    //                if item.id == trackerStore.fetchCurrentId(calendar: calendar, sender: sender) {
-    //                    trackers.append(Tracker(id: item.id,
-    //                                            trackerName: item.trackerName,
-    //                                            trackerColor: item.trackerColor,
-    //                                            trackerEmoji: item.trackerEmoji,
-    //                                            trackerDate: item.trackerDate))
-    //                }
-    //            }
-    //            data.append(TrackerCategory(categoryName: i.categoryName ?? "", trackers: trackers))
-    //        }
-    //
-    //        print("запрос текущих trackerCategory: \(data)")
-    //        return data
-    //    }
+//    func updateTracker(id: Int64) {
+//        let fetchRequest = NSFetchRequest<TrackerCategoryCore>(entityName: "TrackerCategoryCore")
+//        fetchRequest.returnsObjectsAsFaults = false
+//        fetchRequest.predicate = NSPredicate(format: "id == \(id)")
+//        guard let trackers = try? context.fetch(fetchRequest) as? [TrackerCategory] else { return }
+//        guard let tracker = trackers.first(where: {$0.trackers.first(where: {$0.id == id})}) else { return }
+//        tracker.trackers[0].id =
+//        
+//    }
     
     // MARK: - Private Methods
     private func dateArrayToStringConverter(array: [Date]) -> String {
@@ -178,7 +155,6 @@ final class TrackerCategoryStore: NSObject {
         
         return newCategory
     }
-    
     
     private func fetchCategory(categoryName: String) -> TrackerCategoryCore? {
         let fetchRequest: NSFetchRequest<TrackerCategoryCore> = TrackerCategoryCore.fetchRequest()

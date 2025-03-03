@@ -29,7 +29,6 @@ final class ScheduleViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.layer.masksToBounds = true
         table.separatorInset = .init(top: 30, left: 16, bottom: 30, right: 16)
-//        table.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         table.separatorColor = UIColor(named: "SeparatorSet")
         return table
     }()

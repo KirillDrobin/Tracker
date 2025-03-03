@@ -207,7 +207,7 @@ extension CategoryMainViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         categoryMainViewModel.categoryNameSender(name: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? "")
-        
+        categoryMainViewModel.selectedCategoryName = ""
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.navigationController?.popViewController(animated: true)
         }

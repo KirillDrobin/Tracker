@@ -95,4 +95,15 @@ final class TrackerRecordStore {
         }
         return countRecord
     }
+    
+    func completeTrackersCount() -> Int {
+        let fetchRequest = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
+        let trackerRecord = try? context.fetch(fetchRequest)
+        guard let trackerRecord else { return .zero }
+        var countRecord = Int()
+        for i in trackerRecord {
+            countRecord += 1
+        }
+        return countRecord
+    }
 }

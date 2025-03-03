@@ -44,17 +44,7 @@ final class Storage {
             storage.set(newValue, forKey: Keys.categoryNameArray.rawValue)
         }
     }
-    
-    var filteredTrackersData: [Tracker] {
-        get {
-            guard let trackers = storage.array(forKey: Keys.filteredTrackers.rawValue) else { return [] }
-            return trackers as? [Tracker] ?? []
-        }
-        set {
-            storage.set(newValue as [Tracker], forKey: Keys.filteredTrackers.rawValue)
-        }
-    }
-    
+        
     var filterViewControllerIndex: Int {
         get {
             let index = storage.integer(forKey: Keys.filterViewControllerIndex.rawValue)

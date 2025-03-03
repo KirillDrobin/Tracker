@@ -10,4 +10,5 @@ import Foundation
 enum NotificationNames {
     static let buttonIsEnabled = Notification.Name("buttonIsEnabled")
     static let coreDataChange = Notification.Name("coreDataChange")
+    static let trackerCategoryNameChange = Notification.Name("trackerCategoryNameChange")
 }
