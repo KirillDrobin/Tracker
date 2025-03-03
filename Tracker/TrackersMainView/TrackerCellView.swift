@@ -11,7 +11,9 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Singletone
     private let trackerRecordStore = TrackerRecordStore.shared
     private let trackerStore = TrackerStore.shared
-
+    
+    
+    private var analyticsService = AnalyticsService()
     
     // MARK: - Properties
     var id = Int64()
@@ -56,10 +58,6 @@ final class TrackerCellView: UICollectionViewCell {
     
     lazy var pin: UIImageView = {
         let pin = UIImageView()
-//        pin.frame.size.width = 24
-//        pin.frame.size.height = 24
-//        pin.backgroundColor = .red
-//        pin.image = UIImage(systemName: "pin.fill")
         pin.tintColor = .white
         return pin
     }()
@@ -178,6 +176,9 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Objc Methods
     @objc func checkButtonAction() {
         if checkButton.imageView?.image == UIImage(systemName: "plus") {
+            
+            analyticsService.report(event: Events.click, screen: "Main", item: Items.track)
+
             trackerRecordStore.recordSet(cellId: id, cellDate: datePickerDate)
 
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)

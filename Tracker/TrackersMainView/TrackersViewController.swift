@@ -8,6 +8,7 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
+    weak var delegate: TrackerSender?
     // MARK: - Singletone
     private let trackerStore = TrackerStore.shared
     private let trackerFixStore = TrackerFixStore.shared
@@ -15,17 +16,13 @@ final class TrackersViewController: UIViewController {
     private let trackerCategoryFixStore = TrackerCategoryFixStore.shared
     private let trackerRecordStore = TrackerRecordStore.shared
     private let storage = Storage.shared
+    private var categoryMainViewModel = CategoryMainViewModel.shared
     
     // MARK: - Private Properties
     private var trackersViewControllerObserver: NSObjectProtocol?
     private var currentDate = Date()
-    //    private var currentTrackersIndexes = [Int]()
     private var currentTrackerDataArray = [Tracker]()
-    
     private var currentTrackerData = [TrackerCategory]()
-    
-//    private var currentCategories = [TrackerCategory]()
-    //    private var filteredTrackerDataArray = [Tracker]()
     private var analyticsService = AnalyticsService()
     
     private let addTrackerButton: UIButton = {
@@ -39,8 +36,10 @@ final class TrackersViewController: UIViewController {
     
     private let datePicker: UIDatePicker = {
         let date = UIDatePicker()
+        date.overrideUserInterfaceStyle = .light
         date.layer.cornerRadius = 8
         date.layer.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1).cgColor
+        date.setValue(UIColor.cyan, forKeyPath: "textColor")
         date.datePickerMode = .date
         date.preferredDatePickerStyle = .compact
         date.locale = Locale(identifier: NSLocalizedString("ru_RU", comment: ""))
@@ -67,7 +66,7 @@ final class TrackersViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        //        collection.backgroundColor = UIColor(named: "BackgroundSet")
+        collection.backgroundColor = UIColor(named: "BackgroundSet")
         return collection
     }()
     
@@ -106,11 +105,11 @@ final class TrackersViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         reloadMainScreen()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+
         analyticsService.report(event: Events.open, screen: "Main", item: Items.noItem)
         
         self.trackersViewControllerObserver = NotificationCenter.default.addObserver(
@@ -224,7 +223,6 @@ final class TrackersViewController: UIViewController {
             
             datePicker.centerYAnchor.constraint(equalTo: addTrackerButton.centerYAnchor, constant: 0),
             datePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            //            datePicker.widthAnchor.constraint(equalToConstant: 77),
             
             label.widthAnchor.constraint(equalToConstant: 254),
             label.heightAnchor.constraint(equalToConstant: 41),
@@ -257,7 +255,7 @@ final class TrackersViewController: UIViewController {
             
             datePicker.centerYAnchor.constraint(equalTo: addTrackerButton.centerYAnchor, constant: 0),
             datePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            datePicker.widthAnchor.constraint(equalToConstant: 100),
+//            datePicker.widthAnchor.constraint(equalToConstant: 100),
             
             label.widthAnchor.constraint(equalToConstant: 254),
             label.heightAnchor.constraint(equalToConstant: 41),
@@ -299,8 +297,6 @@ final class TrackersViewController: UIViewController {
         if !currentTrackerData.isEmpty {
             collectionView.isHidden = false
             filterButton.isHidden = false
-            //            mainTrackersViewImage.image = UIImage(named: "TrackersDefaultLogo")
-            //            mainTrackersViewImageLabel.text = NSLocalizedString("Что будем отслеживать?", comment: "")
         }
         collectionView.reloadData()
     }
@@ -311,7 +307,6 @@ final class TrackersViewController: UIViewController {
         trackerForFix = trackerStore.fetchSelectedTracker(trackerId: cell?.id ?? 1)
         trackerCategoryFixStore.trackerAndCategoryFixCreater(trackerCategoryName: trackerForFix[0].categoryName,
                                                              tracker: trackerForFix[0].trackers[0])
-        print("трекер перемещен в фикс \(trackerForFix)")
         trackerStore.deleteSelectedTracker(trackerId: cell?.id ?? 1)
         
         trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: "Закрепленные",
@@ -329,7 +324,6 @@ final class TrackersViewController: UIViewController {
 
         trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerForUnFix[0].categoryName,
                                                              tracker: trackerForUnFix[0].trackers[0])
-        print("трекер запрошен из фикс \(trackerForUnFix)")
         
         trackerStore.deleteSelectedTracker(trackerId: cell?.id ?? 1)
         trackerFixStore.deleteSelectedFixTracker(trackerId: cell?.id ?? 1)
@@ -339,31 +333,31 @@ final class TrackersViewController: UIViewController {
     }
     
     private func cellForDelete(indexPath: IndexPath) {
-//        var trackerForFix = [TrackerCategory]()
         let cell = collectionView.cellForItem(at: indexPath) as? TrackerCellView
-//        trackerForFix = trackerStore.fetchSelectedTracker(trackerId: cell?.id ?? 1)
         trackerStore.deleteSelectedTracker(trackerId: cell?.id ?? 1)
-
+        trackerRecordStore.deleteRecordForSelectedTracker(trackerId: cell?.id ?? 1)
         dateChecker(date: datePicker.date)
 
         collectionView.reloadData()
     }
 
     private func editingTracker(cellId: Int64) {
-        let habitCreaterViewController = HabitCreaterViewController()
-        let trackerNavigationController = UINavigationController(rootViewController: habitCreaterViewController)
-        habitCreaterViewController.label.text = "Редактирование привычки"
-        habitCreaterViewController.trackerId = cellId
-        
         var cellData = [TrackerCategory]()
-        
         cellData = trackerStore.fetchSelectedTracker(trackerId: cellId)
         
-        habitCreaterViewController.trackerCategoryName = "123"
-//        cellData[0].categoryName
-//        print("\(cellData[0].categoryName)")
+        let habitCreaterViewController = HabitCreaterViewController()
+        habitCreaterViewController.delegate = self
+        let trackerNavigationController = UINavigationController(rootViewController: habitCreaterViewController)
+
+        categoryMainViewModel.selectedCategoryName = cellData[0].categoryName
+        
+        habitCreaterViewController.label.text = "Редактирование привычки"
+        habitCreaterViewController.trackerId = cellId
         habitCreaterViewController.trackerNameTextField.text = cellData[0].trackers[0].trackerName
         habitCreaterViewController.daysOfWeekShortArray = habitCreaterViewController.dateToDaysOfWeekShortConverter(dates: cellData[0].trackers[0].trackerDate)
+        habitCreaterViewController.colorInt = cellData[0].trackers[0].trackerColor
+        habitCreaterViewController.emoji = cellData[0].trackers[0].trackerEmoji
+        
         habitCreaterViewController.createButton.setTitle(NSLocalizedString("Сохранить", comment: ""), for: .normal)
         
         self.present(trackerNavigationController, animated: true)
@@ -406,6 +400,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func switchToFilterViewController() {
+        analyticsService.report(event: Events.click, screen: "Main", item: Items.filter)
         let filterViewController = FilterViewController()
         filterViewController.delegate = self
         let trackerNavigationController = UINavigationController(rootViewController: filterViewController)
@@ -465,7 +460,7 @@ extension TrackersViewController: UICollectionViewDelegate,
                                                                    withReuseIdentifier: id,
                                                                    for: indexPath) as? TrackerHeaderView
         let cellData = currentTrackerData[indexPath.section]
-        view?.headerLabel.text = cellData.categoryName // ToDo: разные хэдеры для разного набора ячеек
+        view?.headerLabel.text = cellData.categoryName
         return view ?? TrackerHeaderView()
     }
     
@@ -519,6 +514,7 @@ extension TrackersViewController: UICollectionViewDelegate,
     
     // context menu setup
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+            
         guard indexPaths.count > 0 else {
             return nil
         }
@@ -537,13 +533,12 @@ extension TrackersViewController: UICollectionViewDelegate,
                     },
                     
                     UIAction(title: "Редактировать") { [weak self] _ in
-                        
                         self?.editingTracker(cellId: cell?.id ?? 1)
-                        
+                        self?.analyticsService.report(event: Events.click, screen: "Main", item: Items.edit)
                     },
                     
                     UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
-                        
+                        self?.analyticsService.report(event: Events.click, screen: "Main", item: Items.delete)
                         let alert = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: .actionSheet)
                         self?.present(alert, animated: true)
                         
@@ -569,10 +564,12 @@ extension TrackersViewController: UICollectionViewDelegate,
                     
                     UIAction(title: "Редактировать") { [weak self] _ in
                         self?.editingTracker(cellId: cell?.id ?? 1)
-
+                        self?.analyticsService.report(event: Events.click, screen: "Main", item: Items.edit)
                     },
                     
                     UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                        self?.analyticsService.report(event: Events.click, screen: "Main", item: Items.delete)
+                        
                         let alert = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: .actionSheet)
                         self?.present(alert, animated: true)
                         
@@ -593,11 +590,9 @@ extension TrackersViewController: UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfiguration configuration: UIContextMenuConfiguration, highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
-//        guard let identifier = configuration.identifier as? IndexPath else { return nil }
         let cell = collectionView.cellForItem(at: indexPath) as? TrackerCellView
         let parameters = UIPreviewParameters()
         parameters.backgroundColor = .clear
-//        parameters.visiblePath = UIBezierPath(rect: cell?.cardView.bounds ?? CGRect())
         parameters.visiblePath = UIBezierPath(roundedRect: cell?.cardView.bounds ?? CGRect(), cornerRadius: 16)
         let preview = UITargetedPreview(view: cell ?? TrackerCellView(), parameters: parameters)
         return preview

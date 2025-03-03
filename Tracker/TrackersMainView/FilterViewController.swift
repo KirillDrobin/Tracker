@@ -75,24 +75,6 @@ final class FilterViewController: UIViewController {
         ])
     }
     
-//    private func cellCheckMark() {
-//        if storage.trackerViewStatus == 1 {
-//            tableView.cellForRow(at: 0)?.accessoryType = .checkmark
-//        }
-//        
-//        if storage.trackerViewStatus == 2 {
-//            
-//        }
-//        
-//        if storage.trackerViewStatus == 3 {
-//            
-//        }
-//        
-//        if storage.trackerViewStatus == 4 {
-//            
-//        }
-//    }
-    
 }
 
 // MARK: - extension FilterViewController

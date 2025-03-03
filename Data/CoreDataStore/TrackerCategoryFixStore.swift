@@ -42,8 +42,6 @@ final class TrackerCategoryFixStore: NSObject {
         trackersFix.trackerDateFix = dateArrayToStringConverter(array: tracker.trackerDate)
         trackersFix.trackerEmojiFix = tracker.trackerEmoji
         trackersFix.categoryFix = trackerCategoryFix
-
-        print("ЗАФИКСИРОВАННЫЕ категории с трекерами: \(trackersFix)")
         
         appDelegate.saveContext()
     }
@@ -55,8 +53,6 @@ final class TrackerCategoryFixStore: NSObject {
         let request = NSFetchRequest<TrackerCategoryFixCore>(entityName: "TrackerCategoryFixCore")
                 
         guard let trackers = try? context.fetch(request) else { return }
-        
-        print("запрос фикс трекеров \(trackers)")
     }
     
     
