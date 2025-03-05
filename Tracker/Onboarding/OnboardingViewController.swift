@@ -75,7 +75,7 @@ class OnboardingViewController: UIPageViewController {
     private func addSubviews() {
         [
             pageControl,
-            onboardingButton
+            onboardingButton,
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)

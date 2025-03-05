@@ -213,15 +213,15 @@ final class UnregularEventCreaterViewController: UIViewController {
             colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
             
             canselButton.heightAnchor.constraint(equalToConstant: 60),
-            canselButton.widthAnchor.constraint(equalToConstant: 166),
             canselButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            canselButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -205),
             canselButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
             canselButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.widthAnchor.constraint(equalToConstant: 166),
             createButton.centerYAnchor.constraint(equalTo: canselButton.centerYAnchor),
-            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            createButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 205)
         ])
     }
     
