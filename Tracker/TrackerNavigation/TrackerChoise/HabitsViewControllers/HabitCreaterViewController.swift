@@ -424,7 +424,7 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                          withReuseIdentifier: id,
                                                                          for: indexPath) as? HeaderForColorEmojiCollections else { return UICollectionReusableView() }
-        
+                
         if collectionView == emojiCollectionView {
             view.headerLabel.text = "Emoji"
             return view
@@ -438,15 +438,8 @@ extension HabitCreaterViewController: UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int
-    ) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView,
-                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28, height: 18),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
+    ) -> CGSize {        
+        return CGSize(width: 28, height: 18)
     }
     
     // collectionView setups

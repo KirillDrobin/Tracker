@@ -116,16 +116,6 @@ final class TrackerCategoryStore: NSObject {
         return data
     }
     
-//    func updateTracker(id: Int64) {
-//        let fetchRequest = NSFetchRequest<TrackerCategoryCore>(entityName: "TrackerCategoryCore")
-//        fetchRequest.returnsObjectsAsFaults = false
-//        fetchRequest.predicate = NSPredicate(format: "id == \(id)")
-//        guard let trackers = try? context.fetch(fetchRequest) as? [TrackerCategory] else { return }
-//        guard let tracker = trackers.first(where: {$0.trackers.first(where: {$0.id == id})}) else { return }
-//        tracker.trackers[0].id =
-//        
-//    }
-    
     // MARK: - Private Methods
     private func dateArrayToStringConverter(array: [Date]) -> String {
         var dateStringArray = [String]()

@@ -11,6 +11,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     // MARK: - Singletone
     private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private var categoryMainViewModel = CategoryMainViewModel.shared
     
     // MARK: - Delegate
     weak var delegate: TrackerSender?
@@ -234,7 +235,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     
     private func didEnabledButton() {
         if trackerNameText.isEmpty == false,
-           trackerCategoryName.isEmpty == false,
+           categoryMainViewModel.selectedCategoryName.isEmpty == false,
            date.isEmpty == false,
            emoji.isEmpty == false,
            colorCellStatus != 0 {
@@ -248,7 +249,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 10001..<20000)
         
-        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
+        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: categoryMainViewModel.selectedCategoryName,
                                                        tracker: Tracker(id: randomId,
                                                                         trackerName: trackerNameText,
                                                                         trackerColor: colorInt,
@@ -290,7 +291,7 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
         
         cell.textLabel?.text = NSLocalizedString("Категория", comment: "")
-        cell.detailTextLabel?.text = trackerCategoryName
+        cell.detailTextLabel?.text = categoryMainViewModel.nameSender()
         
         return cell
     }
@@ -345,16 +346,16 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
             id = ""
         }
         
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                   withReuseIdentifier: id,
-                                                                   for: indexPath) as? HeaderForColorEmojiCollections
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                         withReuseIdentifier: id,
+                                                                         for: indexPath) as? HeaderForColorEmojiCollections else { return UICollectionReusableView() }
         
         if collectionView == emojiCollectionView {
-            view?.headerLabel.text = "Emoji"
-            return view ?? HeaderForColorEmojiCollections()
+            view.headerLabel.text = "Emoji"
+            return view
         } else {
-            view?.headerLabel.text = NSLocalizedString("Цвет", comment: "")
-            return view ?? HeaderForColorEmojiCollections()
+            view.headerLabel.text = NSLocalizedString("Цвет", comment: "")
+            return view
         }
     }
     
@@ -363,14 +364,7 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView,
-                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28, height: 18),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
+        return CGSize(width: 28, height: 18)
     }
     
     // collectionView setups

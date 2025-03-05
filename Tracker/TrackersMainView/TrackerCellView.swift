@@ -112,6 +112,8 @@ final class TrackerCellView: UICollectionViewCell {
         
         if trackerCategoryName[0].categoryName == "Закрепленные" {
             pin.image = UIImage(systemName: "pin.fill")
+        } else {
+            pin.image = .none
         }
     }
     

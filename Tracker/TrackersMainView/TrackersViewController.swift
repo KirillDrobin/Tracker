@@ -255,7 +255,6 @@ final class TrackersViewController: UIViewController {
             
             datePicker.centerYAnchor.constraint(equalTo: addTrackerButton.centerYAnchor, constant: 0),
             datePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-//            datePicker.widthAnchor.constraint(equalToConstant: 100),
             
             label.widthAnchor.constraint(equalToConstant: 254),
             label.heightAnchor.constraint(equalToConstant: 41),
@@ -438,7 +437,7 @@ extension TrackersViewController: UICollectionViewDelegate,
         
         cell.id = cellData.trackers[indexPath.row].id
         cell.datePickerDate = datePicker.date
-        
+                
         cell.cellViewInit()
         return cell
     }
@@ -456,12 +455,13 @@ extension TrackersViewController: UICollectionViewDelegate,
             id = ""
         }
         
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: id,
-                                                                   for: indexPath) as? TrackerHeaderView
+                                                                         for: indexPath) as? TrackerHeaderView else { return UICollectionReusableView() }
+                
         let cellData = currentTrackerData[indexPath.section]
-        view?.headerLabel.text = cellData.categoryName
-        return view ?? TrackerHeaderView()
+        view.headerLabel.text = cellData.categoryName
+        return view
     }
     
     // header size category
@@ -469,14 +469,7 @@ extension TrackersViewController: UICollectionViewDelegate,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView,
-                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28, height: 18),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
+        return CGSize(width: 150, height: 40)
     }
     
     // cell size
@@ -615,7 +608,6 @@ extension TrackersViewController: FilterProtocol {
     func trackersForTodayFilter() {
         datePicker.date = Date()
         dateChecker(date: datePicker.date)
-        //        storage.trackerViewStatus = 2
         placeHolder()
     }
     
