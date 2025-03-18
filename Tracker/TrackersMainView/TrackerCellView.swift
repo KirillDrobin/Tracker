@@ -12,7 +12,6 @@ final class TrackerCellView: UICollectionViewCell {
     private let trackerRecordStore = TrackerRecordStore.shared
     private let trackerStore = TrackerStore.shared
     
-    
     private var analyticsService = AnalyticsService()
     
     // MARK: - Properties
