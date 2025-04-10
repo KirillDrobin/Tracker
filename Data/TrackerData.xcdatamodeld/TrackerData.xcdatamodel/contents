@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D60" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="TrackerCategoryCore" representedClassName="TrackerCategoryCore" syncable="YES" codeGenerationType="class">
         <attribute name="categoryName" optional="YES" attributeType="String"/>
-        <relationship name="trackers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerCore"/>
+        <relationship name="trackers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerCore" inverseName="category" inverseEntity="TrackerCore"/>
+    </entity>
+    <entity name="TrackerCategoryFixCore" representedClassName="TrackerCategoryFixCore" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryNameFix" optional="YES" attributeType="String"/>
+        <relationship name="trackersFix" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerFixCore" inverseName="categoryFix" inverseEntity="TrackerFixCore"/>
     </entity>
     <entity name="TrackerCore" representedClassName="TrackerCore" syncable="YES" codeGenerationType="class">
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -10,9 +14,20 @@
         <attribute name="trackerDate" attributeType="String" defaultValueString=""/>
         <attribute name="trackerEmoji" attributeType="String" defaultValueString=""/>
         <attribute name="trackerName" attributeType="String" defaultValueString=""/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryCore" inverseName="trackers" inverseEntity="TrackerCategoryCore"/>
+        <relationship name="trackerRecord" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerRecordCore" inverseName="trackers" inverseEntity="TrackerRecordCore"/>
+    </entity>
+    <entity name="TrackerFixCore" representedClassName="TrackerFixCore" syncable="YES" codeGenerationType="class">
+        <attribute name="idFix" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trackerColorFix" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trackerDateFix" attributeType="String"/>
+        <attribute name="trackerEmojiFix" attributeType="String"/>
+        <attribute name="trackerNameFix" attributeType="String"/>
+        <relationship name="categoryFix" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryFixCore" inverseName="trackersFix" inverseEntity="TrackerCategoryFixCore"/>
     </entity>
     <entity name="TrackerRecordCore" representedClassName="TrackerRecordCore" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="trackers" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCore" inverseName="trackerRecord" inverseEntity="TrackerCore"/>
     </entity>
 </model>

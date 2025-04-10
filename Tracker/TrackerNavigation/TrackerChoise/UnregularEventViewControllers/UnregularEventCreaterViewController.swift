@@ -11,6 +11,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     // MARK: - Singletone
     private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private var categoryMainViewModel = CategoryMainViewModel.shared
     
     // MARK: - Delegate
     weak var delegate: TrackerSender?
@@ -37,7 +38,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Новое нерегулярное событие"
+        label.text = NSLocalizedString("Новое нерегулярное событие", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         return label
@@ -45,10 +46,11 @@ final class UnregularEventCreaterViewController: UIViewController {
     
     private let trackerNameTextField: CustomTextField = {
         let textField = CustomTextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("Введите название трекера", comment: "")
         textField.clearButtonMode = .whileEditing
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        textField.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         textField.layer.cornerRadius = 16
         textField.keyboardType = .default
         textField.addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingChanged)
@@ -88,7 +90,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.layer.borderColor = CGColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1)
         button.layer.borderWidth = 1.0
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("Отменить", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(UIColor(named: "YP Red"), for: .normal)
         button.layer.masksToBounds = false
@@ -100,17 +102,18 @@ final class UnregularEventCreaterViewController: UIViewController {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("Создать", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.titleLabel?.textColor = UIColor(named: "White")
         button.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
         button.isEnabled = false
         return button
     }()
-    
+
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundSet")
         navigationController?.navigationBar.isHidden = true
         
         moveToCategoryСhoiceTableView.dataSource = self
@@ -210,15 +213,15 @@ final class UnregularEventCreaterViewController: UIViewController {
             colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
             
             canselButton.heightAnchor.constraint(equalToConstant: 60),
-            canselButton.widthAnchor.constraint(equalToConstant: 166),
             canselButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            canselButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -205),
             canselButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
             canselButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.widthAnchor.constraint(equalToConstant: 166),
             createButton.centerYAnchor.constraint(equalTo: canselButton.centerYAnchor),
-            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            createButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 205)
         ])
     }
     
@@ -232,7 +235,7 @@ final class UnregularEventCreaterViewController: UIViewController {
     
     private func didEnabledButton() {
         if trackerNameText.isEmpty == false,
-           trackerCategoryName.isEmpty == false,
+           categoryMainViewModel.selectedCategoryName.isEmpty == false,
            date.isEmpty == false,
            emoji.isEmpty == false,
            colorCellStatus != 0 {
@@ -246,7 +249,7 @@ final class UnregularEventCreaterViewController: UIViewController {
         
         let randomId = Int64.random(in: 10001..<20000)
         
-        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: trackerCategoryName,
+        trackerCategoryStore.trackerAndCategoryCreater(trackerCategoryName: categoryMainViewModel.selectedCategoryName,
                                                        tracker: Tracker(id: randomId,
                                                                         trackerName: trackerNameText,
                                                                         trackerColor: colorInt,
@@ -282,13 +285,13 @@ extension UnregularEventCreaterViewController: UITableViewDataSource, UITableVie
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        cell.backgroundColor = UIColor(named: "TextFieldTableViewSet")
         cell.accessoryType = .disclosureIndicator
         cell.detailTextLabel?.font = .systemFont(ofSize: 17)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 174/255, blue: 180/255, alpha: 1)
         
-        cell.textLabel?.text = "Категория"
-        cell.detailTextLabel?.text = trackerCategoryName
+        cell.textLabel?.text = NSLocalizedString("Категория", comment: "")
+        cell.detailTextLabel?.text = categoryMainViewModel.nameSender()
         
         return cell
     }
@@ -343,16 +346,16 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
             id = ""
         }
         
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                   withReuseIdentifier: id,
-                                                                   for: indexPath) as? HeaderForColorEmojiCollections
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                         withReuseIdentifier: id,
+                                                                         for: indexPath) as? HeaderForColorEmojiCollections else { return UICollectionReusableView() }
         
         if collectionView == emojiCollectionView {
-            view?.headerLabel.text = "Emoji"
-            return view ?? HeaderForColorEmojiCollections()
+            view.headerLabel.text = "Emoji"
+            return view
         } else {
-            view?.headerLabel.text = "Цвет"
-            return view ?? HeaderForColorEmojiCollections()
+            view.headerLabel.text = NSLocalizedString("Цвет", comment: "")
+            return view
         }
     }
     
@@ -361,14 +364,7 @@ extension UnregularEventCreaterViewController: UICollectionViewDelegate,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView,
-                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                                             at: indexPath)
-        
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width - 28, height: 18),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
+        return CGSize(width: 28, height: 18)
     }
     
     // collectionView setups

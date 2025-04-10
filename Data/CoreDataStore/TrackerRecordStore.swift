@@ -95,4 +95,25 @@ final class TrackerRecordStore {
         }
         return countRecord
     }
+    
+    func completeTrackersCount() -> Int {
+        let fetchRequest = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
+        let trackerRecord = try? context.fetch(fetchRequest)
+        guard let trackerRecord else { return .zero }
+        var countRecord = Int()
+        for _ in trackerRecord {
+            countRecord += 1
+        }
+        return countRecord
+    }
+    
+    func deleteRecordForSelectedTracker(trackerId: Int64) {
+        let fetchRequest = NSFetchRequest<TrackerRecordCore>(entityName: "TrackerRecordCore")
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.predicate = NSPredicate(format: "id == \(trackerId)")
+        let record = try? context.fetch(fetchRequest)
+        guard let deleteTrackerRecord = record?.first(where: {$0.id == trackerId}) else { return }
+        context.delete(deleteTrackerRecord)
+        appDelegate.saveContext()
+    }
 }

@@ -25,6 +25,16 @@ final class Storage {
         }
     }
     
+    var trackerViewStatus: Int {
+        get {
+            let status = storage.integer(forKey: Keys.trackerViewStatus.rawValue)
+            return status
+        }
+        set {
+            storage.set(newValue, forKey: Keys.trackerViewStatus.rawValue)
+        }
+    }
+    
     var trackerCategoryNameArray: [String] {
         get {
             guard let name = storage.stringArray(forKey: Keys.categoryNameArray.rawValue) else { return [] }
@@ -34,9 +44,22 @@ final class Storage {
             storage.set(newValue, forKey: Keys.categoryNameArray.rawValue)
         }
     }
+        
+    var filterViewControllerIndex: Int {
+        get {
+            let index = storage.integer(forKey: Keys.filterViewControllerIndex.rawValue)
+            return index
+        }
+        set {
+            storage.set(newValue, forKey: Keys.filterViewControllerIndex.rawValue)
+        }
+    }
     
     private enum Keys: String {
         case status
         case categoryNameArray
+        case filteredTrackers
+        case filterViewControllerIndex
+        case trackerViewStatus
     }
 }

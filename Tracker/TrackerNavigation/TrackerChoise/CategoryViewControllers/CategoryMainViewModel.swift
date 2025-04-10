@@ -65,8 +65,12 @@ final class CategoryMainViewModel {
         selectedCategoryName = name
     }
 
+    func nameSender() -> String {
+        let name = selectedCategoryName
+        return name
+    }
+    
     func saveCategory(trackerCategoryName: String) {
         trackerCategoryStore.categoryCreater(trackerCategoryName: trackerCategoryName)
     }
-    
 }

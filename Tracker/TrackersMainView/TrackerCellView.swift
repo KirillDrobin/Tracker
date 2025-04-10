@@ -10,6 +10,9 @@ import UIKit
 final class TrackerCellView: UICollectionViewCell {
     // MARK: - Singletone
     private let trackerRecordStore = TrackerRecordStore.shared
+    private let trackerStore = TrackerStore.shared
+    
+    private var analyticsService = AnalyticsService()
     
     // MARK: - Properties
     var id = Int64()
@@ -27,7 +30,6 @@ final class TrackerCellView: UICollectionViewCell {
     
     let recordLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 дней"
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .natural
         label.sizeToFit()
@@ -53,6 +55,12 @@ final class TrackerCellView: UICollectionViewCell {
         return view
     }()
     
+    lazy var pin: UIImageView = {
+        let pin = UIImageView()
+        pin.tintColor = .white
+        return pin
+    }()
+    
     lazy var checkButton: UIButton = {
         let button = UIButton()
         button.frame.size.width = 34
@@ -72,9 +80,6 @@ final class TrackerCellView: UICollectionViewCell {
         contentView.backgroundColor = .clear
         addSubviews()
         makeConstraints()
-        
-//        checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
-//        checkButton.backgroundColor = UIColor(red: 51/255, green: 207/255, blue: 105/255, alpha: 1)
     }
     
     required init?(coder: NSCoder) {
@@ -84,6 +89,7 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Methods
     func cellViewInit() {
         let date = Date()
+        let trackerCategoryName = trackerStore.fetchSelectedTracker(trackerId: id)
         
         if datePickerDate > date {
             checkButton.isEnabled = false
@@ -102,16 +108,22 @@ final class TrackerCellView: UICollectionViewCell {
             checkButton.setImage(UIImage(systemName: "plus"), for: .normal)
             checkButton.backgroundColor = checkButton.backgroundColor?.withAlphaComponent(1)
         }
+        
+        if trackerCategoryName[0].categoryName == "Закрепленные" {
+            pin.image = UIImage(systemName: "pin.fill")
+        } else {
+            pin.image = .none
+        }
     }
     
     // MARK: - Private Methods
     private func recordLabelTextMaker(count: Int) {
         if count == 0 || count >= 5 {
-            recordLabel.text = "\(count) дней"
+            recordLabel.text = "\(count)" + NSLocalizedString(" дней", comment: "")
         } else if count == 1 {
-            recordLabel.text = "\(count) день"
+            recordLabel.text = "\(count)" + NSLocalizedString(" день", comment: "")
         } else {
-            recordLabel.text = "\(count) дня"
+            recordLabel.text = "\(count)" + NSLocalizedString(" дня", comment: "")
         }
     }
     
@@ -120,6 +132,7 @@ final class TrackerCellView: UICollectionViewCell {
             cardView,
             titleLabel,
             recordLabel,
+            pin,
             emojiView,
             checkButton,
         ].forEach {
@@ -149,6 +162,11 @@ final class TrackerCellView: UICollectionViewCell {
             emojiView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 13),
             emojiView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             
+            pin.heightAnchor.constraint(equalToConstant: 12),
+            pin.widthAnchor.constraint(equalToConstant: 10),
+            pin.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 18),
+            pin.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
+            
             checkButton.heightAnchor.constraint(equalToConstant: 34),
             checkButton.widthAnchor.constraint(equalToConstant: 34),
             checkButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 8),
@@ -159,6 +177,9 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Objc Methods
     @objc func checkButtonAction() {
         if checkButton.imageView?.image == UIImage(systemName: "plus") {
+            
+            analyticsService.report(event: Events.click, screen: "Main", item: Items.track)
+
             trackerRecordStore.recordSet(cellId: id, cellDate: datePickerDate)
 
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
@@ -173,4 +194,3 @@ final class TrackerCellView: UICollectionViewCell {
         }
     }
 }
-
